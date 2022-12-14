@@ -1,0 +1,54 @@
+		local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors%20Entity%20Spawner/Source.lua"))()
+		local entityTable = Spawner.createEntity({
+			CustomName = "Ambush",
+			Model = "https://github.com/MateiDaBest/Utilities/blob/main/Doors/Custom%20Entities/Ambush.rbxm?raw=true",
+			Speed = 150,
+			DelayTime = 2,
+			HeightOffset = 0,
+			CanKill = true,
+			KillRange = 75,
+			BackwardsMovement = false,
+			BreakLights = true,
+			FlickerLights = {
+				true,
+				1.5,
+			},
+			Cycles = {
+				Min = 1,
+				Max = 6,
+				WaitTime = 2,
+			},
+			CamShake = {
+				true,
+				{3.5, 20, 0.1, 1},
+				100,
+			},
+			Jumpscare = {
+				true,
+				{
+					Image1 = "rbxassetid://10110576663",
+					Image2 = "rbxassetid://10110576663",
+					Shake = true,
+					Sound1 = {
+						8880765497,
+						{ Volume = 0.8 },
+					},
+					Sound2 = {
+						9045199073,
+						{ Volume = 0.8 },
+					},
+					Flashing = {
+						true,
+						Color3.fromRGB(255, 255, 255),
+					},
+					Tease = {
+						false,
+						Min = 1,
+						Max = 3,
+					},
+				},
+			},
+			CustomDialog = {"You died to Ambush.", "You might need to hop in and out of your hiding spot a couple of times."},
+		})
+
+		Spawner.runEntity(entityTable)
