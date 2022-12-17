@@ -1,0 +1,165 @@
+while wait() do
+	if workspace:FindFirstChild("Screech") then
+		local Hat = Instance.new("Part")
+		local Weld = Instance.new("WeldConstraint")
+		local Mesh = Instance.new("SpecialMesh")
+		local Q1 = Instance.new("Sound")
+		local Q2 = Instance.new("Sound")
+		local Q3 = Instance.new("Sound")
+		local Q4 = Instance.new("Sound")
+		
+		Hat.Name = "Chicken"
+		Hat.Parent = workspace:FindFirstChild("Screech")
+		Hat.Position = workspace:FindFirstChild("Screech").Root.Position
+		Hat.CanCollide = false
+			
+		Weld.Parent = Hat
+		Weld.Part0 = Hat
+		Weld.Part1 = workspace:FindFirstChild("Screech").Base
+
+		Mesh.MeshId = "http://www.roblox.com/asset/?id=24101267"	
+		Mesh.TextureId = "http://www.roblox.com/asset/?id=24108148"		
+		Mesh.Scale = Vector3.new(1.45, 1.45, 1.45)		
+		Mesh.Parent = Hat
+	
+		Q1.SoundId = "http://www.roblox.com/asset/?id=24111685"		
+		Q1.Name = "Quack1"		
+		Q1.Volume = 1		
+		Q1.Parent = Hat
+		
+		Q2.SoundId = "http://www.roblox.com/asset/?id=24111782"		
+		Q2.Name = "Quack2"		
+		Q2.Volume = 1		
+		Q2.Parent = Hat
+		
+		Q3.SoundId = "http://www.roblox.com/asset/?id=24111798"		
+		Q3.Name = "Quack3"		
+		Q3.Volume = 1		
+		Q3.Parent = Hat
+		
+		Q4.SoundId = "http://www.roblox.com/asset/?id=24111823"
+		Q4.Name = "Quack4"	
+		Q4.Volume = 1		
+		Q4.Parent = Hat	
+
+while wait(math.random(1, 5)) do
+local RNG = math.random(1, 4)
+			
+if RNG == 1 then
+Q1:Play()
+elseif RNG == 2 then
+Q2:Play()
+elseif RNG == 3 then
+Q3:Play()				
+elseif RNG == 4 then
+Q4:Play()		
+end			
+end
+end
+end
+
+local Q1 = Instance.new("Sound"):Clone()
+local Q2 = Instance.new("Sound"):Clone()
+local Q3 = Instance.new("Sound"):Clone()
+local Q4 = Instance.new("Sound"):Clone()
+
+while wait() do
+	if workspace:FindFirstChild("RushMoving") then	
+		workspace:FindFirstChild("RushMoving").RushNew.Attachment.ParticleEmitter.Texture = "http://www.roblox.com/asset/?id=11846455684"
+		workspace:FindFirstChild("RushMoving").RushNew.Attachment.ParticleEmitter.Rate = 100
+		workspace:FindFirstChild("RushMoving").RushNew.Attachment.ParticleEmitter.Speed = 0
+		
+		Q1.SoundId = "http://www.roblox.com/asset/?id=24111685"		
+		Q1.Name = "Quack1"		
+		Q1.Volume = 5		
+		Q1.Parent = workspace:FindFirstChild("RushMoving").RushNew
+		
+		Q2.SoundId = "http://www.roblox.com/asset/?id=24111782"		
+		Q2.Name = "Quack2"		
+		Q2.Volume = 5		
+		Q2.Parent = workspace:FindFirstChild("RushMoving").RushNew
+		
+		Q3.SoundId = "http://www.roblox.com/asset/?id=24111798"		
+		Q3.Name = "Quack3"		
+		Q3.Volume = 5		
+		Q3.Parent = workspace:FindFirstChild("RushMoving").RushNew
+		
+		Q4.SoundId = "http://www.roblox.com/asset/?id=24111823"
+		Q4.Name = "Quack4"	
+		Q4.Volume = 5		
+		Q4.Parent = workspace:FindFirstChild("RushMoving").RushNew	
+
+while wait(math.random(5, 20)) do
+local RNG = math.random(1, 4)
+			
+if RNG == 1 then
+Q1:Play()
+elseif RNG == 2 then
+Q2:Play()
+elseif RNG == 3 then
+Q3:Play()				
+elseif RNG == 4 then
+Q4:Play()		
+end			
+end
+end
+end
+
+while wait() do
+	if workspace:FindFirstChild("SeekMoving") then
+		local Hat = Instance.new("Part")
+		local Weld = Instance.new("WeldConstraint")
+		local Mesh = Instance.new("SpecialMesh")
+		local Q1 = Instance.new("Sound")
+		local Q2 = Instance.new("Sound")
+		local Q3 = Instance.new("Sound")
+		local Q4 = Instance.new("Sound")
+		
+		Hat.Name = "Chicken"
+		Hat.Parent = workspace:FindFirstChild("SeekMoving").SeekRig
+		Hat.Position = workspace:FindFirstChild("SeekMoving").SeekRig.Head.Position + Vector3.new(0, 0.15, 0)
+		
+		Weld.Parent = Hat
+		Weld.Part0 = Hat
+		Weld.Part1 = workspace:FindFirstChild("SeekMoving").SeekRig.Head
+
+		Mesh.MeshId = "http://www.roblox.com/asset/?id=24101267"	
+		Mesh.TextureId = "http://www.roblox.com/asset/?id=24108148"		
+		Mesh.Scale = Vector3.new(1.15, 1.15, 1.15)		
+		Mesh.Parent = Hat
+	
+		Q1.SoundId = "http://www.roblox.com/asset/?id=24111685"		
+		Q1.Name = "Quack1"		
+		Q1.Volume = 1		
+		Q1.Parent = Hat
+		
+		Q2.SoundId = "http://www.roblox.com/asset/?id=24111782"		
+		Q2.Name = "Quack2"		
+		Q2.Volume = 1		
+		Q2.Parent = Hat
+		
+		Q3.SoundId = "http://www.roblox.com/asset/?id=24111798"		
+		Q3.Name = "Quack3"		
+		Q3.Volume = 1		
+		Q3.Parent = Hat
+		
+		Q4.SoundId = "http://www.roblox.com/asset/?id=24111823"
+		Q4.Name = "Quack4"	
+		Q4.Volume = 1		
+		Q4.Parent = Hat	
+
+while wait(math.random(5, 20)) do
+local RNG = math.random(1, 4)
+			
+if RNG == 1 then
+Q1:Play()
+elseif RNG == 2 then
+Q2:Play()
+elseif RNG == 3 then
+Q3:Play()				
+elseif RNG == 4 then
+Q4:Play()		
+end			
+end
+end
+end
