@@ -58,13 +58,13 @@ end
 end
 end
 
-local Q1 = Instance.new("Sound"):Clone()
-local Q2 = Instance.new("Sound"):Clone()
-local Q3 = Instance.new("Sound"):Clone()
-local Q4 = Instance.new("Sound"):Clone()
-
 while wait() do
-	if workspace:FindFirstChild("RushMoving") then	
+	if workspace:FindFirstChild("RushMoving") then
+		local Q1 = Instance.new("Sound")
+		local Q2 = Instance.new("Sound")
+		local Q3 = Instance.new("Sound")
+		local Q4 = Instance.new("Sound")
+		
 		workspace:FindFirstChild("RushMoving").RushNew.Attachment.ParticleEmitter.Texture = "http://www.roblox.com/asset/?id=11846455684"
 		workspace:FindFirstChild("RushMoving").RushNew.Attachment.ParticleEmitter.Rate = 100
 		workspace:FindFirstChild("RushMoving").RushNew.Attachment.ParticleEmitter.Speed = 0
