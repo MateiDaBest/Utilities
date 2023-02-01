@@ -1,5 +1,5 @@
 -- Services
-print("Worked")
+
 local Players = game:GetService("Players")
 local ReSt = game:GetService("ReplicatedStorage")
 local RS = game:GetService("RunService")
@@ -87,9 +87,9 @@ end
 
 Spawner.createEntity = function(config)
 	for i, v in next, SelfModules.DefaultConfig do
-		--if config[i] == nil then
-		--	config[i] = v
-		--end
+		if config[i] == nil then
+			config[i] = v
+		end
 	end
 
 	config.Speed = StaticRushSpeed / 100 * config.Speed
@@ -162,7 +162,7 @@ Spawner.runEntity = function(entityTable)
 	EntityConnections[entityModel] = {}
 	local entityConnections = EntityConnections[entityModel]
 
-	entityModel:SetPrimaryPartCFrame(entityNodes[entityTable.Config.BackwardsMovement and #entityNodes or 1].CFrame * CFrame.new(0, 0, startNodeOffset) + Vector3.new(0, 3.5 + entityTable.Config.HeightOffset, 0))
+	entityModel:SetPrimaryPartCFrame(entityNodes[startNodeIndex].Position * CFrame.new(0, 0, startNodeOffset) + Vector3.new(0, 3.5 + entityTable.Config.HeightOffset, 0))
 	entityModel.Parent = workspace
 	task.spawn(entityTable.Debug.OnEntitySpawned)
 
