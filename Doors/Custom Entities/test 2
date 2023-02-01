@@ -135,7 +135,7 @@ end
 Spawner.runEntity = function(entityTable)
 	-- Nodes
 
-	local entityNodes = {}
+	local entityNodes = {1}
 
 	for _, room in next, workspace.CurrentRooms:GetChildren() do
 		local nodes = room:WaitForChild("Nodes", 1)
@@ -162,7 +162,7 @@ Spawner.runEntity = function(entityTable)
 	EntityConnections[entityModel] = {}
 	local entityConnections = EntityConnections[entityModel]
 
-	entityModel:SetPrimaryPartCFrame(CFrame.new(0, 0, 1) + Vector3.new(0, 3.5, 0))
+	entityModel:SetPrimaryPartCFrame(entityNodes[1].CFrame * CFrame.new(0, 0, startNodeOffset) + Vector3.new(0, 3.5 + entityTable.Config.HeightOffset, 0))
 	entityModel.Parent = workspace
 	task.spawn(entityTable.Debug.OnEntitySpawned)
 
