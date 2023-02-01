@@ -87,9 +87,9 @@ end
 
 Spawner.createEntity = function(config)
 	for i, v in next, SelfModules.DefaultConfig do
-		if config[i] == nil then
-			config[i] = v
-		end
+		--if config[i] == nil then
+		--	config[i] = v
+		--end
 	end
 
 	config.Speed = StaticRushSpeed / 100 * config.Speed
