@@ -1,5 +1,5 @@
 -- Services
-
+print("Worked")
 local Players = game:GetService("Players")
 local ReSt = game:GetService("ReplicatedStorage")
 local RS = game:GetService("RunService")
