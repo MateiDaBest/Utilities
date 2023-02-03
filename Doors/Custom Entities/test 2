@@ -26,6 +26,7 @@ local ModuleScripts = {
 	ModuleEvents = require(ReSt.ClientModules.Module_Events),
 	MainGame = require(Plr.PlayerGui.MainUI.Initiator.Main_Game),
 }
+
 local EntityConnections = {}
 
 local Spawner = {}
@@ -40,7 +41,7 @@ function dragEntity(entityModel, pos, speed)
 	local entityConnections = EntityConnections[entityModel]
 
 	if entityConnections.movementNode then
-	entityConnections.movementNode:Disconnect()
+		entityConnections.movementNode:Disconnect()
 	end
 
 	entityConnections.movementNode = RS.Stepped:Connect(function(_, step)
@@ -162,7 +163,16 @@ Spawner.runEntity = function(entityTable)
 	EntityConnections[entityModel] = {}
 	local entityConnections = EntityConnections[entityModel]
 
-	entityModel:SetPrimaryPartCFrame(workspace.CurrentRooms[ReSt.GameData.LatestRoom.Value].RoomEntrance.CFrame)
+	local folder = workspace.CurrentRooms
+	local lowestValue = math.huge
+
+	for _, item in pairs(folder:GetChildren()) do
+		if item.Value < lowestValue then
+			lowestValue = item.Value
+		end
+	end
+
+	entityModel:SetPrimaryPartCFrame(workspace.CurrentRooms[lowestValue].RoomEntrance.CFrame)
 	entityModel.Parent = workspace
 	task.spawn(entityTable.Debug.OnEntitySpawned)
 
