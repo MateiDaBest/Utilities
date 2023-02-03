@@ -40,7 +40,7 @@ function dragEntity(entityModel, pos, speed)
 	local entityConnections = EntityConnections[entityModel]
 
 	if entityConnections.movementNode then
-		entityConnections.movementNode:Disconnect()
+	entityConnections.movementNode:Disconnect()
 	end
 
 	entityConnections.movementNode = RS.Stepped:Connect(function(_, step)
