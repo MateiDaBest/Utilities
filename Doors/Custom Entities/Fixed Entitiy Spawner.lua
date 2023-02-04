@@ -163,9 +163,9 @@ Spawner.runEntity = function(entityTable)
 	EntityConnections[entityModel] = {}
 	local entityConnections = EntityConnections[entityModel]
 	
-	local CurrentRoom = workspace.CurrentRooms
+	local CurrentRoom = workspace.CurrentRooms:GetChildren()
 
-	entityModel:SetPrimaryPartCFrame(workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom - #CurrentRoom].RoomEntrance.CFrame)
+	entityModel:SetPrimaryPartCFrame(workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom.Value - #CurrentRoom].RoomEntrance.CFrame)
 	entityModel.Parent = workspace
 	task.spawn(entityTable.Debug.OnEntitySpawned)
 
