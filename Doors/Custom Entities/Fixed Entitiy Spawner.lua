@@ -26,6 +26,7 @@ local ModuleScripts = {
 	ModuleEvents = require(ReSt.ClientModules.Module_Events),
 	MainGame = require(Plr.PlayerGui.MainUI.Initiator.Main_Game),
 }
+
 local EntityConnections = {}
 
 local Spawner = {}
@@ -162,7 +163,16 @@ Spawner.runEntity = function(entityTable)
 	EntityConnections[entityModel] = {}
 	local entityConnections = EntityConnections[entityModel]
 
-	entityModel:SetPrimaryPartCFrame(entityNodes[1].CFrame * CFrame.new(0, 0, startNodeOffset) + Vector3.new(0, 3.5 + entityTable.Config.HeightOffset, 0))
+	local folder = workspace.CurrentRooms
+	local lowestValue = math.huge
+
+	for _, item in pairs(folder:GetChildren()) do
+		if item.Value < lowestValue then
+			lowestValue = item.Name
+		end
+	end
+
+	entityModel:SetPrimaryPartCFrame(workspace.CurrentRooms[lowestValue].RoomEntrance.CFrame)
 	entityModel.Parent = workspace
 	task.spawn(entityTable.Debug.OnEntitySpawned)
 
@@ -181,7 +191,7 @@ Spawner.runEntity = function(entityTable)
 	-- Flickering
 
 	if entityTable.Config.FlickerLights[1] then
-		ModuleScripts.ModuleEvents.flickerLights(workspace.CurrentRooms[ReSt.GameData.LatestRoom.Value], entityTable.Config.FlickerLights[2])
+		ModuleScripts.ModuleEvents.flicker(workspace.CurrentRooms[ReSt.GameData.LatestRoom.Value], entityTable.Config.FlickerLights[2])
 	end
 
 	-- Movement
@@ -272,7 +282,7 @@ Spawner.runEntity = function(entityTable)
 						ReSt.GameStats["Player_".. Plr.Name].Total.DeathCause.Value = entityModel.Name
 
 						if #entityTable.Config.CustomDialog > 0 then
-							firesignal(ReSt.Bricks.DeathHint.OnClientEvent, entityTable.Config.CustomDialog)
+							firesignal(ReSt.EntityInfo.DeathHint.OnClientEvent, entityTable.Config.CustomDialog)
 						end
 
 						-- Unmute entity
@@ -477,4 +487,3 @@ task.spawn(function()
 end)
 
 return Spawner
-print("e")
