@@ -165,7 +165,7 @@ Spawner.runEntity = function(entityTable)
 	
 	local CurrentRoom = workspace.CurrentRooms:GetChildren()
 
-	entityModel:SetPrimaryPartCFrame(workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom - #CurrentRoom].RoomEntrance.CFrame)
+	entityModel:SetPrimaryPartCFrame(workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom.Value - #CurrentRoom + 2].RoomEntrance.CFrame)
 	entityModel.Parent = workspace
 	task.spawn(entityTable.Debug.OnEntitySpawned)
 
