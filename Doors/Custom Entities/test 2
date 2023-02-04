@@ -163,12 +163,12 @@ Spawner.runEntity = function(entityTable)
 	EntityConnections[entityModel] = {}
 	local entityConnections = EntityConnections[entityModel]
 
-	local folder = workspace.CurrentRooms
+	local CRooms = workspace.CurrentRooms
 	local lowestValue = math.huge
 
-	for _, item in pairs(folder:GetChildren()) do
-		if item.Value < lowestValue then
-			lowestValue = item.Value
+	for _, CR in pairs(CRooms:GetChildren()) do
+		if CR.Value < lowestValue then
+			lowestValue = CR.Name
 		end
 	end
 
