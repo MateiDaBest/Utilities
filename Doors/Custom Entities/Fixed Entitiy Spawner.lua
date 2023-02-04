@@ -162,17 +162,10 @@ Spawner.runEntity = function(entityTable)
 
 	EntityConnections[entityModel] = {}
 	local entityConnections = EntityConnections[entityModel]
+	
+	local CurrentRoom = workspace.CurrentRooms
 
-	local folder = workspace.CurrentRooms
-	local lowestValue = math.huge
-
-	for _, item in pairs(folder:GetChildren()) do
-		if item.Value < lowestValue then
-			lowestValue = item.Name
-		end
-	end
-
-	entityModel:SetPrimaryPartCFrame(workspace.CurrentRooms[lowestValue].RoomEntrance.CFrame)
+	entityModel:SetPrimaryPartCFrame(workspace.CurrentRooms[game.ReplicatedStorage.GameData.LatestRoom - #CurrentRoom].RoomEntrance.CFrame)
 	entityModel.Parent = workspace
 	task.spawn(entityTable.Debug.OnEntitySpawned)
 
