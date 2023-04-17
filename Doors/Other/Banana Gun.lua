@@ -1,5 +1,4 @@
 local Player = game.Players.LocalPlayer
-local UserInputService = game:GetService("UserInputService")
 local char = Player.Character
 local hum = char:WaitForChild("Humanoid")
 local Equipped = false
@@ -11,7 +10,28 @@ local LeftArm = Char:WaitForChild("LeftUpperArm")
 local RightC1 = RightArm.RightShoulder.C1
 local LeftC1 = LeftArm.LeftShoulder.C1
 local CustomShop = loadstring(game:HttpGet("https://raw.githubusercontent.com/MateiDaBest/Utilities/main/Doors/Custom%20Shop%20Items/Main.lua", true))()
-local BananaGun = game:GetObjects("rbxassetid://13125092275")[1]
+local BananaGun = game:GetObjects("rbxassetid://13161656565")[1]
+local mouse = Player:GetMouse()
+
+local Mobile = Instance.new("ScreenGui")
+local Click = Instance.new("TextButton")
+
+Mobile.Name = "Mobile"
+Mobile.Enabled = false
+Mobile.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+Mobile.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Click.Name = "Click"
+Click.Parent = Mobile
+Click.AnchorPoint = Vector2.new(0.5, 0.5)
+Click.BackgroundColor3 = Color3.new(1, 1, 1)
+Click.BackgroundTransparency = 1
+Click.Position = UDim2.new(0.5, 0, 0.5, 0)
+Click.Size = UDim2.new(1, 0, 1, 0)
+Click.Font = Enum.Font.SourceSans
+Click.Text = ""
+Click.TextColor3 = Color3.new(0, 0, 0)
+Click.TextSize = 14
 
 CustomShop.CreateItem({
 	Title = "Banana Gun",
@@ -23,36 +43,33 @@ CustomShop.CreateItem({
 
 BananaGun.Parent = game.Players.LocalPlayer.Backpack
 
-local function Shoot()
-	local Banana = workspace:FindFirstChild("BananaPeel")
-	local Sound = Instance.new("Sound", game.StarterPlayer)
-	local HRP = BananaGun.Shoot.CFrame * CFrame.Angles(0,math.rad(-90),0)
-	local Attachment = Instance.new("Attachment", Banana)
-	local LV = Instance.new("LinearVelocity", Attachment)
-	task.wait()
-	Banana.Anchored = false
-	Banana.Massless = false
+function getBananasPlayerOwned()
+	local bananas = {}
+	for _, instance in ipairs(workspace:GetChildren()) do
+		if instance.Name == "BananaPeel" and isnetworkowner(instance) then
+			table.insert(bananas,instance)
+		end
+	end
+
+	return bananas
+end
+
+Click.MouseButton1Click:Connect(function()
+	local Sound = Instance.new("Sound", game.StarterPlayer) 
 	Sound.Volume = 10
 	Sound.SoundId = "rbxassetid://4700679385"
 	Sound.PlayOnRemove = true
 	Sound:Destroy()
-	LV.MaxForce = math.huge
-	LV.VectorVelocity = (game:GetService("Players").LocalPlayer:GetMouse().Hit.Position - BananaGun.Shoot.Position).Unit * 100
-	LV.Attachment0 = Attachment
-	Banana.Parent = workspace
-	Banana.CFrame = BananaGun.Shoot.CFrame * CFrame.Angles(math.rad(0),math.rad(90),math.rad(90))
 
-	Banana.Touched:Connect(function(part)
-		local Model = part:FindFirstAncestorWhichIsA("Model")
-		if Model.Name == "JeffTheKiller" then
-			Model:FindFirstChild("Humanoid").Health = 0
-			task.wait()
-			Model:FindFirstChild("Humanoid").Health = 1
-			task.wait()
-			Model:FindFirstChild("Humanoid").Health = 0	
-		end	
-	end)
-end
+	local bananas = getBananasPlayerOwned()
+	local randomBanana = bananas[math.random(1,#bananas)]
+
+	local velocity = mouse.Hit.LookVector * 0.5 * 200
+	local spawnPos = workspace.CurrentCamera.CFrame:ToWorldSpace(CFrame.new(0, 0, -5) * CFrame.lookAt(Vector3.new(0, 0, 0), workspace.CurrentCamera.CFrame.LookVector))
+
+	randomBanana.CFrame = spawnPos
+	randomBanana.Velocity = velocity
+end)
 
 local function setupHands(tool)
 	tool.Equipped:Connect(function()
@@ -70,6 +87,10 @@ local function setupHands(tool)
 		LeftArm.LeftShoulder.C1 = LeftC1
 			* CFrame.new(-0.2, 0.5, -0.5)
 			* CFrame.Angles(math.rad(-90), math.rad(25), math.rad(0))
+
+		if game:GetService("UserInputService").TouchEnabled then
+			Click.Enabled = true
+		end
 	end)
 
 	tool.Unequipped:Connect(function()
@@ -80,10 +101,25 @@ local function setupHands(tool)
 
 		RightArm.RightShoulder.C1 = RightC1
 		LeftArm.LeftShoulder.C1 = LeftC1
+		
+		Click.Enabled = false
 	end)
 
 	tool.Activated:Connect(function()
-		Shoot()
+		local Sound = Instance.new("Sound", game.StarterPlayer) 
+		Sound.Volume = 10
+		Sound.SoundId = "rbxassetid://4700679385"
+		Sound.PlayOnRemove = true
+		Sound:Destroy()
+
+		local bananas = getBananasPlayerOwned()
+		local randomBanana = bananas[math.random(1,#bananas)]
+
+		local velocity = mouse.Hit.LookVector * 0.5 * 200
+		local spawnPos = workspace.CurrentCamera.CFrame:ToWorldSpace(CFrame.new(0, 0, -5) * CFrame.lookAt(Vector3.new(0, 0, 0), workspace.CurrentCamera.CFrame.LookVector))
+
+		randomBanana.CFrame = spawnPos
+		randomBanana.Velocity = velocity
 	end)
 end
 
