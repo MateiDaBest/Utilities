@@ -1,6 +1,6 @@
 local Krnl = _G.Krnl
 
-if Krnl or false then
+if _G.Krnl or false then
   print("Krnl")
 else
   print("e")
