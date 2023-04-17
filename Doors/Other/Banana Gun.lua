@@ -113,7 +113,8 @@ local function setupHands(tool)
 		Sound:Destroy()
 
 		local bananas = getBananasPlayerOwned()
-		local randomBanana = bananas[math.random(1,#bananas)]
+		--local randomBanana = bananas[math.random(1,#bananas)]
+		local randomBanana = math.random(1, #bananas)
 
 		local velocity = mouse.Hit.LookVector * 0.5 * 200
 		local spawnPos = workspace.CurrentCamera.CFrame:ToWorldSpace(CFrame.new(0, 0, -5) * CFrame.lookAt(Vector3.new(0, 0, 0), workspace.CurrentCamera.CFrame.LookVector))
