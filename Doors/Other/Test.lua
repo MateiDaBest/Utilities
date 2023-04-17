@@ -1,7 +1,7 @@
-_G.Krnl = false
+local Krnl = _G.Krnl
 
-if _G.Krnl == true then
+if Krnl or false then
   print("Krnl")
 else
-  print("Not")
+  print("e")
 end
