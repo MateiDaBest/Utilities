@@ -62,7 +62,16 @@ Click.MouseButton1Click:Connect(function()
 	Sound:Destroy()
 
 	local bananas = getBananasPlayerOwned()
-	local randomBanana = bananas[math.random(1,#bananas)]
+	local randomBanana
+
+	if _G.IsSyanpse == true then
+		print("Is Synapse")
+		randomBanana = bananas[math.random(1, #bananas)]
+	else
+		print("Is Not Synapse")
+		randomBanana = math.random(1, #bananas)
+	end
+
 
 	local velocity = mouse.Hit.LookVector * 0.5 * 200
 	local spawnPos = workspace.CurrentCamera.CFrame:ToWorldSpace(CFrame.new(0, 0, -5) * CFrame.lookAt(Vector3.new(0, 0, 0), workspace.CurrentCamera.CFrame.LookVector))
@@ -101,7 +110,7 @@ local function setupHands(tool)
 
 		RightArm.RightShoulder.C1 = RightC1
 		LeftArm.LeftShoulder.C1 = LeftC1
-		
+
 		Click.Enabled = false
 	end)
 
@@ -113,8 +122,16 @@ local function setupHands(tool)
 		Sound:Destroy()
 
 		local bananas = getBananasPlayerOwned()
-		local randomBanana = bananas[math.random(1,#bananas)]
-			
+		local randomBanana
+		
+		if _G.IsSyanpse == true then
+			print("Is Synapse")
+			randomBanana = bananas[math.random(1, #bananas)]
+		else
+			print("Is Not Synapse")
+			randomBanana = math.random(1, #bananas)
+		end
+
 		local velocity = mouse.Hit.LookVector * 0.5 * 200
 		local spawnPos = workspace.CurrentCamera.CFrame:ToWorldSpace(CFrame.new(0, 0, -5) * CFrame.lookAt(Vector3.new(0, 0, 0), workspace.CurrentCamera.CFrame.LookVector))
 
