@@ -56,7 +56,7 @@ end
 
 Click.MouseButton1Click:Connect(function()
 	local Sound = Instance.new("Sound", game.StarterPlayer) 
-	Sound.Volume = 10
+	Sound.Volume = 2.5
 	Sound.SoundId = "rbxassetid://4700679385"
 	Sound.PlayOnRemove = true
 	Sound:Destroy()
