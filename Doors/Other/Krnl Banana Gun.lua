@@ -31,7 +31,7 @@ local function Shoot()
 	task.wait()
 	Banana.Anchored = false
 	Banana.Massless = false
-	Sound.Volume = 10
+	Sound.Volume = 2.5
 	Sound.SoundId = "rbxassetid://4700679385"
 	Sound.PlayOnRemove = true
 	Sound:Destroy()
