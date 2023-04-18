@@ -102,7 +102,9 @@ local function setupHands(tool)
 		RightArm.RightShoulder.C1 = RightC1
 		LeftArm.LeftShoulder.C1 = LeftC1
 
-		Click.Enabled = false
+				if game:GetService("UserInputService").TouchEnabled then
+			Click.Enabled = false
+		end
 	end)
 
 	tool.Activated:Connect(function()
@@ -120,6 +122,17 @@ local function setupHands(tool)
 
 		randomBanana.CFrame = spawnPos
 		randomBanana.Velocity = velocity
+			
+		randomBanana.Touched:Connect(function(part)
+		local Model = part:FindFirstAncestorWhichIsA("Model")
+		if Model.Name == "JeffTheKiller" then
+			Model:FindFirstChild("Humanoid").Health = 0
+			task.wait()
+			Model:FindFirstChild("Humanoid").Health = 1
+			task.wait()
+			Model:FindFirstChild("Humanoid").Health = 0	
+		end	
+	end)
 	end)
 end
 
