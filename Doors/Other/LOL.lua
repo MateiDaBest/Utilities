@@ -1,5 +1,5 @@
-local Release = "Beta 8"
-local NotificationDuration = 6.5
+local Release = "Kiwi"
+local NotificationDuration = 10
 local RayfieldFolder = "Rayfield"
 local ConfigurationFolder = RayfieldFolder.."/Configurations"
 local ConfigurationExtension = ".rfld"
@@ -12,35 +12,35 @@ local RayfieldLibrary = {
 			TextColor = Color3.fromRGB(240, 240, 240),
 
 			Background = Color3.fromRGB(0, 85, 0),
-			Topbar = Color3.fromRGB(34, 34, 34),
-			Shadow = Color3.fromRGB(20, 20, 20),
+			Topbar = Color3.fromRGB(0, 71, 0),
+			Shadow = Color3.fromRGB(0, 50, 0),
 
-			NotificationBackground = Color3.fromRGB(20, 20, 20),
-			NotificationActionsBackground = Color3.fromRGB(230, 230, 230),
+			NotificationBackground = Color3.fromRGB(0, 85, 0),
+			NotificationActionsBackground = Color3.fromRGB(0, 66, 0),
 
-			TabBackground = Color3.fromRGB(80, 80, 80),
-			TabStroke = Color3.fromRGB(85, 85, 85),
-			TabBackgroundSelected = Color3.fromRGB(210, 210, 210),
+			TabBackground = Color3.fromRGB(0, 107, 0),
+			TabStroke = Color3.fromRGB(0, 44, 0),
+			TabBackgroundSelected = Color3.fromRGB(0, 127, 0),
 			TabTextColor = Color3.fromRGB(240, 240, 240),
-			SelectedTabTextColor = Color3.fromRGB(50, 50, 50),
+			SelectedTabTextColor = Color3.fromRGB(0, 85, 0),
 
-			ElementBackground = Color3.fromRGB(35, 35, 35),
-			ElementBackgroundHover = Color3.fromRGB(40, 40, 40),
-			SecondaryElementBackground = Color3.fromRGB(25, 25, 25), -- For labels and paragraphs
-			ElementStroke = Color3.fromRGB(50, 50, 50),
-			SecondaryElementStroke = Color3.fromRGB(40, 40, 40), -- For labels and paragraphs
+			ElementBackground = Color3.fromRGB(0, 85, 0),
+			ElementBackgroundHover = Color3.fromRGB(0, 70, 0),
+			SecondaryElementBackground = Color3.fromRGB(0, 54, 0), -- For labels and paragraphs
+			ElementStroke = Color3.fromRGB(0, 104, 0),
+			SecondaryElementStroke = Color3.fromRGB(0, 104, 0), -- For labels and paragraphs
 
-			SliderBackground = Color3.fromRGB(43, 105, 159),
-			SliderProgress = Color3.fromRGB(43, 105, 159),
-			SliderStroke = Color3.fromRGB(48, 119, 177),
+			SliderBackground = Color3.fromRGB(0, 57, 0),
+			SliderProgress = Color3.fromRGB(0, 85, 0),
+			SliderStroke = Color3.fromRGB(0, 103, 0),
 
-			ToggleBackground = Color3.fromRGB(30, 30, 30),
-			ToggleEnabled = Color3.fromRGB(0, 146, 214),
+			ToggleBackground = Color3.fromRGB(0, 85, 0),
+			ToggleEnabled = Color3.fromRGB(0, 116, 0),
 			ToggleDisabled = Color3.fromRGB(100, 100, 100),
-			ToggleEnabledStroke = Color3.fromRGB(0, 170, 255),
-			ToggleDisabledStroke = Color3.fromRGB(125, 125, 125),
-			ToggleEnabledOuterStroke = Color3.fromRGB(100, 100, 100),
-			ToggleDisabledOuterStroke = Color3.fromRGB(65, 65, 65),
+			ToggleEnabledStroke = Color3.fromRGB(0, 104, 0),
+			ToggleDisabledStroke = Color3.fromRGB(0, 68, 0),
+			ToggleEnabledOuterStroke = Color3.fromRGB(0, 85, 0),
+			ToggleDisabledOuterStroke = Color3.fromRGB(0, 85, 0),
 
 			InputBackground = Color3.fromRGB(30, 30, 30),
 			InputStroke = Color3.fromRGB(65, 65, 65),
@@ -207,7 +207,7 @@ function ChangeTheme(ThemeName)
 		end
 	end
 
-	Rayfield.Main.BackgroundColor3 = SelectedTheme.Background
+	Rayfield.Main.BackgroundColor3 = Color3.fromRGB(85, 0, 255)
 	Rayfield.Main.Topbar.BackgroundColor3 = SelectedTheme.Topbar
 	Rayfield.Main.Topbar.CornerRepair.BackgroundColor3 = SelectedTheme.Topbar
 	Rayfield.Main.Shadow.Image.ImageColor3 = SelectedTheme.Shadow
@@ -910,7 +910,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 	LoadingFrame.Title.Text = Settings.LoadingTitle or "Rayfield Interface Suite"
 	LoadingFrame.Subtitle.Text = Settings.LoadingSubtitle or "by Sirius"
 	if Settings.LoadingTitle ~= "Rayfield Interface Suite" then
-		LoadingFrame.Version.Text = "Rayfield UI"
+		LoadingFrame.Version.Text = "Kiwi"
 	end
 	Topbar.Visible = false
 	Elements.Visible = false
