@@ -1,3 +1,5 @@
+-- H
+
 repeat wait() until game:IsLoaded()
 
 if not writefile then
@@ -114,8 +116,8 @@ modifier.createTab = function(tab)
 		end
 	end
 	
-	if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("Abc") then
-		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("Abc"):Destroy()
+	if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("abc") then
+		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("abc"):Destroy()
 		--game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = true
 		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = true
 		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
@@ -229,7 +231,7 @@ modifier.createModifier = function(customization)
 		end
 	end
 	
-	if not game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("Abc") then
+	if not game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("abc") then
 		firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent, "No tab found.")
 		return
 	end
