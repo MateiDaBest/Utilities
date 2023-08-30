@@ -1,3 +1,4 @@
+-- hi
 repeat wait() until game:IsLoaded()
 
 if not writefile then
@@ -239,10 +240,10 @@ modifier.createModifier = function(customization)
 	end
 	
 	local code = {
-		modifier = function() end
+		modifierlogic = function() end
 	}
 	
-	task.defer(code.modifier)
+	task.defer(code.modifierlogic)
 	
 	local enabledModifier = false
 	
