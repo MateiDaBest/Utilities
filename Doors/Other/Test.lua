@@ -271,7 +271,17 @@ modifier.createModifier = function(customization)
 			counter = counter + 1
 		end
 
-		local activeInfo = nil  -- Keep track of the active info
+		local function updateConnectorsColor(selectedInfo)
+			for _, info in ipairs(linkedObjects) do
+				if info.Connector and info.ConnectorOut then
+					local isSelected = info == selectedInfo
+					info.Connector.BackgroundColor3 = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
+					info.ConnectorOut.BackgroundColor3 = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
+				end
+			end
+		end
+
+		local selectedInfo = nil
 
 		for _, name in ipairs(group) do
 			-- Interaction behavior for linked objects
@@ -284,29 +294,19 @@ modifier.createModifier = function(customization)
 			table.insert(linkedObjects, info)
 
 			if info.Connector and info.ConnectorOut then
-				local function updateConnectorColor()
-					if activeInfo == info then
-						activeInfo = nil
-						info.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)  -- Original color
-						info.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63)  -- Original color
+				info.Object.MouseButton1Click:Connect(function()
+					if selectedInfo == info then
+						selectedInfo = nil
 					else
-						if activeInfo then
-							activeInfo.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)  -- Reset color for previously active link
-							activeInfo.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63)  -- Reset color for previously active link
-						end
-						activeInfo = info
-						info.Connector.BackgroundColor3 = Color3.fromRGB(255, 160, 147)  -- New color for active link
-						info.ConnectorOut.BackgroundColor3 = Color3.fromRGB(255, 160, 147)  -- New color for active link
+						selectedInfo = info
 					end
-				end
-
-				info.Object.MouseButton1Click:Connect(updateConnectorColor)
+					updateConnectorsColor(selectedInfo)
+				end)
 			end
 		end
 	end
 
 	createLinkedGroup()
-
 
 	-- Modifiers UI and interaction
 
@@ -450,4 +450,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier
+return modifier -- e
