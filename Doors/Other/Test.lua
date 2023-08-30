@@ -180,14 +180,14 @@ elseif Floor.Value == "Rooms" then
 	return
 end
 
-local CustomTab = {
-	Tab = {
+local defaultConfig = {
+	CustomTab = {
 		Image = "http://www.roblox.com/asset/?id=12351005336",
 		Text = "A-90"
 	}
 }
 
-local CustomModifier = {
+local defaultConfig2 = {
 	ButtonCustomization = {
 		Color = Color3.fromRGB(255, 160, 147),
 		Name = "A-90",
@@ -200,17 +200,17 @@ local CustomModifier = {
 }
 
 modifiers.createTab = function(config)
-	for i, v in next, CustomTab do
+	for i, v in next, defaultConfig do
 		if config[i] == nil then
-			config[i] = CustomTab[i]
+			config[i] = defaultConfig[i]
 		end
 	end
 
 	local custom = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel:Clone()
 	custom.Visible = false
-	custom.Name = config.Tab.Name
-	custom.Text = config.Tab.Name
-	custom.Background.Image = config.Tab.Image
+	custom.Name = config.CustomTab.Name
+	custom.Text = config.CustomTab.Name
+	custom.Background.Image = config.CustomTab.Image
 	custom.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors
 
 	local custommodifiers = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:Clone()
@@ -281,10 +281,11 @@ modifiers.createTab = function(config)
 	end
 end
 
-modifiers.createModifier = function(config2)
-	for i, v in next, CustomModifier do
-		if config2[i] == nil then
-			config2[i] = CustomModifier[i]
+modifiers.createModifier = function(config)
+	print("Detected")
+	for o, b in next, defaultConfig2 do
+		if config[o] == nil then
+			config[o] = defaultConfig2[o]
 		end
 	end
 	
@@ -337,10 +338,9 @@ modifiers.createModifier = function(config2)
 		ModifiersMain.Visible = true
 		ModifiersMain.KnobBonus.Text = AddedAmount.. "%"
 		ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
-		
-		print(EnabledMod)
+
+print(EnabledMod)
 		if EnabledMod then
-			print("ye")
 			local Template = ModifiersMain.Template:Clone()
 			Template.Name = "abc"
 			Template.Visible = true
