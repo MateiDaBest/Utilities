@@ -30,7 +30,6 @@ local defaultConfig2 = {
 	}
 }
 
-print(defaultConfig2.ButtonCustomization.WorksInRooms)
 
 local Floor = game:GetService("ReplicatedStorage").GameData.Floor
 if Floor.Value == "Hotel" and game.PlaceId == 6839171747 then
@@ -63,15 +62,16 @@ if Floor.Value == "Hotel" and game.PlaceId == 6839171747 then
 
 	spawn(function()
 		local Template = TempMods:FindFirstChild("Template"):Clone()
-		Template.Text = jsonData3
+		Template.Text = decodedData3
 		Template.Parent = TempMods
 		Template.Visible = true
-		Template.BackgroundColor3 = jsonData4
+		Template.BackgroundColor3 = decodedData4
 		local Template_2 = MainMods:FindFirstChild("Template"):Clone()
-		Template_2.Text = jsonData3
+		Template_2.Text = decodedData3
 		Template_2.Parent = MainMods
 		Template_2.Visible = true
-		Template_2.BackgroundColor3 = jsonData4
+		Template_2.BackgroundColor3 = decodedData4
+		
 		Mods += 1
 	end)
 
@@ -114,9 +114,11 @@ if Floor.Value == "Hotel" and game.PlaceId == 6839171747 then
 end
 
 modifiers.createTab = function(config)
-	for i, v in next, defaultConfig do
+	if game.PlaceId == 6839171747 then return end
+	
+	for i, v in next, defaultConfig.CustomTab do
 		if config[i] == nil then
-			config[i] = defaultConfig[i]
+			config[i] = defaultConfig.CustomTab[i]
 		end
 	end
 
@@ -197,9 +199,9 @@ end
 
 modifiers.createModifier = function(config)
 	print("Detected")
-	for i, v in next, defaultConfig2 do
+	for i, v in next, defaultConfig2.ButtonCustomization do
 		if config[i] == nil then
-			config[i] = defaultConfig2[i]
+			config[i] = defaultConfig2.ButtonCustomization[i]
 		end
 	end
 	
