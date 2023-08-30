@@ -12,6 +12,7 @@ local ModifersEnabled = 0
 
 local defaultConfig = {
 	Tab = {
+		CreateNewTab = true,
 		Title = "A-90",
 		Image = "http://www.roblox.com/asset/?id=12351005336"
 	},
@@ -19,15 +20,13 @@ local defaultConfig = {
 		Title = "A-90",
 		Description = "A-90 is a entity from rooms.",
 		Color = Color3.fromRGB(255, 160, 147),
-		Knobs = "50",
-		KnobBonus = true, -- +50%
-		KnobPenalty = false, -- -50%
-		WorksInRooms = false,
+		Knobs = 50,
+		KnobBonus = true,
+		KnobPenalty = false,
 		Linked = false
 	}
 }
 
-local Floor = game:GetService("ReplicatedStorage").GameData.Floor
 if game.PlaceId == 6839171747 then
 	if not isfile("name.txt") then
 		return
@@ -63,7 +62,10 @@ if game.PlaceId == 6839171747 then
 		Template_2.Visible = true
 		Template_2.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
 
-		spawn(modifier.modifierLogic)
+		spawn(function()
+			modifier.modifierLogic()
+		end)
+
 
 		Mods += 1
 	end)
@@ -107,11 +109,18 @@ if game.PlaceId == 6839171747 then
 end
 
 modifier.createTab = function(tab)
-	if game.PlaceId == 6839171747 then return end
+	if game.PlaceId == 6839171747 then
+		return 
+	end
+	
 	for i, v in next, defaultConfig do
 		if tab[i] == nil then
 			tab[i] = defaultConfig[i]
 		end
+	end
+	
+	if tab.Tab.CreateNewTab == false then
+		return
 	end
 
 	local custom = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel:Clone()
@@ -211,7 +220,7 @@ modifier.createModifier = function(customization)
 	end
 
 	local Confirm = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm:Clone()
-	Confirm.Name = "RoomsConfirm"
+	Confirm.Name = "customConfirm"
 	Confirm.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
 	Confirm.Visible = false
 	Confirm.MouseButton1Click:Connect(function()
@@ -298,7 +307,11 @@ modifier.createModifier = function(customization)
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
 	modifierCreate.Visible = true
 	modifierCreate.Text = customization.Customization.Title
-	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
+	if customization.Tab.CreateNewTab == false then
+		modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers
+	else
+		modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
+	end
 	if customization.Customization.KnobBonus == true then
 		modifierCreate.Info.KnobPenalty.Visible = false
 		modifierCreate.Info.KnobBonus.Text = "+".. customization.Customization.Knobs.. "%"
