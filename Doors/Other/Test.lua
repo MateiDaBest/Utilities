@@ -1,4 +1,3 @@
--- E
 repeat wait() until game:IsLoaded()
 
 if not writefile then
@@ -262,10 +261,10 @@ modifier.createModifier = function(customization)
 		local colorTable = {
 			R = customization.Customization.Color.R,
 			G = customization.Customization.Color.G,
-			B = customization.Customization.Color.B,
+			B = customization.Customization.Color.B
 		}
 		
-		writefile("color.txt", game:GetService("HttpService"):JSONEncode())
+		writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
 
 	end)
 
