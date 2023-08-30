@@ -330,7 +330,9 @@ modifier.createModifier = function(customization)
 			ModifiersMain.Visible = true
 			ModifiersMain.KnobBonus.Text = AddedAmount.. "%"
 			ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
-
+			
+			print(enabledModifier)
+			
 			if enabledModifier then
 				local Template = ModifiersMain.Template:Clone()
 				Template.Name = "abc"
@@ -351,14 +353,6 @@ modifier.createModifier = function(customization)
 			}
 
 			writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
-
-			-- Clone the Confirm button and reset the UI for the next modifier
-			local NewConfirm = Confirm:Clone()
-			NewConfirm.Name = "customConfirm"
-			NewConfirm.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
-			NewConfirm.Visible = false
-			Confirm:Destroy()
-			Confirm = NewConfirm
 		end)
 	else
 		local Confirm = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm:Clone()
@@ -396,7 +390,9 @@ modifier.createModifier = function(customization)
 			ModifiersMain.Visible = true
 			ModifiersMain.KnobBonus.Text = AddedAmount.. "%"
 			ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
-
+			
+			print(enabledModifier)
+			
 			if enabledModifier then
 				local Template = ModifiersMain.Template:Clone()
 				Template.Name = "abc"
@@ -417,14 +413,6 @@ modifier.createModifier = function(customization)
 			}
 
 			writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
-
-			-- Clone the Confirm button and reset the UI for the next modifier
-			local NewConfirm = Confirm:Clone()
-			NewConfirm.Name = "customConfirm"
-			NewConfirm.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
-			NewConfirm.Visible = false
-			Confirm:Destroy()
-			Confirm = NewConfirm
 		end)
 	end
 
@@ -452,4 +440,3 @@ modifier.createModifier = function(customization)
 end
 
 return modifier
--- hi
