@@ -1,3 +1,4 @@
+-- e
 repeat wait() until game:IsLoaded()
 
 if not writefile then
@@ -379,13 +380,13 @@ modifiers.createModifier = function(config)
 		end
 	end)
 	
-	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator[config.ButtonCustomization.Name]:WaitForChild("Template"):Clone()
+	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:WaitForChild("Template"):Clone()
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
 	local enabledModifier = false
 	
 	modifierCreate.Visible = true
 	modifierCreate.Text = config.ButtonCustomization.Name
-	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator[config.ButtonCustomization.Name]
+	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 	modifierCreate.Info.KnobBonus.Visible = true
 	modifierCreate.Info.KnobBonus.Text = "+69%"
 	modifierCreate.BackgroundColor3 = config.ButtonCustomization.Color
