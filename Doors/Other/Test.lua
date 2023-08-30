@@ -263,7 +263,6 @@ modifier.createModifier = function(customization)
 
 	local function createLinkedGroup()
 		-- Grouping linked objects
-
 		local group = {}
 		local counter = #linkedObjects + 1
 
@@ -272,11 +271,11 @@ modifier.createModifier = function(customization)
 			counter = counter + 1
 		end
 
+		local activeInfo = nil  -- Keep track of the active info
+
 		for _, name in ipairs(group) do
 			-- Interaction behavior for linked objects
-
 			local info = {
-				IsActive = false,
 				Object = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name),
 				Connector = modifierCreate.Object and modifierCreate.Object:FindFirstChild("Connector"),
 				ConnectorOut = modifierCreate.Object and modifierCreate.Object:FindFirstChild("ConnectorOut")
@@ -285,30 +284,29 @@ modifier.createModifier = function(customization)
 			table.insert(linkedObjects, info)
 
 			if info.Connector and info.ConnectorOut then
-				info.Object.MouseButton1Click:Connect(function()
-					for _, otherInfo in ipairs(linkedObjects) do
-						if otherInfo ~= info then
-							otherInfo.IsActive = false
-							otherInfo.Connector.Visible = false
-							otherInfo.ConnectorOut.Visible = false
-						end
-					end
-
-					if not info.IsActive then
-						info.IsActive = true
-						info.Connector.Visible = true
-						info.ConnectorOut.Visible = true
+				local function updateConnectorColor()
+					if activeInfo == info then
+						activeInfo = nil
+						info.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)  -- Original color
+						info.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63)  -- Original color
 					else
-						info.IsActive = false
-						info.Connector.Visible = false
-						info.ConnectorOut.Visible = false
+						if activeInfo then
+							activeInfo.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)  -- Reset color for previously active link
+							activeInfo.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63)  -- Reset color for previously active link
+						end
+						activeInfo = info
+						info.Connector.BackgroundColor3 = Color3.fromRGB(255, 160, 147)  -- New color for active link
+						info.ConnectorOut.BackgroundColor3 = Color3.fromRGB(255, 160, 147)  -- New color for active link
 					end
-				end)
+				end
+
+				info.Object.MouseButton1Click:Connect(updateConnectorColor)
 			end
 		end
 	end
 
 	createLinkedGroup()
+
 
 	-- Modifiers UI and interaction
 
