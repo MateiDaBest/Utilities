@@ -5,7 +5,7 @@ if not writefile then
 	return
 end
 
-local modifiers = {}
+local modifier = {}
 local Data = {}
 local AddedAmount = 0
 local ModifersEnabled = 0
@@ -72,6 +72,8 @@ if Floor.Value == "Hotel" and game.PlaceId == 6839171747 then
 		Template_2.Visible = true
 		Template_2.BackgroundColor3 = decodedData4
 		
+		task.defer(modifier.modifierLogic)
+		
 		Mods += 1
 	end)
 
@@ -113,7 +115,7 @@ if Floor.Value == "Hotel" and game.PlaceId == 6839171747 then
 	return
 end
 
-modifiers.createTab = function(config)
+modifier.createTab = function(config)
 	if game.PlaceId == 6839171747 then return end
 	
 	for i, v in next, defaultConfig.CustomTab do
@@ -197,8 +199,9 @@ modifiers.createTab = function(config)
 	end
 end
 
-modifiers.createModifier = function(config)
+modifier.createModifier = function(config)
 	print("Detected")
+	print(config.ButtonCustomization.Color)
 	for i, v in next, defaultConfig2.ButtonCustomization do
 		if config[i] == nil then
 			config[i] = defaultConfig2.ButtonCustomization[i]
@@ -267,7 +270,6 @@ modifiers.createModifier = function(config)
 
 		writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
 		writefile("name.txt", tostring(game:GetService("HttpService"):JSONEncode(config.ButtonCustomization.Name)))
-		print(config.ButtonCustomization.Color)
 		writefile("color.txt", tostring(game:GetService("HttpService"):JSONEncode(config.ButtonCustomization.Color)))
 	end)
 	
@@ -382,4 +384,4 @@ modifiers.createModifier = function(config)
 	end)
 end
 
-return modifiers
+return modifier
