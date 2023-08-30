@@ -233,6 +233,8 @@ modifier.createModifier = function(customization)
 		deletefile("color.txt")
 	end
 	
+	local enabledModifier
+	
 	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:WaitForChild("Template"):Clone()
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
 	modifierCreate.Visible = true
@@ -271,6 +273,7 @@ modifier.createModifier = function(customization)
 	end)
 	
 	modifierCreate.MouseButton1Click:Connect(function()
+		enabledModifier = false
 		
 		if not enabledModifier then
 			enabledModifier = true
@@ -306,7 +309,6 @@ modifier.createModifier = function(customization)
 		local ModifiersMain = game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers
 		local MaxPlayers = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.MaxPlayers.Toggle.Text
 		local FriendsOnly
-		local enabledModifier = false
 
 		if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.FriendsOnly.Toggle.BackgroundTransparency == 0.9 then
 			FriendsOnly = false
@@ -342,6 +344,7 @@ modifier.createModifier = function(customization)
 			Template.Text = customization.Customization.Title
 			Template.BackgroundColor3 = customization.Customization.Color
 			table.insert(Data, customization.Customization.Title)
+			enabledModifier = nil
 		end
 
 		writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
@@ -355,7 +358,15 @@ modifier.createModifier = function(customization)
 
 		writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
 
+		-- Clone the Confirm button and reset the UI for the next modifier
+		local NewConfirm = Confirm:Clone()
+		NewConfirm.Name = "customConfirm"
+		NewConfirm.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
+		NewConfirm.Visible = false
+		Confirm:Destroy()
+		Confirm = NewConfirm
 	end)
+
 	
 	spawn(function()
 		while wait() do
