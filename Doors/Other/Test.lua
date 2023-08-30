@@ -12,7 +12,6 @@ local ModifersEnabled = 0
 
 local defaultConfig = {
 	Tab = {
-		CreateNewTab = true, -- If any new tabs should be made for the modifier
 		Title = "A-90", -- Tab name.
 		Image = "http://www.roblox.com/asset/?id=12351005336" -- Tab image.
 	},
@@ -113,10 +112,6 @@ modifier.createTab = function(tab)
 		if tab[i] == nil then
 			tab[i] = defaultConfig[i]
 		end
-	end
-	
-	if tab.Tab.CreateNewTab == false then
-		return
 	end
 
 	local custom = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel:Clone()
@@ -244,11 +239,7 @@ modifier.createModifier = function(customization)
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
 	modifierCreate.Visible = true
 	modifierCreate.Text = customization.Customization.Title
-	if customization.Tab.CreateNewTab == false then
-		modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers
-	else
-		modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
-	end
+	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 	if customization.Customization.KnobBonus == true then
 		modifierCreate.Info.KnobPenalty.Visible = false
 		modifierCreate.Info.KnobBonus.Text = "+".. customization.Customization.Knobs.. "%"
