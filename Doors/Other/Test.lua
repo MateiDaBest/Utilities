@@ -13,7 +13,7 @@ local ModifersEnabled = 0
 local defaultConfig = {
 	CustomTab = {
 		Image = "http://www.roblox.com/asset/?id=12351005336",
-		Text = "A-90"
+		Name = "A-90"
 	}
 }
 
@@ -201,7 +201,7 @@ end
 
 modifier.createModifier = function(config)
 	print("Detected")
-	print(config.ButtonCustomization.Color)
+
 	for i, v in next, defaultConfig2.ButtonCustomization do
 		if config[i] == nil then
 			config[i] = defaultConfig2.ButtonCustomization[i]
