@@ -1,3 +1,4 @@
+-- hi
 repeat wait() until game:IsLoaded()
 
 if not writefile then
@@ -219,6 +220,8 @@ modifier.createTab = function(tab)
 	end
 end
 
+local modifierLogic = function() end
+
 modifier.createModifier = function(customization)
 	for i, v in next, defaultConfig do
 		if customization[i] == nil then
@@ -238,9 +241,7 @@ modifier.createModifier = function(customization)
 		deletefile("color.txt")
 	end
 	
-	local modifierlogic = function() end
-	
-	task.defer(modifierlogic)
+	task.defer(modifierLogic)
 	
 	local enabledModifier = false
 	
