@@ -7,8 +7,8 @@ end
 
 local modifier = {}
 local Data = {}
-local AddedAmount = 0
-local ModifersEnabled = 0
+_G.AddedAmount = 0
+_G.ModifersEnabled = 0
 
 local defaultConfig = {
 	Tab = {
@@ -228,6 +228,11 @@ modifier.createModifier = function(customization)
 			customization[i] = defaultConfig[i]
 		end
 	end
+	
+	if not game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("Abc") then
+		firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent, "No tab found.")
+		return
+	end
 
 	if isfile("knobs.txt") then
 		deletefile("knobs.txt")
@@ -291,8 +296,8 @@ modifier.createModifier = function(customization)
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not enabledModifier then
 			enabledModifier = true
-			AddedAmount += tonumber(customization.Customization.Knobs)
-			ModifersEnabled += 1
+			_G.AddedAmount += tonumber(customization.Customization.Knobs)
+			_G.ModifersEnabled += 1
 
 			modifierCreate.ConnectorOut.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
 			modifierCreate.Connector.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
@@ -302,8 +307,8 @@ modifier.createModifier = function(customization)
 		else
 			enabledModifier = false
 
-			AddedAmount -= tonumber(customization.Customization.Knobs)
-			ModifersEnabled -= 1
+			_G.AddedAmount -= tonumber(customization.Customization.Knobs)
+			_G.ModifersEnabled -= 1
 
 			modifierCreate.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
 			modifierCreate.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
@@ -337,15 +342,15 @@ modifier.createModifier = function(customization)
 			local Event = game:GetService("ReplicatedStorage").EntityInfo.CreateElevator
 			Event:FireServer(A_1)
 
-			if ModifersEnabled == 0 then
+			if _G.ModifersEnabled == 0 then
 				ModifiersMain.Desc.Visible = false
 			else
 				ModifiersMain.Desc.Visible = true
 			end
 
 			ModifiersMain.Visible = true
-			ModifiersMain.KnobBonus.Text = AddedAmount.. "%"
-			ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
+			ModifiersMain.KnobBonus.Text = _G.AddedAmount.. "%"
+			ModifiersMain.Desc.Text = _G.ModifersEnabled .. " MODIFIER" .. (_G.ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
 			
 			print(enabledModifier)
 			
@@ -359,7 +364,7 @@ modifier.createModifier = function(customization)
 				table.insert(Data, customization.Customization.Title)
 			end
 
-			writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
+			writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(_G.AddedAmount)))
 			writefile("name.txt", tostring(game:GetService("HttpService"):JSONEncode(customization.Customization.Title)))
 
 			local colorTable = {
@@ -397,15 +402,15 @@ modifier.createModifier = function(customization)
 			local Event = game:GetService("ReplicatedStorage").EntityInfo.CreateElevator
 			Event:FireServer(A_1)
 
-			if ModifersEnabled == 0 then
+			if _G.ModifersEnabled == 0 then
 				ModifiersMain.Desc.Visible = false
 			else
 				ModifiersMain.Desc.Visible = true
 			end
 
 			ModifiersMain.Visible = true
-			ModifiersMain.KnobBonus.Text = AddedAmount.. "%"
-			ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
+			ModifiersMain.KnobBonus.Text = _G.AddedAmount.. "%"
+			ModifiersMain.Desc.Text = _G.ModifersEnabled .. " MODIFIER" .. (_G.ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
 			
 			print(enabledModifier)
 			
@@ -419,7 +424,7 @@ modifier.createModifier = function(customization)
 				table.insert(Data, customization.Customization.Title)
 			end
 
-			writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
+			writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(_G.AddedAmount)))
 			writefile("name.txt", tostring(game:GetService("HttpService"):JSONEncode(customization.Customization.Title)))
 
 			local colorTable = {
@@ -435,20 +440,20 @@ modifier.createModifier = function(customization)
 	
 	spawn(function()
 		while wait() do
-			if AddedAmount <= -1 then
-				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = AddedAmount.. "%"
-			elseif AddedAmount >= 1 then
-				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = "+".. AddedAmount.. "%"
-			elseif AddedAmount == 0 then
+			if _G.AddedAmount <= -1 then
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = _G.AddedAmount.. "%"
+			elseif _G.AddedAmount >= 1 then
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = "+".. _G.AddedAmount.. "%"
+			elseif _G.AddedAmount == 0 then
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = "+0%"
 			end
 
-			if ModifersEnabled == 0 then
+			if _G.ModifersEnabled == 0 then
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Visible = false
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.ModIcon.Visible = false
 			else
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Visible = true
-				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "")
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Text = _G.ModifersEnabled .. " MODIFIER" .. (_G.ModifersEnabled ~= 1 and "S" or "")
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.ModIcon.Visible = true
 			end
 		end
