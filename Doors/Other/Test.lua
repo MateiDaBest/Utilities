@@ -10,6 +10,28 @@ local Data = {}
 local AddedAmount = 0
 local ModifersEnabled = 0
 
+local defaultConfig = {
+	CustomTab = {
+		Image = "http://www.roblox.com/asset/?id=12351005336",
+		Text = "A-90"
+	}
+}
+
+local defaultConfig2 = {
+	ButtonCustomization = {
+		Color = Color3.fromRGB(255, 160, 147),
+		Name = "A-90",
+		Description = "A-90 is a entity from rooms.",
+		Knobs = "50",
+		KnobBonus = true, -- +50%
+		KnobPenalty = false, -- -50%
+		WorksInRooms = false,
+		Linked = false
+	}
+}
+
+print(defaultConfig2.ButtonCustomization.WorksInRooms)
+
 local Floor = game:GetService("ReplicatedStorage").GameData.Floor
 if Floor.Value == "Hotel" and game.PlaceId == 6839171747 then
 	if not isfile("name.txt") then
@@ -89,115 +111,7 @@ if Floor.Value == "Hotel" and game.PlaceId == 6839171747 then
 	end)
 
 	return
-elseif Floor.Value == "Rooms" then
-	if not isfile("name.txt") then
-		return
-	end
-
-	workspace.CurrentRooms.ChildAdded:Connect(function(C)
-		for _, v in pairs(C:GetDescendants()) do
-			if v.Name == "RedForcefield" then
-				v:Destroy()
-			end
-		end
-	end)
-
-	local TempMods = game:GetService("Players").LocalPlayer.PlayerGui.MainUI:WaitForChild("Modifiers")
-	local MainMods = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics:WaitForChild("Mods")
-	local UIS = game:GetService("UserInputService")
-	local TabPressed = false
-	local Mods = 0
-	
-	local jsonData2 = readfile("knobs.txt")
-	local decodedData2 = game:GetService("HttpService"):JSONDecode(jsonData2)
-	
-	local jsonData3 = readfile("name.txt")
-	local decodedData3 = game:GetService("HttpService"):JSONDecode(jsonData3)
-	
-	local jsonData4 = readfile("color.txt")
-	local decodedData4 = game:GetService("HttpService"):JSONDecode(jsonData4)
-
-	for _, v in pairs(TempMods:GetDescendants()) do
-		if v.Name == "UIListLayout" or v.Name == "Template" or v.Name == "UICorner" or v.Name == "UIPadding" or v.Name == "Desc" or v.Name == "Icon" or v.Name == "BigList" or v.Name == "KnobBonus" or v.Name == "UIGradient" or v.Name == "IconLeft" or v.Name == "NoProgress" or v.Name == "NoRift" or v.Name == "NotFloor" or v.Name == "Tip" or v.Name == "UIGridLayout" then
-		else
-			v:Destroy()
-			return
-		end
-	end
-	
-	spawn(function()
-		local Template = TempMods:FindFirstChild("Template"):Clone()
-		Template.Text = decodedData3
-		Template.Parent = TempMods
-		Template.Visible = true
-		Template.BackgroundColor3 = decodedData4
-		local Template_2 = MainMods:FindFirstChild("Template"):Clone()
-		Template_2.Text = decodedData3
-		Template_2.Parent = MainMods
-		Template_2.Visible = true
-		Template_2.BackgroundColor3 = decodedData4
-		Mods += 1
-	end)
-
-
-	spawn(function()
-		task.defer(modifiers.modifierLogic)
-	end)
-	print(Mods)
-	TempMods.Desc.Text = Mods .. " MODIFIER" .. (Mods ~= 1 and "S" or "").. " ACTIVATED"
-	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Visible = true
-	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Text = "MODIFIERS (".. Mods .. ")" 
-	if decodedData2 >= 1 then
-		game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Amount.Text = "+ ".. decodedData2 .. "%"
-	elseif decodedData2 <= 1 then
-		game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Amount.Text = decodedData2 .. "%"
-	else
-		game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Amount.Text = "+ 0%"
-	end
-
-	if decodedData2 <= -1 then
-		TempMods.KnobBonus.Text = decodedData2.. "%"
-	elseif decodedData2 >= 1 then
-		TempMods.KnobBonus.Text = "+".. decodedData2.. "%"
-	end
-
-	spawn(function()
-		TempMods.Visible = true
-		TempMods.Tip.Text = "To check this list, press TAB"
-		TempMods.Tip.Visible = true
-		wait(15)
-		TempMods.Visible = false
-		TempMods.Tip.Visible = false
-	end)
-
-	UIS.InputBegan:Connect(function(key, gP)
-		if key.KeyCode == Enum.KeyCode.Tab and not gP then
-			TabPressed = not TabPressed
-			TempMods.Visible = TabPressed
-			TempMods.Tip.Visible = false
-		end
-	end)
-	return
 end
-
-local defaultConfig = {
-	CustomTab = {
-		Image = "http://www.roblox.com/asset/?id=12351005336",
-		Text = "A-90"
-	}
-}
-
-local defaultConfig2 = {
-	ButtonCustomization = {
-		Color = Color3.fromRGB(255, 160, 147),
-		Name = "A-90",
-		Description = "A-90 is a entity from rooms.",
-		Knobs = "50",
-		KnobBonus = true, -- +50%
-		KnobPenalty = false, -- -50%
-		Linked = false
-	}
-}
 
 modifiers.createTab = function(config)
 	for i, v in next, defaultConfig do
@@ -351,6 +265,7 @@ modifiers.createModifier = function(config)
 
 		writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
 		writefile("name.txt", tostring(game:GetService("HttpService"):JSONEncode(config.ButtonCustomization.Name)))
+		print(config.ButtonCustomization.Color)
 		writefile("color.txt", tostring(game:GetService("HttpService"):JSONEncode(config.ButtonCustomization.Color)))
 	end)
 	
