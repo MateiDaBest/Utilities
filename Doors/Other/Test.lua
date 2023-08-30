@@ -338,9 +338,10 @@ modifiers.createModifier = function(config)
 		ModifiersMain.Visible = true
 		ModifiersMain.KnobBonus.Text = AddedAmount.. "%"
 		ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
-		ModifiersMain.Parent = game.Players.LocalPlayer.PlayerGui.MainUI
-
+		
+		print(EnabledMod)
 		if EnabledMod then
+			print("ye")
 			local Template = ModifiersMain.Template:Clone()
 			Template.Name = "abc"
 			Template.Visible = true
@@ -388,7 +389,7 @@ modifiers.createModifier = function(config)
 	modifierCreate.Text = config.ButtonCustomization.Name
 	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 	modifierCreate.Info.KnobBonus.Visible = true
-	modifierCreate.Info.KnobBonus.Text = "+69%"
+	modifierCreate.Info.KnobBonus.Text = config.ButtonCustomization.Knobs
 	modifierCreate.BackgroundColor3 = config.ButtonCustomization.Color
 	modifierCreate.TextColor3 = config.ButtonCustomization.Color
 	modifierCreate.MouseEnter:Connect(function()
