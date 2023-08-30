@@ -12,18 +12,19 @@ local ModifersEnabled = 0
 
 local defaultConfig = {
 	Tab = {
-		CreateNewTab = true,
-		Title = "A-90",
-		Image = "http://www.roblox.com/asset/?id=12351005336"
+		CreateNewTab = true, -- If any new tabs should be made for the modifier
+		Title = "A-90", -- Tab name.
+		Image = "http://www.roblox.com/asset/?id=12351005336" -- Tab image.
 	},
 	Customization = {
-		Title = "A-90",
-		Description = "A-90 is a entity from rooms.",
-		Color = Color3.fromRGB(255, 160, 147),
-		Knobs = 50,
-		KnobBonus = true,
-		KnobPenalty = false,
-		Linked = false
+		Title = "A-90", -- Modifier title.
+		Description = "A-90 is a entity from rooms.", -- Preview description.
+		Color = Color3.fromRGB(255, 160, 147), -- Background / text colour.
+		Knobs = 50, -- Knob boost amount.
+		KnobBonus = true, -- + Knobs.
+		KnobPenalty = false, -- - Knobs.
+		Connector = false, -- The |- that keeps stuff linked.
+		ConnectorOut = false -- The - that is at the very first linked object.
 	}
 }
 
@@ -134,91 +135,7 @@ modifier.createTab = function(tab)
 	custommodifiers.Visible = false
 	custommodifiers.Name = "custommodifiers"
 	custommodifiers.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
-
-	game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
-
-	game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.MouseButton1Click:Connect(function()
-		if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible then
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = false
-			custom.Visible = true
-			custommodifiers.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.RoomsConfirm.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = false
-		else
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = true
-			custom.Visible = false
-			custommodifiers.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.RoomsConfirm.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
-		end
-	end)
-
-	game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.MouseButton1Click:Connect(function()
-		if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible then
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = false
-			custom.Visible = true
-			custommodifiers.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.RoomsConfirm.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = false
-		else
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = true
-			custom.Visible = false
-			custommodifiers.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.RoomsConfirm.Visible = false
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm.Visible = true
-			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
-		end
-	end)
-
-	for _, v in pairs(custommodifiers:GetDescendants()) do
-		if v:IsA("TextButton") and v.Name ~= "Template" then
-			v:Destroy()
-		end
-	end
-
-	for _, v in pairs(custommodifiers:GetDescendants()) do
-		if v:IsA("Frame") and v.Name == "Separator" then
-			v:Destroy()
-		end
-	end
-end
-
-modifier.createModifier = function(customization)
-	for i, v in next, defaultConfig do
-		if customization[i] == nil then
-			customization[i] = defaultConfig[i]
-		end
-	end
-
-	local enabledModifier = false
-
-	if isfile("knobs.txt") then
-		deletefile("knobs.txt")
-	end
-
-	if isfile("name.txt") then
-		deletefile("name.txt")
-	end
-
-	if isfile("color.txt") then
-		deletefile("color.txt")
-	end
-
+	
 	local Confirm = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm:Clone()
 	Confirm.Name = "customConfirm"
 	Confirm.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
@@ -267,17 +184,17 @@ modifier.createModifier = function(customization)
 
 		writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
 		writefile("name.txt", tostring(game:GetService("HttpService"):JSONEncode(customization.Customization.Title)))
-		
+
 		local colorTable = {
 			R = customization.Customization.Color.R,
 			G = customization.Customization.Color.G,
 			B = customization.Customization.Color.B
 		}
-		
+
 		writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
 
 	end)
-
+	
 	local Exit = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.ExitElevator:Clone()
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.ExitElevator:Destroy()
 	Exit.Parent = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame
@@ -302,6 +219,90 @@ modifier.createModifier = function(customization)
 			end
 		end
 	end)
+	
+	game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
+
+	game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.MouseButton1Click:Connect(function()
+		if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible then
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = false
+			custom.Visible = true
+			custommodifiers.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = false
+		else
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = true
+			custom.Visible = false
+			custommodifiers.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
+		end
+	end)
+
+	game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.MouseButton1Click:Connect(function()
+		if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible then
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = false
+			custom.Visible = true
+			custommodifiers.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = false
+		else
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = true
+			custom.Visible = false
+			custommodifiers.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Visible = false
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm.Visible = true
+			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
+		end
+	end)
+
+	for _, v in pairs(custommodifiers:GetDescendants()) do
+		if v:IsA("TextButton") and v.Name ~= "Template" then
+			v:Destroy()
+		end
+	end
+
+	for _, v in pairs(custommodifiers:GetDescendants()) do
+		if v:IsA("Frame") and v.Name == "Separator" then
+			v:Destroy()
+		end
+	end
+end
+
+modifier.createModifier = function(customization)
+	for i, v in next, defaultConfig do
+		if customization[i] == nil then
+			customization[i] = defaultConfig[i]
+		end
+	end
+
+	local enabledModifier = false
+
+	if isfile("knobs.txt") then
+		deletefile("knobs.txt")
+	end
+
+	if isfile("name.txt") then
+		deletefile("name.txt")
+	end
+
+	if isfile("color.txt") then
+		deletefile("color.txt")
+	end
 
 	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:WaitForChild("Template"):Clone()
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
@@ -373,20 +374,20 @@ modifier.createModifier = function(customization)
 	spawn(function()
 		while wait() do
 			if AddedAmount <= -1 then
-				Confirm.Info.KnobBonus.Text = AddedAmount.. "%"
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = AddedAmount.. "%"
 			elseif AddedAmount >= 1 then
-				Confirm.Info.KnobBonus.Text = "+".. AddedAmount.. "%"
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = "+".. AddedAmount.. "%"
 			elseif AddedAmount == 0 then
-				Confirm.Info.KnobBonus.Text = "+0%"
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = "+0%"
 			end
 
 			if ModifersEnabled == 0 then
-				Confirm.Info.Desc.Visible = false
-				Confirm.Info.ModIcon.Visible = false
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Visible = false
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.ModIcon.Visible = false
 			else
-				Confirm.Info.Desc.Visible = true
-				Confirm.Info.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "")
-				Confirm.Info.ModIcon.Visible = true
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Visible = true
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "")
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.ModIcon.Visible = true
 			end
 		end
 	end)
