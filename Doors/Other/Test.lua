@@ -23,7 +23,7 @@ local defaultConfig = {
 		KnobBonus = true, -- + Knobs.
 		KnobPenalty = false, -- - Knobs.
 		Connector = false, -- The |- that keeps stuff linked.
-		ConnectorOut = false -- The - that is at the very first linked object.
+		ConnectorEnd = false -- The very last |-.
 	}
 }
 
@@ -113,10 +113,18 @@ modifier.createTab = function(tab)
 			tab[i] = defaultConfig[i]
 		end
 	end
-
+	
+	if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("Abc") then
+		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("Abc"):Destroy()
+		--game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = true
+		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = true
+		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
+		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.Visible = false
+	end
+	
 	local custom = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel:Clone()
 	custom.Visible = false
-	custom.Name = tab.Tab.Title
+	custom.Name = "abc"
 	custom.Text = tab.Tab.Title
 	custom.Background.Image = tab.Tab.Image
 	custom.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors
@@ -237,6 +245,14 @@ modifier.createModifier = function(customization)
 	
 	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:WaitForChild("Template"):Clone()
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
+	if customization.Customization.Connector == true then
+		modifierCreate.Connector.Visible = true
+		modifierCreate.ConnectorOut.Visible = true
+		modifierCreate.Connector.Position = UDim2.new(-0.063, 0, 1.07, 0)
+		modifierCreate.Connector.Size = UDim2.new(0, 4, 1, 8)
+	elseif customization.Customization.ConnectorEnd == true then
+		modifierCreate.ConnectorOut.Visible = true
+	end
 	modifierCreate.Visible = true
 	modifierCreate.Text = customization.Customization.Title
 	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
