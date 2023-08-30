@@ -1,3 +1,4 @@
+-- Hi
 repeat wait() until game:IsLoaded()
 
 if not writefile then
@@ -111,7 +112,7 @@ if game.PlaceId == 6839171747 then
 	return
 end
 
-modifier.Tab = function(tab)
+modifier.createTab = function(tab)
 	for i, v in next, defaultConfig do
 		if tab[i] == nil then
 			tab[i] = defaultConfig[i]
@@ -193,7 +194,7 @@ modifier.Tab = function(tab)
 	end
 end
 
-modifier.Customization = function(customization)
+modifier.createModifier = function(customization)
 	local enabledModifier = false
 
 	if isfile("knobs.txt") then
