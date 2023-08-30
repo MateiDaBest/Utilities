@@ -195,6 +195,12 @@ modifier.createTab = function(tab)
 end
 
 modifier.createModifier = function(customization)
+	for i, v in next, defaultConfig do
+		if customization[i] == nil then
+			customization[i] = defaultConfig[i]
+		end
+	end
+	
 	local enabledModifier = false
 
 	if isfile("knobs.txt") then
@@ -287,7 +293,6 @@ modifier.createModifier = function(customization)
 
 	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:WaitForChild("Template"):Clone()
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
-print(customization)
 	modifierCreate.Visible = true
 	modifierCreate.Text = customization.Customization.Title
 	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
