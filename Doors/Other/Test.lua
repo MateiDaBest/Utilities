@@ -233,8 +233,6 @@ modifier.createModifier = function(customization)
 		deletefile("color.txt")
 	end
 	
-	local enabledModifier = false
-	
 	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:WaitForChild("Template"):Clone()
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
 	modifierCreate.Visible = true
@@ -273,6 +271,7 @@ modifier.createModifier = function(customization)
 	end)
 	
 	modifierCreate.MouseButton1Click:Connect(function()
+		
 		if not enabledModifier then
 			enabledModifier = true
 
@@ -307,6 +306,7 @@ modifier.createModifier = function(customization)
 		local ModifiersMain = game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers
 		local MaxPlayers = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.MaxPlayers.Toggle.Text
 		local FriendsOnly
+		local enabledModifier = false
 
 		if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.FriendsOnly.Toggle.BackgroundTransparency == 0.9 then
 			FriendsOnly = false
