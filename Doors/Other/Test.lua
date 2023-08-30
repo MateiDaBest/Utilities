@@ -40,14 +40,9 @@ if game.PlaceId == 6839171747 then
 	local TabPressed = false
 	local Mods = 0
 
-	local jsonData2 = readfile("knobs.txt")
-	local decodedData2 = game:GetService("HttpService"):JSONDecode(jsonData2)
-
-	local jsonData3 = readfile("name.txt")
-	local decodedData3 = game:GetService("HttpService"):JSONDecode(jsonData3)
-
-	local jsonData4 = readfile("color.txt")
-	local decodedData4 = game:GetService("HttpService"):JSONDecode(jsonData4)
+	local decodedData = game:GetService("HttpService"):JSONDecode(readfile("knobs.txt"))
+	local decodedData2 = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
+	local decodedData3 = game:GetService("HttpService"):JSONDecode(readfile("color.txt"))
 
 	for _, v in pairs(TempMods:GetDescendants()) do
 		if v.Name == "UIListLayout" or v.Name == "Template" or v.Name == "UICorner" or v.Name == "UIPadding" or v.Name == "Desc" or v.Name == "Icon" or v.Name == "BigList" or v.Name == "KnobBonus" or v.Name == "UIGradient" or v.Name == "IconLeft" or v.Name == "NoProgress" or v.Name == "NoRift" or v.Name == "NotFloor" or v.Name == "Tip" or v.Name == "UIGridLayout" then
@@ -59,15 +54,15 @@ if game.PlaceId == 6839171747 then
 
 	spawn(function()
 		local Template = TempMods:FindFirstChild("Template"):Clone()
-		Template.Text = decodedData3
+		Template.Text = decodedData2
 		Template.Parent = TempMods
 		Template.Visible = true
-		Template.BackgroundColor3 = decodedData4
+		Template.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
 		local Template_2 = MainMods:FindFirstChild("Template"):Clone()
-		Template_2.Text = decodedData3
+		Template_2.Text = decodedData2
 		Template_2.Parent = MainMods
 		Template_2.Visible = true
-		Template_2.BackgroundColor3 = decodedData4
+		Template_2.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
 
 		task.defer(modifier.modifierLogic)
 
@@ -78,18 +73,18 @@ if game.PlaceId == 6839171747 then
 
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Visible = true
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Text = "MODIFIERS (".. Mods .. ")"
-	if decodedData2 >= 1 then
-		game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Amount.Text = "+ ".. decodedData2 .. "%"
-	elseif decodedData2 <= 1 then
-		game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Amount.Text = decodedData2 .. "%"
+	if decodedData >= 1 then
+		game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Amount.Text = "+ ".. decodedData .. "%"
+	elseif decodedData <= 1 then
+		game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Amount.Text = decodedData .. "%"
 	else
 		game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Amount.Text = "+ 0%"
 	end
 
-	if decodedData2 <= -1 then
-		TempMods.KnobBonus.Text = decodedData2.. "%"
-	elseif decodedData2 >= 1 then
-		TempMods.KnobBonus.Text = "+".. decodedData2.. "%"
+	if decodedData <= -1 then
+		TempMods.KnobBonus.Text = decodedData.. "%"
+	elseif decodedData >= 1 then
+		TempMods.KnobBonus.Text = "+".. decodedData.. "%"
 	end
 
 	spawn(function()
@@ -263,7 +258,14 @@ modifier.createModifier = function(customization)
 
 		writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
 		writefile("name.txt", tostring(game:GetService("HttpService"):JSONEncode(customization.Customization.Title)))
-		writefile("color.txt", game:GetService("HttpService"):JSONEncode({R = customization.Customization.Color.R, G = customization.Customization.Color.G, B = customization.Customization.Color.B}))
+		
+		local colorTable = {
+			R = customization.Customization.Color.R,
+			G = customization.Customization.Color.G,
+			B = customization.Customization.Color.B,
+		}
+		
+		writefile("color.txt", game:GetService("HttpService"):JSONEncode())
 
 	end)
 
