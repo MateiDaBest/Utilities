@@ -275,8 +275,9 @@ modifier.createModifier = function(customization)
 			for _, info in ipairs(linkedObjects) do
 				if info.Connector and info.ConnectorOut then
 					local isSelected = info == selectedInfo
-					info.Connector.BackgroundColor3 = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
-					info.ConnectorOut.BackgroundColor3 = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
+					local color = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
+					info.Connector.BackgroundColor3 = color
+					info.ConnectorOut.BackgroundColor3 = color
 				end
 			end
 		end
@@ -298,7 +299,11 @@ modifier.createModifier = function(customization)
 					if selectedInfo == info then
 						selectedInfo = nil
 					else
-						selectedInfo = info
+						if selectedInfo then
+							selectedInfo = nil
+						else
+							selectedInfo = info
+						end
 					end
 					updateConnectorsColor(selectedInfo)
 				end)
@@ -307,6 +312,7 @@ modifier.createModifier = function(customization)
 	end
 
 	createLinkedGroup()
+
 
 	-- Modifiers UI and interaction
 
@@ -450,4 +456,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- e
+return modifier
