@@ -283,13 +283,13 @@ end
 
 modifiers.createModifier = function(config)
 	print("Detected")
-	for o, b in next, defaultConfig2 do
-		if config[o] == nil then
-			config[o] = defaultConfig2[o]
+	for i, v in next, defaultConfig2 do
+		if config[i] == nil then
+			config[i] = defaultConfig2[i]
 		end
 	end
 	
-	local EnabledMod = false
+	local enabledModifier = false
 	
 	if isfile("knobs.txt") then
 		deletefile("knobs.txt")
@@ -339,8 +339,7 @@ modifiers.createModifier = function(config)
 		ModifiersMain.KnobBonus.Text = AddedAmount.. "%"
 		ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
 
-print(EnabledMod)
-		if EnabledMod then
+		if enabledModifier then
 			local Template = ModifiersMain.Template:Clone()
 			Template.Name = "abc"
 			Template.Visible = true
@@ -382,13 +381,19 @@ print(EnabledMod)
 	
 	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:WaitForChild("Template"):Clone()
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
-	local enabledModifier = false
 	
 	modifierCreate.Visible = true
 	modifierCreate.Text = config.ButtonCustomization.Name
 	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
-	modifierCreate.Info.KnobBonus.Visible = true
-	modifierCreate.Info.KnobBonus.Text = config.ButtonCustomization.Knobs
+	if config.ButtonCustomization.KnobBonus == true then
+		modifierCreate.Info.KnobPenalty.Visible = false
+		modifierCreate.Info.KnobBonus.Text = "+".. config.ButtonCustomization.Knobs.. "%"
+		modifierCreate.Info.KnobBonus.Visible = true
+	elseif config.ButtonCustomization.KnobPenalty == true then
+		modifierCreate.Info.KnobPenalty.Visible = true
+		modifierCreate.Info.KnobPenalty.Text = config.ButtonCustomization.Knobs.. "%"
+		modifierCreate.Info.KnobBonus.Visible = false
+	end
 	modifierCreate.BackgroundColor3 = config.ButtonCustomization.Color
 	modifierCreate.TextColor3 = config.ButtonCustomization.Color
 	modifierCreate.MouseEnter:Connect(function()
@@ -399,11 +404,11 @@ print(EnabledMod)
 		Preview.Title.TextColor3 = config.ButtonCustomization.Color
 		if config.ButtonCustomization.KnobBonus == true then
 			Preview.Info.KnobPenalty.Visible = false
-			Preview.Info.KnobBonus.Text = config.ButtonCustomization.Knobs
+			Preview.Info.KnobBonus.Text = "+".. config.ButtonCustomization.Knobs.. "%"
 			Preview.Info.KnobBonus.Visible = true
 		elseif config.ButtonCustomization.KnobPenalty == true then
 			Preview.Info.KnobPenalty.Visible = true
-			Preview.Info.KnobPenalty.Text = config.ButtonCustomization.Knobs
+			Preview.Info.KnobPenalty.Text = config.ButtonCustomization.Knobs.. "%"
 			Preview.Info.KnobBonus.Visible = false
 		end
 
