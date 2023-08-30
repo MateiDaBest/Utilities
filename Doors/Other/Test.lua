@@ -1,4 +1,3 @@
--- hi
 repeat wait() until game:IsLoaded()
 
 if not writefile then
@@ -239,11 +238,9 @@ modifier.createModifier = function(customization)
 		deletefile("color.txt")
 	end
 	
-	local code = {
-		modifierlogic = function() end
-	}
+	local modifierlogic = function() end
 	
-	task.defer(code.modifierlogic)
+	task.defer(modifierlogic)
 	
 	local enabledModifier = false
 	
