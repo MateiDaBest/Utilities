@@ -62,12 +62,7 @@ if game.PlaceId == 6839171747 then
 		Template_2.Parent = MainMods
 		Template_2.Visible = true
 		Template_2.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
-
-		spawn(function()
-			modifier.modifierLogic()
-		end)
-
-
+		
 		Mods += 1
 	end)
 
@@ -242,6 +237,12 @@ modifier.createModifier = function(customization)
 	if isfile("color.txt") then
 		deletefile("color.txt")
 	end
+	
+	local code = {
+		modifier = function() end
+	}
+	
+	task.defer(code.modifier)
 	
 	local enabledModifier = false
 	
