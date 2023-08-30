@@ -1,4 +1,3 @@
--- e
 repeat wait() until game:IsLoaded()
 
 if not writefile then
@@ -283,6 +282,7 @@ modifiers.createTab = function(config)
 end
 
 modifiers.createModifier = function(config)
+	print("Detected")
 	for i, v in next, defaultConfig do
 		if config[i] == nil then
 			config[i] = defaultConfig2[i]
