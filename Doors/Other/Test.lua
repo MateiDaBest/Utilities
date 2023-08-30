@@ -185,7 +185,7 @@ local defaultConfig = {
 		Image = "http://www.roblox.com/asset/?id=12351005336",
 		Text = "A-90"
 	}
-};
+}
 
 local defaultConfig2 = {
 	ButtonCustomization = {
@@ -197,7 +197,7 @@ local defaultConfig2 = {
 		KnobPenalty = false, -- -50%
 		Linked = false
 	}
-};
+}
 
 modifiers.createTab = function(config)
 	for i, v in next, defaultConfig do
@@ -283,7 +283,7 @@ end
 
 modifiers.createModifier = function(config)
 	print("Detected")
-	for i, v in next, defaultConfig do
+	for i, v in next, defaultConfig2 do
 		if config[i] == nil then
 			config[i] = defaultConfig2[i]
 		end
@@ -435,6 +435,27 @@ modifiers.createModifier = function(config)
 
 			modifierCreate.BackgroundTransparency = 0.9
 			modifierCreate.UIStroke.Enabled = false
+		end
+	end)
+	
+	spawn(function()
+		while wait() do
+			if AddedAmount <= -1 then
+				Confirm.Info.KnobBonus.Text = AddedAmount.. "%"
+			elseif AddedAmount >= 1 then
+				Confirm.Info.KnobBonus.Text = "+".. AddedAmount.. "%"
+			elseif AddedAmount == 0 then
+				Confirm.Info.KnobBonus.Text = "+0%"
+			end
+
+			if ModifersEnabled == 0 then
+				Confirm.Info.Desc.Visible = false
+				Confirm.Info.ModIcon.Visible = false
+			else
+				Confirm.Info.Desc.Visible = true
+				Confirm.Info.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "")
+				Confirm.Info.ModIcon.Visible = true
+			end
 		end
 	end)
 end
