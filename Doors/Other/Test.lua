@@ -180,14 +180,14 @@ elseif Floor.Value == "Rooms" then
 	return
 end
 
-local defaultConfig = {
-	CustomTab = {
+local CustomTab = {
+	Tab = {
 		Image = "http://www.roblox.com/asset/?id=12351005336",
 		Text = "A-90"
 	}
 }
 
-local defaultConfig2 = {
+local CustomModifier = {
 	ButtonCustomization = {
 		Color = Color3.fromRGB(255, 160, 147),
 		Name = "A-90",
@@ -200,17 +200,17 @@ local defaultConfig2 = {
 }
 
 modifiers.createTab = function(config)
-	for i, v in next, defaultConfig do
+	for i, v in next, CustomTab do
 		if config[i] == nil then
-			config[i] = defaultConfig[i]
+			config[i] = CustomTab[i]
 		end
 	end
 
 	local custom = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel:Clone()
 	custom.Visible = false
-	custom.Name = config.CustomTab.Name
-	custom.Text = config.CustomTab.Name
-	custom.Background.Image = config.CustomTab.Image
+	custom.Name = config.Tab.Name
+	custom.Text = config.Tab.Name
+	custom.Background.Image = config.Tab.Image
 	custom.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors
 
 	local custommodifiers = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:Clone()
@@ -281,11 +281,10 @@ modifiers.createTab = function(config)
 	end
 end
 
-modifiers.createModifier = function(config)
-	print("Detected")
-	for i, v in next, defaultConfig2 do
-		if config[i] == nil then
-			config[i] = defaultConfig2[i]
+modifiers.createModifier = function(config2)
+	for i, v in next, CustomModifier do
+		if config2[i] == nil then
+			config2[i] = CustomModifier[i]
 		end
 	end
 	
