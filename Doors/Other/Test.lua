@@ -1,3 +1,4 @@
+-- E
 repeat wait() until game:IsLoaded()
 
 if not writefile then
@@ -310,7 +311,7 @@ modifier.createModifier = function(customization)
 	modifierCreate.MouseEnter:Connect(function()
 		Preview.BackgroundColor3 = customization.Customization.Color
 		Preview.Desc.Text = customization.Customization.Description
-		Preview.Title.Text = customization.Customization.Name
+		Preview.Title.Text = customization.Customization.Title
 		Preview.Desc.TextColor3 = customization.Customization.Color
 		Preview.Title.TextColor3 = customization.Customization.Color
 		if customization.Customization.KnobBonus == true then
