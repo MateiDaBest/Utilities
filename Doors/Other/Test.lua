@@ -233,7 +233,7 @@ modifier.createModifier = function(customization)
 		deletefile("color.txt")
 	end
 	
-	local enabledModifier
+	local enabledModifier = false
 	
 	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:WaitForChild("Template"):Clone()
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
@@ -273,11 +273,7 @@ modifier.createModifier = function(customization)
 	end)
 	
 	modifierCreate.MouseButton1Click:Connect(function()
-		enabledModifier = false
-		
 		if not enabledModifier then
-			enabledModifier = true
-
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifersEnabled += 1
 
@@ -300,72 +296,138 @@ modifier.createModifier = function(customization)
 		end
 	end)
 	
-	local Confirm = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm:Clone()
-	Confirm.Name = "customConfirm"
-	Confirm.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
-	Confirm.Visible = false
-	Confirm.MouseButton1Click:Connect(function()
-		game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers.Visible = true
-		local ModifiersMain = game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers
-		local MaxPlayers = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.MaxPlayers.Toggle.Text
-		local FriendsOnly
+	if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("customConfirm") then
+		local Confirm = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm
+		Confirm.MouseButton1Click:Connect(function()
+			game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers.Visible = true
+			local ModifiersMain = game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers
+			local MaxPlayers = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.MaxPlayers.Toggle.Text
+			local FriendsOnly
 
-		if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.FriendsOnly.Toggle.BackgroundTransparency == 0.9 then
-			FriendsOnly = false
-		else
-			FriendsOnly = true
-		end
+			if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.FriendsOnly.Toggle.BackgroundTransparency == 0.9 then
+				FriendsOnly = false
+			else
+				FriendsOnly = true
+			end
 
-		local A_1 = 
-			{
-				["Mods"] = {}, 
-				["FriendsOnly"] = FriendsOnly, 
-				["MaxPlayers"] = MaxPlayers
+			local A_1 = 
+				{
+					["Mods"] = {}, 
+					["FriendsOnly"] = FriendsOnly, 
+					["MaxPlayers"] = MaxPlayers
+				}
+
+			local Event = game:GetService("ReplicatedStorage").EntityInfo.CreateElevator
+			Event:FireServer(A_1)
+
+			if ModifersEnabled == 0 then
+				ModifiersMain.Desc.Visible = false
+			else
+				ModifiersMain.Desc.Visible = true
+			end
+
+			ModifiersMain.Visible = true
+			ModifiersMain.KnobBonus.Text = AddedAmount.. "%"
+			ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
+
+			if enabledModifier then
+				local Template = ModifiersMain.Template:Clone()
+				Template.Name = "abc"
+				Template.Visible = true
+				Template.Parent = ModifiersMain
+				Template.Text = customization.Customization.Title
+				Template.BackgroundColor3 = customization.Customization.Color
+				table.insert(Data, customization.Customization.Title)
+				enabledModifier = nil
+			end
+
+			writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
+			writefile("name.txt", tostring(game:GetService("HttpService"):JSONEncode(customization.Customization.Title)))
+
+			local colorTable = {
+				R = customization.Customization.Color.R,
+				G = customization.Customization.Color.G,
+				B = customization.Customization.Color.B
 			}
 
-		local Event = game:GetService("ReplicatedStorage").EntityInfo.CreateElevator
-		Event:FireServer(A_1)
+			writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
 
-		if ModifersEnabled == 0 then
-			ModifiersMain.Desc.Visible = false
-		else
-			ModifiersMain.Desc.Visible = true
-		end
+			-- Clone the Confirm button and reset the UI for the next modifier
+			local NewConfirm = Confirm:Clone()
+			NewConfirm.Name = "customConfirm"
+			NewConfirm.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
+			NewConfirm.Visible = false
+			Confirm:Destroy()
+			Confirm = NewConfirm
+		end)
+	else
+		local Confirm = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Confirm:Clone()
+		Confirm.Name = "customConfirm"
+		Confirm.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
+		Confirm.Visible = false
+		Confirm.MouseButton1Click:Connect(function()
+			game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers.Visible = true
+			local ModifiersMain = game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers
+			local MaxPlayers = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.MaxPlayers.Toggle.Text
+			local FriendsOnly
 
-		ModifiersMain.Visible = true
-		ModifiersMain.KnobBonus.Text = AddedAmount.. "%"
-		ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
+			if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.FriendsOnly.Toggle.BackgroundTransparency == 0.9 then
+				FriendsOnly = false
+			else
+				FriendsOnly = true
+			end
 
-		if enabledModifier then
-			local Template = ModifiersMain.Template:Clone()
-			Template.Name = "abc"
-			Template.Visible = true
-			Template.Parent = ModifiersMain
-			Template.Text = customization.Customization.Title
-			Template.BackgroundColor3 = customization.Customization.Color
-			table.insert(Data, customization.Customization.Title)
-			enabledModifier = nil
-		end
+			local A_1 = 
+				{
+					["Mods"] = {}, 
+					["FriendsOnly"] = FriendsOnly, 
+					["MaxPlayers"] = MaxPlayers
+				}
 
-		writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
-		writefile("name.txt", tostring(game:GetService("HttpService"):JSONEncode(customization.Customization.Title)))
+			local Event = game:GetService("ReplicatedStorage").EntityInfo.CreateElevator
+			Event:FireServer(A_1)
 
-		local colorTable = {
-			R = customization.Customization.Color.R,
-			G = customization.Customization.Color.G,
-			B = customization.Customization.Color.B
-		}
+			if ModifersEnabled == 0 then
+				ModifiersMain.Desc.Visible = false
+			else
+				ModifiersMain.Desc.Visible = true
+			end
 
-		writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
+			ModifiersMain.Visible = true
+			ModifiersMain.KnobBonus.Text = AddedAmount.. "%"
+			ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "").. " ACTIVATED"
 
-		-- Clone the Confirm button and reset the UI for the next modifier
-		local NewConfirm = Confirm:Clone()
-		NewConfirm.Name = "customConfirm"
-		NewConfirm.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
-		NewConfirm.Visible = false
-		Confirm:Destroy()
-		Confirm = NewConfirm
-	end)
+			if enabledModifier then
+				local Template = ModifiersMain.Template:Clone()
+				Template.Name = "abc"
+				Template.Visible = true
+				Template.Parent = ModifiersMain
+				Template.Text = customization.Customization.Title
+				Template.BackgroundColor3 = customization.Customization.Color
+				table.insert(Data, customization.Customization.Title)
+				enabledModifier = nil
+			end
+
+			writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
+			writefile("name.txt", tostring(game:GetService("HttpService"):JSONEncode(customization.Customization.Title)))
+
+			local colorTable = {
+				R = customization.Customization.Color.R,
+				G = customization.Customization.Color.G,
+				B = customization.Customization.Color.B
+			}
+
+			writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
+
+			-- Clone the Confirm button and reset the UI for the next modifier
+			local NewConfirm = Confirm:Clone()
+			NewConfirm.Name = "customConfirm"
+			NewConfirm.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator
+			NewConfirm.Visible = false
+			Confirm:Destroy()
+			Confirm = NewConfirm
+		end)
+	end
 
 	
 	spawn(function()
