@@ -274,6 +274,7 @@ modifier.createModifier = function(customization)
 	
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not enabledModifier then
+			enabledModifier = true
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifersEnabled += 1
 
@@ -338,7 +339,6 @@ modifier.createModifier = function(customization)
 				Template.Text = customization.Customization.Title
 				Template.BackgroundColor3 = customization.Customization.Color
 				table.insert(Data, customization.Customization.Title)
-				enabledModifier = nil
 			end
 
 			writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
@@ -405,7 +405,6 @@ modifier.createModifier = function(customization)
 				Template.Text = customization.Customization.Title
 				Template.BackgroundColor3 = customization.Customization.Color
 				table.insert(Data, customization.Customization.Title)
-				enabledModifier = nil
 			end
 
 			writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
@@ -453,3 +452,4 @@ modifier.createModifier = function(customization)
 end
 
 return modifier
+-- hi
