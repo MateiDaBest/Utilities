@@ -63,7 +63,7 @@ if game.PlaceId == 6839171747 then
 		Template_2.Visible = true
 		Template_2.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
 
-		task.defer(modifier.modifierLogic)
+		spawn(modifier.modifierLogic)
 
 		Mods += 1
 	end)
@@ -107,6 +107,7 @@ if game.PlaceId == 6839171747 then
 end
 
 modifier.createTab = function(tab)
+	if game.PlaceId == 6839171747 then return end
 	for i, v in next, defaultConfig do
 		if tab[i] == nil then
 			tab[i] = defaultConfig[i]
