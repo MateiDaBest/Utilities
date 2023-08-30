@@ -41,19 +41,20 @@ if Floor.Value == "Hotel" and game.PlaceId == 6839171747 then
 
 	spawn(function()
 		local Template = TempMods:FindFirstChild("Template"):Clone()
-		Template.Text = "Slower"
+		Template.Text = jsonData3
 		Template.Parent = TempMods
 		Template.Visible = true
-		Template.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
+		Template.BackgroundColor3 = jsonData4
 		local Template_2 = MainMods:FindFirstChild("Template"):Clone()
-		Template_2.Text = "Slower"
+		Template_2.Text = jsonData3
 		Template_2.Parent = MainMods
 		Template_2.Visible = true
-		Template_2.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
+		Template_2.BackgroundColor3 = jsonData4
 		Mods += 1
 	end)
 
 	TempMods.Desc.Text = Mods .. " MODIFIER" .. (Mods ~= 1 and "S" or "").. " ACTIVATED"
+	
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Visible = true
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Text = "MODIFIERS (".. Mods .. ")"
 	if decodedData2 >= 1 then
@@ -87,7 +88,6 @@ if Floor.Value == "Hotel" and game.PlaceId == 6839171747 then
 		end
 	end)
 
-	firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent, "Modifiers are waiting for you at rooms.")
 	return
 elseif Floor.Value == "Rooms" then
 	if not isfile("name.txt") then
@@ -143,7 +143,7 @@ elseif Floor.Value == "Rooms" then
 	spawn(function()
 		task.defer(modifiers.modifierLogic)
 	end)
-
+	print(Mods)
 	TempMods.Desc.Text = Mods .. " MODIFIER" .. (Mods ~= 1 and "S" or "").. " ACTIVATED"
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Visible = true
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Text = "MODIFIERS (".. Mods .. ")" 
