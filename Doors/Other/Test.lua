@@ -1,4 +1,3 @@
--- Hi
 repeat wait() until game:IsLoaded()
 
 if not writefile then
@@ -200,7 +199,7 @@ modifier.createModifier = function(customization)
 			customization[i] = defaultConfig[i]
 		end
 	end
-	
+
 	local enabledModifier = false
 
 	if isfile("knobs.txt") then
@@ -263,7 +262,8 @@ modifier.createModifier = function(customization)
 
 		writefile("knobs.txt", tostring(game:GetService("HttpService"):JSONEncode(AddedAmount)))
 		writefile("name.txt", tostring(game:GetService("HttpService"):JSONEncode(customization.Customization.Title)))
-		writefile("color.txt", tostring(game:GetService("HttpService"):JSONEncode(customization.Customization.Color)))
+		writefile("color.txt", game:GetService("HttpService"):JSONEncode({R = customization.Customization.Color.R, G = customization.Customization.Color.G, B = customization.Customization.Color.B}))
+
 	end)
 
 	local Exit = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.ExitElevator:Clone()
