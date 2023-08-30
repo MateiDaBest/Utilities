@@ -282,8 +282,6 @@ modifier.createModifier = function(customization)
 			end
 		end
 
-		local selectedInfo = nil
-
 		for _, name in ipairs(group) do
 			-- Interaction behavior for linked objects
 			local info = {
@@ -312,7 +310,6 @@ modifier.createModifier = function(customization)
 	end
 
 	createLinkedGroup()
-
 
 	-- Modifiers UI and interaction
 
