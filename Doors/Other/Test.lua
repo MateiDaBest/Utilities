@@ -263,30 +263,30 @@ modifier.createModifier = function(customization)
 	modifierCreate.Visible = true
 
 local function createLinkedGroup()
-    -- Grouping linked objects
     local group = {}
     local counter = #linkedObjects + 1
-    local selectedInfo -- Change to local variable
+    local selectedInfo
 
     while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
         table.insert(group, "Abc" .. counter)
         counter = counter + 1
     end
 
-    local function updateConnectorsColor(selectedInfo)
-        local color = Color3.fromRGB(103, 73, 63) -- Default color
+		local function updateConnectorsColor(selectedInfo)
+			for _, info in ipairs(linkedObjects) do
+				if info and info.Connector and info.ConnectorOut then
+					local isSelected = info == selectedInfo
+					local transparency = isSelected and 0.7 or 0.9
+					local connectorColor = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
+					local uiStrokeEnabled = isSelected and true or false
 
-        if selectedInfo then
-            color = Color3.fromRGB(255, 160, 147) -- Selected color
-        end
-
-        for _, info in ipairs(linkedObjects) do
-            if info.Connector and info.ConnectorOut then
-                info.Connector.BackgroundColor3 = color
-                info.ConnectorOut.BackgroundColor3 = color
-            end
-        end
-    end
+					info.BackgroundTransparency = transparency
+					info.Connector.BackgroundColor3 = connectorColor
+					info.ConnectorOut.BackgroundColor3 = connectorColor
+					info.UIStroke.Enabled = uiStrokeEnabled
+				end
+			end
+		end
 
     for _, name in ipairs(group) do
         local info = {
