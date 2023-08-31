@@ -280,8 +280,13 @@ modifier.createModifier = function(customization)
 				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 
 				if info then
-					info.BackgroundTransparency = selectedButton and 0.7 or 0.9
-					info.UIStroke.Enabled = selectedButton
+					if info == selectedButton then
+						info.BackgroundTransparency = 0.7
+						info.UIStroke.Enabled = true
+					else
+						info.BackgroundTransparency = 0.9
+						info.UIStroke.Enabled = false
+					end
 
 					info.Connector.BackgroundColor3 = connectorsColor
 					info.ConnectorOut.BackgroundColor3 = connectorsColor
@@ -444,4 +449,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier
+return modifier -- shhh
