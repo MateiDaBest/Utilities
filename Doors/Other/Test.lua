@@ -223,8 +223,6 @@ modifier.createTab = function(tab)
 end
 
 modifier.createModifier = function(customization)
-	-- Initialization and configuration
-
 	for i, v in next, defaultConfig do
 		if customization[i] == nil then
 			customization[i] = defaultConfig[i]
@@ -242,7 +240,7 @@ modifier.createModifier = function(customization)
 
 	local function generateUniqueName()
 		local newName = baseName .. counter
-		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild(newName) do
+		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(newName) do
 			counter = counter + 1
 			newName = baseName .. counter
 		end
