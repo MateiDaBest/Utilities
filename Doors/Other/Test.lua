@@ -275,7 +275,8 @@ modifier.createModifier = function(customization)
 
 		local function updateConnectorsColor(selectedInfo)
 			for _, name in ipairs(group) do
-				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(modifierCreate)
+				print(modifierCreate.Name)
+				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(modifierCreate.Name)
 				if info then
 					local isSelected = name == selectedInfo
 					local transparency = isSelected and 0.7 or 0.9
