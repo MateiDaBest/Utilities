@@ -265,7 +265,7 @@ modifier.createModifier = function(customization)
 	local function createLinkedGroup()
 		local group = {}
 		local counter = #linkedObjects + 1
-		local selectedInfo
+		local selectedInfo = nil
 
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
 			table.insert(group, "Abc" .. counter)
@@ -290,6 +290,8 @@ modifier.createModifier = function(customization)
 
 			table.insert(linkedObjects, info)
 		end
+
+		updateConnectorsColor(selectedInfo)
 	end
 
 	modifierCreate.Name = generateUniqueName()
@@ -345,7 +347,6 @@ modifier.createModifier = function(customization)
 
 			--modifierCreate.BackgroundTransparency = 0.7
 			--modifierCreate.UIStroke.Enabled = true
-			
 			createLinkedGroup()
 			print("Ran")
 		else
@@ -432,4 +433,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- a
+return modifier
