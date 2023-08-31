@@ -305,7 +305,6 @@ modifier.createModifier = function(customization)
 			end
 		end
 		
-		-- Print every object in the table
 		for _, obj in ipairs(group) do
 			print(obj)
 		end
@@ -318,10 +317,6 @@ modifier.createModifier = function(customization)
 			print("group is blank")
 		end
 	end
-
-	createLinkedGroup()
-
-	-- Modifiers UI and interaction
 
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
@@ -365,7 +360,6 @@ modifier.createModifier = function(customization)
 	end)
 
 	modifierCreate.MouseButton1Click:Connect(function()
-		-- Modifier activation and deactivation
 
 		if not enabledModifier then
 			enabledModifier = true
@@ -377,6 +371,8 @@ modifier.createModifier = function(customization)
 
 			modifierCreate.BackgroundTransparency = 0.7
 			modifierCreate.UIStroke.Enabled = true
+			
+			createLinkedGroup()
 		else
 			enabledModifier = false
 
@@ -390,8 +386,6 @@ modifier.createModifier = function(customization)
 			modifierCreate.UIStroke.Enabled = false
 		end
 	end)
-
-	-- Confirmation and saving
 
 	local Confirm = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("customConfirm")
 
@@ -463,4 +457,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- t
+return modifier
