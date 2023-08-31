@@ -263,6 +263,7 @@ modifier.createModifier = function(customization)
 	modifierCreate.Visible = true
 	
 	local function createLinkedGroup()
+		print("ran createLinkedGroup")
 		local group = {}
 		local counter = #linkedObjects + 1
 		local selectedInfo = nil
@@ -273,14 +274,19 @@ modifier.createModifier = function(customization)
 		end
 
 		local function updateConnectorsColor(selectedInfo)
+			print("Ran updateConnectorsColor")
 			for _, info in ipairs(linkedObjects) do
 				if info and info.Connector and info.ConnectorOut then
+					print("found")
 					local isSelected = info == selectedInfo
 					local transparency = isSelected and 0.7 or 0.9
 					local uiStrokeEnabled = isSelected and true or false
 
 					info.BackgroundTransparency = transparency
 					info.UIStroke.Enabled = uiStrokeEnabled
+					
+					print(info.BackgroundTransparency)
+					print(info.UIStroke.Enabled)
 				end
 			end
 		end
@@ -373,8 +379,6 @@ modifier.createModifier = function(customization)
 	end
 
 	Confirm.MouseButton1Click:Connect(function()
-		-- Confirming changes
-
 		game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers.Visible = true
 		local ModifiersMain = game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers
 		local MaxPlayers = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Settings.MaxPlayers.Toggle.Text
