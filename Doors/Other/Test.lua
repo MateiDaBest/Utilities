@@ -268,7 +268,7 @@ modifier.createModifier = function(customization)
 		print("ran createLinkedGroup")
 		local group = {}
 		local counter = #linkedObjects + 1
-		local selectedInfo = nil
+		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
 
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
 			table.insert(group, "Abc" .. counter)
@@ -283,17 +283,15 @@ modifier.createModifier = function(customization)
 
 				if info then
 					if info == selectedButton then
-						info.BackgroundTransparency = 0.7
+						info.BackgroundTransparency = 0
 						info.UIStroke.Enabled = true
 						info.TextTransparency = 0
-						_G.ModifersEnabled += 1
-						_G.AddedAmount += tonumber(customization.Customization.Knobs)						
+						_G.AddedAmount -= tonumber(customization.Customization.Knobs)						
 					else
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
-						_G.ModifersEnabled -= 1
-						_G.AddedAmount -= tonumber(customization.Customization.Knobs)
+						_G.AddedAmount += tonumber(customization.Customization.Knobs)
 					end
 
 					info.Connector.BackgroundColor3 = connectorsColor
@@ -400,7 +398,7 @@ modifier.createModifier = function(customization)
 			print("Ran")
 		else
 			enabledModifier = false
-
+			enabledModifier.BackgroundTransparency = 0
 			_G.AddedAmount -= tonumber(customization.Customization.Knobs)
 			_G.ModifersEnabled -= 1
 
