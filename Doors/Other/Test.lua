@@ -264,48 +264,44 @@ modifier.createModifier = function(customization)
 	
 	local function createLinkedGroup()
 		print("ran createLinkedGroup")
-		local linkedObjects = {}  -- Initialize the linkedObjects table here
+		local group = {}
 		local counter = #linkedObjects + 1
 		local selectedInfo = nil
 
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-			table.insert(linkedObjects, "Abc" .. counter)  -- Insert the object into linkedObjects
+			table.insert(group, "Abc" .. counter)
 			counter = counter + 1
 		end
 
-		local function updateConnectorsColor(selectedInfo)
-			local isOptionSelected = false
-			local abcButton
+		local function updateConnectorsColor(selectedButton)
+			local connectorsColor = selectedButton and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
 
-			for _, name in ipairs(linkedObjects) do  -- Iterate through linkedObjects
-				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)  -- Use 'name' instead of 'modifierCreate.Name'
+			for _, name in ipairs(group) do
+				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 
 				if info then
-					local MC = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers[name]
-					abcButton = MC
+					info.BackgroundTransparency = selectedButton and 0.7 or 0.9
+					info.UIStroke.Enabled = selectedButton
 
-					info.BackgroundTransparency = 0.9
-					info.UIStroke.Enabled = false
-					info.Connector.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
-					info.ConnectorOut.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
-
-					if name == selectedInfo then
-						info.BackgroundTransparency = 0.7
-						info.UIStroke.Enabled = true
-					end
-
-					isOptionSelected = true
+					info.Connector.BackgroundColor3 = connectorsColor
+					info.ConnectorOut.BackgroundColor3 = connectorsColor
 				end
-			end
-
-			if not isOptionSelected and abcButton then
-				abcButton.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
-				abcButton.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
 			end
 		end
 
-		for _, name in ipairs(linkedObjects) do
-			table.insert(linkedObjects, name)
+		for _, name in ipairs(group) do
+			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+			if info then
+				table.insert(linkedObjects, info)
+				info.MouseButton1Click:Connect(function()
+					if selectedInfo == info then
+						selectedInfo = nil
+					else
+						selectedInfo = info
+					end
+					updateConnectorsColor(selectedInfo)
+				end)
+			end
 		end
 
 		updateConnectorsColor(selectedInfo)
@@ -448,4 +444,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- wow
+return modifier
