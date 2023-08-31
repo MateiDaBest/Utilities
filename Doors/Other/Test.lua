@@ -283,9 +283,11 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
+						_G.ModifersEnabled += 1
 					else
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
+						_G.ModifersEnabled -= 1
 					end
 
 					info.Connector.BackgroundColor3 = connectorsColor
