@@ -28,7 +28,7 @@ local defaultConfig = {
 }
 
 if game.PlaceId == 6839171747 then
-	if not isfile("name.txt") then
+	if not isfile("name.txt") or not isfile("knobs.txt") or not isfile("color.txt") then
 		return
 	end
 
@@ -237,15 +237,18 @@ modifier.createModifier = function(customization)
 
 	local enabledModifier = false
 	local linkedObjects = {}
-	local newName = "Abc"
+	local baseName = "Abc"
 	local counter = 1
 
-	while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild(newName) do
-		newName = "Abc" .. counter
-		counter += 1
+	local function generateUniqueName()
+		local newName = baseName .. counter
+		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild(newName) do
+			counter = counter + 1
+			newName = baseName .. counter
+		end
+		return newName
 	end
 
-	-- Creating modifier objects and linked groups
 
 	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:WaitForChild("Template"):Clone()
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
@@ -265,6 +268,7 @@ modifier.createModifier = function(customization)
 		-- Grouping linked objects
 		local group = {}
 		local counter = #linkedObjects + 1
+		local selectedInfo -- Change to local variable
 
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
 			table.insert(group, "Abc" .. counter)
@@ -283,7 +287,6 @@ modifier.createModifier = function(customization)
 		end
 
 		for _, name in ipairs(group) do
-			-- Interaction behavior for linked objects
 			local info = {
 				Object = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name),
 				Connector = modifierCreate.Object and modifierCreate.Object:FindFirstChild("Connector"),
@@ -313,7 +316,7 @@ modifier.createModifier = function(customization)
 
 	-- Modifiers UI and interaction
 
-	modifierCreate.Name = newName
+	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
 	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 
