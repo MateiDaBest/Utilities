@@ -268,13 +268,14 @@ modifier.createModifier = function(customization)
 		local counter = #linkedObjects + 1
 		local selectedInfo = nil
 
-		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
+		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
 			table.insert(group, "Abc" .. counter)
 			counter = counter + 1
 		end
 
 		local function updateConnectorsColor(selectedInfo)
 			print("Ran updateConnectorsColor")
+			print(group)
 			for _, name in ipairs(group) do
 				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 				print(name)
@@ -443,4 +444,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- e
+return modifier
