@@ -263,10 +263,10 @@ modifier.createModifier = function(customization)
 	modifierCreate.Visible = true
 
 	local function createLinkedGroup()
-		-- Grouping linked objects
+		print("Created Linked Group")
 		local group = {}
 		local counter = #linkedObjects + 1
-		local selectedInfo -- Change to local variable
+		local selectedInfo
 
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
 			table.insert(group, "Abc" .. counter)
@@ -304,19 +304,22 @@ modifier.createModifier = function(customization)
 				end)
 			end
 		end
-
+		
 		-- Print every object in the table
+		for _, obj in ipairs(group) do
+			print(obj)
+		end
+		
+		if linkedObjects == {} then
+			print("linked objects is blank")
+		end
+		
+		if group == {} then
+			print("group is blank")
+		end
 	end
 
 	createLinkedGroup()
-	
-	for _, obj in ipairs(linkedObjects) do
-		print(obj)
-	end
-	
-	for _, obj in ipairs(linkedObjects) do
-		print(obj.Object)
-	end
 
 	-- Modifiers UI and interaction
 
@@ -460,4 +463,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier
+return modifier -- t
