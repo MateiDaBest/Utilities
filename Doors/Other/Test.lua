@@ -274,13 +274,9 @@ modifier.createModifier = function(customization)
 		end
 
 		local function updateConnectorsColor(selectedInfo)
-			print("Ran updateConnectorsColor")
-			print(group)
 			for _, name in ipairs(group) do
-				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-				print(name)
+				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(modifierCreate)
 				if info then
-					print("found")
 					local isSelected = name == selectedInfo
 					local transparency = isSelected and 0.7 or 0.9
 					local uiStrokeEnabled = isSelected and true or false
@@ -292,10 +288,10 @@ modifier.createModifier = function(customization)
 					info.Connector.BackgroundColor3 = connectorColor
 					info.ConnectorOut.BackgroundColor3 = connectorColor
 
-					print(info.BackgroundTransparency)
-					print(info.UIStroke.Enabled)
-					print(info.Connector.BackgroundColor3)
-					print(info.ConnectorOut.BackgroundColor3)
+					print("BT: ".. info.BackgroundTransparency)
+					print("UISE: ".. info.UIStroke.Enabled)
+					print("CBC3: ".. info.Connector.BackgroundColor3)
+					print("COBC3: ".. info.ConnectorOut.BackgroundColor3)
 				end
 			end
 		end
@@ -444,4 +440,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier
+return modifier -- e
