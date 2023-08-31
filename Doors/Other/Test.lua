@@ -263,10 +263,10 @@ modifier.createModifier = function(customization)
 	modifierCreate.Visible = true
 
 	local function createLinkedGroup()
-		print("Created Linked Group")
+		-- Grouping linked objects
 		local group = {}
 		local counter = #linkedObjects + 1
-		local selectedInfo
+		local selectedInfo -- Change to local variable
 
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
 			table.insert(group, "Abc" .. counter)
@@ -274,10 +274,14 @@ modifier.createModifier = function(customization)
 		end
 
 		local function updateConnectorsColor(selectedInfo)
+			local color = Color3.fromRGB(103, 73, 63) -- Default color
+
+			if selectedInfo then
+				color = Color3.fromRGB(255, 160, 147) -- Selected color
+			end
+
 			for _, info in ipairs(linkedObjects) do
 				if info.Connector and info.ConnectorOut then
-					local isSelected = info == selectedInfo
-					local color = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
 					info.Connector.BackgroundColor3 = color
 					info.ConnectorOut.BackgroundColor3 = color
 				end
@@ -303,18 +307,6 @@ modifier.createModifier = function(customization)
 					updateConnectorsColor(selectedInfo)
 				end)
 			end
-		end
-		
-		for _, obj in ipairs(group) do
-			print(obj)
-		end
-		
-		if linkedObjects == {} then
-			print("linked objects is blank")
-		end
-		
-		if group == {} then
-			print("group is blank")
 		end
 	end
 
@@ -366,11 +358,11 @@ modifier.createModifier = function(customization)
 			_G.AddedAmount += tonumber(customization.Customization.Knobs)
 			_G.ModifersEnabled += 1
 
-			modifierCreate.ConnectorOut.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
-			modifierCreate.Connector.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
+			--modifierCreate.ConnectorOut.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
+			--modifierCreate.Connector.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
 
-			modifierCreate.BackgroundTransparency = 0.7
-			modifierCreate.UIStroke.Enabled = true
+			--modifierCreate.BackgroundTransparency = 0.7
+			--modifierCreate.UIStroke.Enabled = true
 			
 			createLinkedGroup()
 		else
@@ -379,11 +371,11 @@ modifier.createModifier = function(customization)
 			_G.AddedAmount -= tonumber(customization.Customization.Knobs)
 			_G.ModifersEnabled -= 1
 
-			modifierCreate.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
-			modifierCreate.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
+			--modifierCreate.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
+			--modifierCreate.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
 
-			modifierCreate.BackgroundTransparency = 0.9
-			modifierCreate.UIStroke.Enabled = false
+			--modifierCreate.BackgroundTransparency = 0.9
+			--modifierCreate.UIStroke.Enabled = false
 		end
 	end)
 
@@ -457,4 +449,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier
+return modifier -- no
