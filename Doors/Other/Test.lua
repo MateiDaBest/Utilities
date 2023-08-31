@@ -306,12 +306,17 @@ modifier.createModifier = function(customization)
 		end
 
 		-- Print every object in the table
-		for _, obj in ipairs(linkedObjects) do
-			print(obj)
-		end
 	end
 
 	createLinkedGroup()
+	
+	for _, obj in ipairs(linkedObjects) do
+		print(obj)
+	end
+	
+	for _, obj in ipairs(linkedObjects) do
+		print(obj.Object)
+	end
 
 	-- Modifiers UI and interaction
 
@@ -455,4 +460,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- e
+return modifier
