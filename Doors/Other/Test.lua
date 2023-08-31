@@ -274,26 +274,40 @@ modifier.createModifier = function(customization)
 		end
 
 		local function updateConnectorsColor(selectedInfo)
+			local isOptionSelected = false
+			local abcButton
+			
 			for _, name in ipairs(group) do
-				print(modifierCreate.Name)
 				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(modifierCreate.Name)
+
 				if info then
-					local isSelected = name == selectedInfo
-					local transparency = isSelected and 0.7 or 0.9
-					local uiStrokeEnabled = isSelected and true or false
-					local connectorColor = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
+					local MC = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers["Abc".. counter] 
+					abcButton = MC
+					
+					if name ~= MC.Name then
+						info.BackgroundTransparency = 0.9
+						info.UIStroke.Enabled = false
 
-					info.BackgroundTransparency = transparency
-					info.UIStroke.Enabled = uiStrokeEnabled
+						info.Connector.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
+						info.ConnectorOut.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
+						
+						isOptionSelected = true
+					else
+						info.BackgroundTransparency = 0.7
+						info.UIStroke.Enabled = true
 
-					info.Connector.BackgroundColor3 = connectorColor
-					info.ConnectorOut.BackgroundColor3 = connectorColor
+						info.Connector.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
+						info.ConnectorOut.BackgroundColor3 = Color3.fromRGB(255, 160, 147)  
 
-					print("BT: ".. info.BackgroundTransparency)
-					print("UISE: ".. info.UIStroke.Enabled)
-					print("CBC3: ".. info.Connector.BackgroundColor3)
-					print("COBC3: ".. info.ConnectorOut.BackgroundColor3)
+						isOptionSelected = true
+					end
 				end
+			end
+
+			if not isOptionSelected then
+				abcButton.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
+				abcButton.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63) 
+				abcButton = nil
 			end
 		end
 
@@ -441,4 +455,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- e
+return modifier
