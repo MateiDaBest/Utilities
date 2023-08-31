@@ -295,7 +295,7 @@ modifier.createModifier = function(customization)
 
 			if info.Connector and info.ConnectorOut then
 				info.Object.MouseButton1Click:Connect(function()
-					if selectedInfo == info then
+					if selectedInfo and selectedInfo ~= info then
 						selectedInfo = nil
 					else
 						selectedInfo = info
@@ -450,4 +450,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- e
+return modifier
