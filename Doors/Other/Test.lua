@@ -262,55 +262,49 @@ modifier.createModifier = function(customization)
 
 	modifierCreate.Visible = true
 
-local function createLinkedGroup()
-    local group = {}
-    local counter = #linkedObjects + 1
-    local selectedInfo
+	local function createLinkedGroup()
+		local group = {}
+		local counter = #linkedObjects + 1
+		local selectedInfo
 
-    while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
-        table.insert(group, "Abc" .. counter)
-        counter = counter + 1
-    end
+		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
+			table.insert(group, "Abc" .. counter)
+			counter = counter + 1
+		end
 
 		local function updateConnectorsColor(selectedInfo)
-			print("Selected Info:", selectedInfo)
-
 			for _, info in ipairs(linkedObjects) do
 				if info.Object and info.Connector and info.ConnectorOut then
 					local isSelected = info == selectedInfo
 					local transparency = isSelected and 0.7 or 0.9
-					local connectorColor = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
 					local uiStrokeEnabled = isSelected and true or false
 
 					info.Object.BackgroundTransparency = transparency
-					info.Connector.BackgroundTransparency = transparency
-					info.ConnectorOut.BackgroundTransparency = transparency
 					info.Object.UIStroke.Enabled = uiStrokeEnabled
 				end
 			end
 		end
 
-    for _, name in ipairs(group) do
-        local info = {
-            Object = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name),
-            Connector = modifierCreate.Object and modifierCreate.Object:FindFirstChild("Connector"),
-            ConnectorOut = modifierCreate.Object and modifierCreate.Object:FindFirstChild("ConnectorOut")
-        }
+		for _, name in ipairs(group) do
+			local info = {
+				Object = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name),
+			}
 
-        table.insert(linkedObjects, info)
+			table.insert(linkedObjects, info)
 
-        if info.Connector and info.ConnectorOut then
-            info.Object.MouseButton1Click:Connect(function()
-                if selectedInfo and selectedInfo ~= info then
-                    selectedInfo = nil
-                else
-                    selectedInfo = info
-                end
-                updateConnectorsColor(selectedInfo)
-            end)
-        end
-    end
-end
+			if info.Object then
+				info.Object.MouseButton1Click:Connect(function()
+					if selectedInfo and selectedInfo.Object ~= info.Object then
+						selectedInfo.Object.BackgroundTransparency = 0.9
+						selectedInfo.Object.UIStroke.Enabled = false
+					end
+
+					selectedInfo = info
+					updateConnectorsColor(selectedInfo)
+				end)
+			end
+		end
+	end
 
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
@@ -367,6 +361,7 @@ end
 			--modifierCreate.UIStroke.Enabled = true
 			
 			createLinkedGroup()
+			print("Ran")
 		else
 			enabledModifier = false
 
@@ -451,4 +446,4 @@ end
 	end)
 end
 
-return modifier -- a
+return modifier
