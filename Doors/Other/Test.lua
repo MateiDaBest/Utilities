@@ -273,17 +273,19 @@ local function createLinkedGroup()
     end
 
 		local function updateConnectorsColor(selectedInfo)
+			print("Selected Info:", selectedInfo)
+
 			for _, info in ipairs(linkedObjects) do
-				if info and info.Connector and info.ConnectorOut then
+				if info.Object and info.Connector and info.ConnectorOut then
 					local isSelected = info == selectedInfo
 					local transparency = isSelected and 0.7 or 0.9
 					local connectorColor = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
 					local uiStrokeEnabled = isSelected and true or false
 
-					info.BackgroundTransparency = transparency
-					info.Connector.BackgroundColor3 = connectorColor
-					info.ConnectorOut.BackgroundColor3 = connectorColor
-					info.UIStroke.Enabled = uiStrokeEnabled
+					info.Object.BackgroundTransparency = transparency
+					info.Connector.BackgroundTransparency = transparency
+					info.ConnectorOut.BackgroundTransparency = transparency
+					info.Object.UIStroke.Enabled = uiStrokeEnabled
 				end
 			end
 		end
@@ -449,4 +451,4 @@ end
 	end)
 end
 
-return modifier
+return modifier -- a
