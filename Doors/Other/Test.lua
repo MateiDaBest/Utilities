@@ -6,6 +6,7 @@ if not writefile then
 end
 
 local modifier = {}
+local linkedObjects = {}
 local Data = {}
 _G.AddedAmount = 0
 _G.ModifersEnabled = 0
@@ -234,7 +235,6 @@ modifier.createModifier = function(customization)
 	if isfile("color.txt") then deletefile("color.txt") end
 
 	local enabledModifier = false
-	local linkedObjects = {}
 	local baseName = "Abc"
 	local counter = 1
 
@@ -262,53 +262,53 @@ modifier.createModifier = function(customization)
 
 	modifierCreate.Visible = true
 
-	local function createLinkedGroup()
-		-- Grouping linked objects
-		local group = {}
-		local counter = #linkedObjects + 1
-		local selectedInfo -- Change to local variable
+local function createLinkedGroup()
+    -- Grouping linked objects
+    local group = {}
+    local counter = #linkedObjects + 1
+    local selectedInfo -- Change to local variable
 
-		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
-			table.insert(group, "Abc" .. counter)
-			counter = counter + 1
-		end
+    while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
+        table.insert(group, "Abc" .. counter)
+        counter = counter + 1
+    end
 
-		local function updateConnectorsColor(selectedInfo)
-			local color = Color3.fromRGB(103, 73, 63) -- Default color
+    local function updateConnectorsColor(selectedInfo)
+        local color = Color3.fromRGB(103, 73, 63) -- Default color
 
-			if selectedInfo then
-				color = Color3.fromRGB(255, 160, 147) -- Selected color
-			end
+        if selectedInfo then
+            color = Color3.fromRGB(255, 160, 147) -- Selected color
+        end
 
-			for _, info in ipairs(linkedObjects) do
-				if info.Connector and info.ConnectorOut then
-					info.Connector.BackgroundColor3 = color
-					info.ConnectorOut.BackgroundColor3 = color
-				end
-			end
-		end
+        for _, info in ipairs(linkedObjects) do
+            if info.Connector and info.ConnectorOut then
+                info.Connector.BackgroundColor3 = color
+                info.ConnectorOut.BackgroundColor3 = color
+            end
+        end
+    end
 
-		for _, name in ipairs(group) do
-			local info = {
-				Object = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name),
-				Connector = modifierCreate.Object and modifierCreate.Object:FindFirstChild("Connector"),
-				ConnectorOut = modifierCreate.Object and modifierCreate.Object:FindFirstChild("ConnectorOut")
-			}
+    for _, name in ipairs(group) do
+        local info = {
+            Object = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name),
+            Connector = modifierCreate.Object and modifierCreate.Object:FindFirstChild("Connector"),
+            ConnectorOut = modifierCreate.Object and modifierCreate.Object:FindFirstChild("ConnectorOut")
+        }
 
-			table.insert(linkedObjects, info)
+        table.insert(linkedObjects, info)
 
-			if info.Connector and info.ConnectorOut then
-				info.Object.MouseButton1Click:Connect(function()
-					if selectedInfo and selectedInfo ~= info then
-						selectedInfo = nil
-					else
-						selectedInfo = info
-					end
-					updateConnectorsColor(selectedInfo)
-				end)
-			end
-		end
-	end
+        if info.Connector and info.ConnectorOut then
+            info.Object.MouseButton1Click:Connect(function()
+                if selectedInfo and selectedInfo ~= info then
+                    selectedInfo = nil
+                else
+                    selectedInfo = info
+                end
+                updateConnectorsColor(selectedInfo)
+            end)
+        end
+    end
+end
 
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
@@ -449,4 +449,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- no
+return modifier
