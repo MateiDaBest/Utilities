@@ -261,7 +261,7 @@ modifier.createModifier = function(customization)
 	end
 
 	modifierCreate.Visible = true
-
+	
 	local function createLinkedGroup()
 		local group = {}
 		local counter = #linkedObjects + 1
@@ -274,35 +274,21 @@ modifier.createModifier = function(customization)
 
 		local function updateConnectorsColor(selectedInfo)
 			for _, info in ipairs(linkedObjects) do
-				if info.Object and info.Connector and info.ConnectorOut then
+				if info and info.Connector and info.ConnectorOut then
 					local isSelected = info == selectedInfo
 					local transparency = isSelected and 0.7 or 0.9
 					local uiStrokeEnabled = isSelected and true or false
 
-					info.Object.BackgroundTransparency = transparency
-					info.Object.UIStroke.Enabled = uiStrokeEnabled
+					info.BackgroundTransparency = transparency
+					info.UIStroke.Enabled = uiStrokeEnabled
 				end
 			end
 		end
 
 		for _, name in ipairs(group) do
-			local info = {
-				Object = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name),
-			}
+			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 
 			table.insert(linkedObjects, info)
-
-			if info.Object then
-				info.Object.MouseButton1Click:Connect(function()
-					if selectedInfo and selectedInfo.Object ~= info.Object then
-						selectedInfo.Object.BackgroundTransparency = 0.9
-						selectedInfo.Object.UIStroke.Enabled = false
-					end
-
-					selectedInfo = info
-					updateConnectorsColor(selectedInfo)
-				end)
-			end
 		end
 	end
 
@@ -446,4 +432,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier
+return modifier -- a
