@@ -298,11 +298,7 @@ modifier.createModifier = function(customization)
 					if selectedInfo == info then
 						selectedInfo = nil
 					else
-						if selectedInfo then
-							selectedInfo = nil
-						else
-							selectedInfo = info
-						end
+						selectedInfo = info
 					end
 					updateConnectorsColor(selectedInfo)
 				end)
@@ -454,4 +450,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier
+return modifier -- e
