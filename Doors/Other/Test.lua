@@ -273,49 +273,30 @@ modifier.createModifier = function(customization)
 			counter = counter + 1
 		end
 
-		local function createLinkedGroup()
-			print("ran createLinkedGroup")
-			local group = {}
-			local counter = #linkedObjects + 1
-			local selectedInfo = nil
+		local function updateConnectorsColor(selectedInfo)
+			print("Ran updateConnectorsColor")
+			for _, name in ipairs(group) do
+				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+				print(name)
+				if info then
+					print("found")
+					local isSelected = name == selectedInfo
+					local transparency = isSelected and 0.7 or 0.9
+					local uiStrokeEnabled = isSelected and true or false
+					local connectorColor = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
 
-			while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("Abc" .. counter) do
-				table.insert(group, "Abc" .. counter)
-				counter = counter + 1
-			end
+					info.BackgroundTransparency = transparency
+					info.UIStroke.Enabled = uiStrokeEnabled
 
-			local function updateConnectorsColor(selectedInfo)
-				print("Ran updateConnectorsColor")
-				for _, name in ipairs(group) do
-					print(name)
-					local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-					print(info.Name)
-					if info then
-						print("found")
-						local isSelected = name == selectedInfo
-						local transparency = isSelected and 0.7 or 0.9
-						local uiStrokeEnabled = isSelected and true or false
-						local connectorColor = isSelected and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
+					info.Connector.BackgroundColor3 = connectorColor
+					info.ConnectorOut.BackgroundColor3 = connectorColor
 
-						info.BackgroundTransparency = transparency
-						info.UIStroke.Enabled = uiStrokeEnabled
-
-						info.Connector.BackgroundColor3 = connectorColor
-						info.ConnectorOut.BackgroundColor3 = connectorColor
-
-						print(info.BackgroundTransparency)
-						print(info.UIStroke.Enabled)
-						print(info.Connector.BackgroundColor3)
-						print(info.ConnectorOut.BackgroundColor3)
-					end
+					print(info.BackgroundTransparency)
+					print(info.UIStroke.Enabled)
+					print(info.Connector.BackgroundColor3)
+					print(info.ConnectorOut.BackgroundColor3)
 				end
 			end
-
-			for _, name in ipairs(group) do
-				table.insert(linkedObjects, name)
-			end
-
-			updateConnectorsColor(selectedInfo)
 		end
 
 		for _, name in ipairs(group) do
