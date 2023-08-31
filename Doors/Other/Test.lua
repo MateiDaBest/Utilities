@@ -21,6 +21,8 @@ local defaultConfig = {
 		Description = "A-90 is a entity from rooms.", -- Preview description.
 		Color = Color3.fromRGB(255, 160, 147), -- Background / text colour.
 		Knobs = 50, -- Knob boost amount.
+		NoProgress = false,
+		NoRift = false,
 		KnobBonus = true, -- + Knobs.
 		KnobPenalty = false, -- - Knobs.
 		Connector = false, -- The |- that keeps stuff linked.
@@ -117,7 +119,7 @@ modifier.createTab = function(tab)
 
 	if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("abc") then
 		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors:FindFirstChild("abc"):Destroy()
-		--game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = true
+		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Visible = true
 		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.Hotel.Visible = true
 		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavRight.Visible = true
 		game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Floors.NavLeft.Visible = false
@@ -283,11 +285,15 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
+						info.TextTransparency = 0
 						_G.ModifersEnabled += 1
+						_G.AddedAmount += tonumber(customization.Customization.Knobs)						
 					else
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
+						info.TextTransparency = 0.8
 						_G.ModifersEnabled -= 1
+						_G.AddedAmount -= tonumber(customization.Customization.Knobs)
 					end
 
 					info.Connector.BackgroundColor3 = connectorsColor
@@ -317,6 +323,18 @@ modifier.createModifier = function(customization)
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
 	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
+	
+	if customization.Customization.NoProgress == true then
+		modifierCreate.Info.NoProgress.Visible = true
+	else
+		modifierCreate.Info.NoProgress.Visible = false
+	end
+	
+	if customization.Customization.NoRift == true then
+		modifierCreate.Info.NoRift.Visible = true
+	else
+		modifierCreate.Info.NoRift.Visible = false
+	end
 
 	if customization.Customization.KnobBonus == true then
 		modifierCreate.Info.KnobPenalty.Visible = false
@@ -339,7 +357,20 @@ modifier.createModifier = function(customization)
 		Preview.Title.Text = customization.Customization.Title
 		Preview.Desc.TextColor3 = customization.Customization.Color
 		Preview.Title.TextColor3 = customization.Customization.Color
+		
+		if customization.Customization.NoProgress == true then
+			Preview.Info.NoProgress.Visible = true
+		else
+			Preview.Info.NoProgress.Visible = false
+		end
+		
+		if customization.Customization.NoRift == true then
+			Preview.Info.NoRift.Visible = true
+		else
+			Preview.Info.NoRift.Visible = false
+		end
 
+		
 		if customization.Customization.KnobBonus == true then
 			Preview.Info.KnobPenalty.Visible = false
 			Preview.Info.KnobBonus.Text = "+" .. customization.Customization.Knobs .. "%"
@@ -351,8 +382,6 @@ modifier.createModifier = function(customization)
 		end
 
 		Preview.Visible = true
-		Preview.Info.NoProgress.Visible = false
-		Preview.Info.NoRift.Visible = false
 	end)
 
 	modifierCreate.MouseButton1Click:Connect(function()
