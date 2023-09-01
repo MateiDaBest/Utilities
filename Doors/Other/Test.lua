@@ -392,8 +392,6 @@ modifier.createModifier = function(customization)
 	end)
 
 	modifierCreate.MouseButton1Click:Connect(function()
-		
-		
 		if not enabledModifier then
 			enabledModifier = true
 
