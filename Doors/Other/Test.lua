@@ -273,7 +273,7 @@ modifier.createModifier = function(customization)
 			table.insert(group, "Abc" .. counter)
 			counter = counter + 1
 		end
-		
+
 		local function updateConnectorsColor(selectedButton)
 			local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
 			local selectedTransparency = selectedButton and 0 or 0.8
@@ -290,12 +290,14 @@ modifier.createModifier = function(customization)
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
-						knobsToAdd = knobsToAdd + tonumber(customization.Customization.Knobs)
-						modifiersToAdd = modifiersToAdd + 1
+						knobsToAdd = tonumber(customization.Customization.Knobs)
+						modifiersToAdd += 1
 					else
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
+						knobsToAdd = knobsToAdd - tonumber(customization.Customization.Knobs)
+						modifiersToAdd -= 1
 					end
 
 					info.Connector.BackgroundColor3 = connectorsColor
