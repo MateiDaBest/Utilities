@@ -9,7 +9,7 @@ local modifier = {}
 local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
-local ModifersEnabled = 0
+local ModifiersEnabled = 0
 
 local defaultConfig = {
 	Tab = {
@@ -291,13 +291,13 @@ modifier.createModifier = function(customization)
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 						knobsToAdd = tonumber(customization.Customization.Knobs)
-						modifiersToAdd += 1
+						modifiersToAdd = 1
 					else
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
 						knobsToAdd = knobsToAdd - tonumber(customization.Customization.Knobs)
-						modifiersToAdd -= 1
+						modifiersToAdd = -1
 					end
 
 					info.Connector.BackgroundColor3 = connectorsColor
@@ -306,8 +306,8 @@ modifier.createModifier = function(customization)
 				end
 			end
 
-			AddedAmount += knobsToAdd
-			ModifersEnabled += modifiersToAdd
+			AddedAmount = AddedAmount + knobsToAdd
+			ModifiersEnabled = ModifiersEnabled + modifiersToAdd
 		end
 
 		for _, name in ipairs(group) do
@@ -317,10 +317,11 @@ modifier.createModifier = function(customization)
 				info.MouseButton1Click:Connect(function()
 					if selectedInfo == info then
 						selectedInfo = nil
+						updateConnectorsColor(selectedInfo) -- Update when unselecting
 					else
 						selectedInfo = info
+						updateConnectorsColor(selectedInfo) -- Update when selecting
 					end
-					updateConnectorsColor(selectedInfo)
 				end)
 			end
 		end
@@ -439,10 +440,10 @@ modifier.createModifier = function(customization)
 		local Event = game:GetService("ReplicatedStorage").EntityInfo.CreateElevator
 		Event:FireServer(A_1)
 
-		ModifiersMain.Desc.Visible = ModifersEnabled > 0
+		ModifiersMain.Desc.Visible = ModifiersEnabled > 0
 		ModifiersMain.Visible = true
 		ModifiersMain.KnobBonus.Text = AddedAmount .. "%"
-		ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "") .. " ACTIVATED"
+		ModifiersMain.Desc.Text = ModifiersEnabled .. " MODIFIER" .. (ModifiersEnabled ~= 1 and "S" or "") .. " ACTIVATED"
 
 		if enabledModifier then
 			local Template = ModifiersMain.Template:Clone()
@@ -471,16 +472,16 @@ modifier.createModifier = function(customization)
 			local knobBonusText = AddedAmount ~= 0 and (AddedAmount > 0 and "+" or "") .. AddedAmount .. "%" or "+0%"
 			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = knobBonusText
 
-			if ModifersEnabled == 0 then
+			if ModifiersEnabled == 0 then
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Visible = false
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.ModIcon.Visible = false
 			else
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Visible = true
-				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "")
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Text = ModifiersEnabled .. " MODIFIER" .. (ModifiersEnabled ~= 1 and "S" or "")
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.ModIcon.Visible = true
 			end
 		end
 	end)
 end
 
-return modifier
+return modifier -- e
