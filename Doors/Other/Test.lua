@@ -275,7 +275,7 @@ modifier.createModifier = function(customization)
 		end
 
 		local function updateConnectorsColor(selectedButton)
-			local connectorsColor = selectedButton and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
+			local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
 			local selectedTransparency = selectedButton and 0 or 0.8
 			local unselectedTransparency = selectedButton and 0.8 or 0
 
@@ -287,6 +287,7 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
+						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 						_G.AddedAmount -= tonumber(customization.Customization.Knobs)	
 						enabledModifier = false
@@ -402,7 +403,7 @@ modifier.createModifier = function(customization)
 			print("Ran")
 		else
 			enabledModifier = false
-			enabledModifier.BackgroundTransparency = 0
+
 			_G.AddedAmount -= tonumber(customization.Customization.Knobs)
 			_G.ModifersEnabled -= 1
 
