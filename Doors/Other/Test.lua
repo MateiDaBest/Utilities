@@ -276,6 +276,8 @@ modifier.createModifier = function(customization)
 		
 		local function updateConnectorsColor(selectedButton)
 			local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
+			local selectedTransparency = selectedButton and 0 or 0.8
+			local unselectedTransparency = selectedButton and 0.8 or 0
 			local knobsToAdd = 0
 			local modifiersToAdd = 0
 
@@ -284,8 +286,9 @@ modifier.createModifier = function(customization)
 
 				if info then
 					if info == selectedButton then
-						info.BackgroundTransparency = 0
+						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
+						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 						knobsToAdd = knobsToAdd + tonumber(customization.Customization.Knobs)
 						modifiersToAdd = modifiersToAdd + 1
@@ -297,19 +300,12 @@ modifier.createModifier = function(customization)
 
 					info.Connector.BackgroundColor3 = connectorsColor
 					info.ConnectorOut.BackgroundColor3 = connectorsColor
+					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
 				end
 			end
 
-			-- Update knob count and modifier count based on selection
-			_G.AddedAmount = _G.AddedAmount + knobsToAdd
-			_G.ModifersEnabled = _G.ModifersEnabled + modifiersToAdd
-
-			-- Update status comment
-			if selectedButton then
-				print("-- Modifiers are now ON")
-			else
-				print("-- Modifiers are now OFF")
-			end
+			AddedAmount += knobsToAdd
+			ModifersEnabled += modifiersToAdd
 		end
 
 		for _, name in ipairs(group) do
