@@ -286,14 +286,16 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
-						AddedAmount -= tonumber(customization.Customization.Knobs)
+						AddedAmount += tonumber(customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
+						ModifiersEnabled += 1
 					else
 						-- The unselected button
 						ModifiersEnabled -= 1
+						AddedAmount -= tonumber(customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -401,14 +403,10 @@ modifier.createModifier = function(customization)
 			--modifierCreate.BackgroundTransparency = 0.7
 			--modifierCreate.UIStroke.Enabled = true
 			createLinkedGroup()
-			AddedAmount += tonumber(customization.Customization.Knobs)
-			ModifiersEnabled += 1
+		--	AddedAmount += tonumber(customization.Customization.Knobs)
 			print("Enabled")
 		else
 			enabledModifier = false
-			
-			ModifiersEnabled -= 1
-			print("Disabled")
 			
 			--modifierCreate.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
 			--modifierCreate.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
