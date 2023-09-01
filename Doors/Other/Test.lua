@@ -10,6 +10,7 @@ local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
+local enabledModifiers = {}
 
 local defaultConfig = {
 	Tab = {
@@ -284,11 +285,13 @@ modifier.createModifier = function(customization)
 
 				if info then
 					if info == selectedButton then
+						AddedAmount -= tonumber(customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
+						enabledModifier = false
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -385,7 +388,8 @@ modifier.createModifier = function(customization)
 	end)
 
 	modifierCreate.MouseButton1Click:Connect(function()
-
+		
+		
 		if not enabledModifier then
 			enabledModifier = true
 
