@@ -290,8 +290,9 @@ modifier.createModifier = function(customization)
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 						_G.AddedAmount -= tonumber(customization.Customization.Knobs)	
-						enabledModifier = false
+						enabledModifier = true
 					else
+						enabledModifier = false
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -483,4 +484,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- shhh
+return modifier
