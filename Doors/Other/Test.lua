@@ -290,14 +290,14 @@ modifier.createModifier = function(customization)
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
-						knobsToAdd = tonumber(customization.Customization.Knobs)
-						modifiersToAdd = 1
+						knobsToAdd = knobsToAdd + tonumber(customization.Customization.Knobs)
+						modifiersToAdd += 1
 					else
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
 						knobsToAdd = knobsToAdd - tonumber(customization.Customization.Knobs)
-						modifiersToAdd = -1
+						modifiersToAdd -= 1
 					end
 
 					info.Connector.BackgroundColor3 = connectorsColor
@@ -306,8 +306,8 @@ modifier.createModifier = function(customization)
 				end
 			end
 
-			AddedAmount = AddedAmount + knobsToAdd
-			ModifiersEnabled = ModifiersEnabled + modifiersToAdd
+			AddedAmount += knobsToAdd
+			ModifiersEnabled += modifiersToAdd
 		end
 
 		for _, name in ipairs(group) do
@@ -484,4 +484,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier -- e
+return modifier
