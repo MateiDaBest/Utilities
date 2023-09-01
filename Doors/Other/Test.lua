@@ -278,8 +278,6 @@ modifier.createModifier = function(customization)
 			local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
 			local selectedTransparency = selectedButton and 0 or 0.8
 			local unselectedTransparency = selectedButton and 0.8 or 0
-			local knobsToAdd = 0
-			local modifiersToAdd = 0
 
 			for _, name in ipairs(group) do
 				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
@@ -290,14 +288,20 @@ modifier.createModifier = function(customization)
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
-						knobsToAdd = knobsToAdd + tonumber(customization.Customization.Knobs)
-						modifiersToAdd += 1
+						AddedAmount += tonumber(customization.Customization.Knobs)
+						ModifiersEnabled += 1
+						print("Enabled")
+						print(AddedAmount)
+						print(ModifiersEnabled)
 					else
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
-						knobsToAdd = knobsToAdd - tonumber(customization.Customization.Knobs)
-						modifiersToAdd -= 1
+						AddedAmount += tonumber(customization.Customization.Knobs)
+						ModifiersEnabled -= 1
+						print("Disabled")
+						print(AddedAmount)
+						print(ModifiersEnabled)
 					end
 
 					info.Connector.BackgroundColor3 = connectorsColor
@@ -305,9 +309,6 @@ modifier.createModifier = function(customization)
 					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
 				end
 			end
-
-			AddedAmount += knobsToAdd
-			ModifiersEnabled += modifiersToAdd
 		end
 
 		for _, name in ipairs(group) do
