@@ -286,16 +286,12 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
-						AddedAmount += tonumber(customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
-						ModifiersEnabled += 1
 					else
 						-- The unselected button
-						ModifiersEnabled -= 1
-						AddedAmount -= tonumber(customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -394,23 +390,15 @@ modifier.createModifier = function(customization)
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not enabledModifier then
 			enabledModifier = true
-
-			--modifierCreate.ConnectorOut.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
-			--modifierCreate.Connector.BackgroundColor3 = Color3.fromRGB(255, 160, 147)
-
-			--modifierCreate.BackgroundTransparency = 0.7
-			--modifierCreate.UIStroke.Enabled = true
+			AddedAmount += tonumber(customization.Customization.Knobs)
+			ModifiersEnabled += 1
+			
 			createLinkedGroup()
-		--	AddedAmount += tonumber(customization.Customization.Knobs)
-			print("Enabled")
 		else
 			enabledModifier = false
 			
-			--modifierCreate.ConnectorOut.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
-			--modifierCreate.Connector.BackgroundColor3 = Color3.fromRGB(103, 73, 63)
-
-			--modifierCreate.BackgroundTransparency = 0.9
-			--modifierCreate.UIStroke.Enabled = false
+			ModifiersEnabled -= 1
+			AddedAmount -= tonumber(customization.Customization.Knobs)
 		end
 	end)
 
