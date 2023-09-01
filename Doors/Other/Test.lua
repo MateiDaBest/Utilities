@@ -265,7 +265,6 @@ modifier.createModifier = function(customization)
 	modifierCreate.Visible = true
 	
 	local function createLinkedGroup()
-		print("ran createLinkedGroup")
 		local group = {}
 		local counter = #linkedObjects + 1
 		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
@@ -277,16 +276,20 @@ modifier.createModifier = function(customization)
 
 		local function updateConnectorsColor(selectedButton)
 			local connectorsColor = selectedButton and Color3.fromRGB(255, 160, 147) or Color3.fromRGB(103, 73, 63)
+			local selectedTransparency = selectedButton and 0 or 0.8
+			local unselectedTransparency = selectedButton and 0.8 or 0
 
+			
 			for _, name in ipairs(group) do
 				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 
 				if info then
 					if info == selectedButton then
-						info.BackgroundTransparency = 0
+						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.TextTransparency = 0
-						_G.AddedAmount -= tonumber(customization.Customization.Knobs)						
+						_G.AddedAmount -= tonumber(customization.Customization.Knobs)	
+						enabledModifier = false
 					else
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
@@ -296,6 +299,7 @@ modifier.createModifier = function(customization)
 
 					info.Connector.BackgroundColor3 = connectorsColor
 					info.ConnectorOut.BackgroundColor3 = connectorsColor
+					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
 				end
 			end
 		end
