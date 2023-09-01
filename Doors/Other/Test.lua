@@ -8,8 +8,8 @@ end
 local modifier = {}
 local linkedObjects = {}
 local Data = {}
-_G.AddedAmount = 0
-_G.ModifersEnabled = 0
+local AddedAmount = 0
+local ModifersEnabled = 0
 
 local defaultConfig = {
 	Tab = {
@@ -273,38 +273,42 @@ modifier.createModifier = function(customization)
 			table.insert(group, "Abc" .. counter)
 			counter = counter + 1
 		end
-
+		
 		local function updateConnectorsColor(selectedButton)
 			local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
-			local selectedTransparency = selectedButton and 0 or 0.8
-			local unselectedTransparency = selectedButton and 0.8 or 0
+			local knobsToAdd = 0
+			local modifiersToAdd = 0
 
-			
 			for _, name in ipairs(group) do
 				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 
 				if info then
 					if info == selectedButton then
-						info.BackgroundTransparency = 0.7
+						info.BackgroundTransparency = 0
 						info.UIStroke.Enabled = true
-						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
-						_G.AddedAmount += tonumber(customization.Customization.Knobs)	
-						_G.ModifersEnabled += 1
-						enabledModifier = true
+						knobsToAdd = knobsToAdd + tonumber(customization.Customization.Knobs)
+						modifiersToAdd = modifiersToAdd + 1
 					else
-						_G.ModifersEnabled -= 1
-						enabledModifier = false
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
-						_G.AddedAmount -= tonumber(customization.Customization.Knobs)
 					end
 
 					info.Connector.BackgroundColor3 = connectorsColor
 					info.ConnectorOut.BackgroundColor3 = connectorsColor
-					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
 				end
+			end
+
+			-- Update knob count and modifier count based on selection
+			_G.AddedAmount = _G.AddedAmount + knobsToAdd
+			_G.ModifersEnabled = _G.ModifersEnabled + modifiersToAdd
+
+			-- Update status comment
+			if selectedButton then
+				print("-- Modifiers are now ON")
+			else
+				print("-- Modifiers are now OFF")
 			end
 		end
 
@@ -437,10 +441,10 @@ modifier.createModifier = function(customization)
 		local Event = game:GetService("ReplicatedStorage").EntityInfo.CreateElevator
 		Event:FireServer(A_1)
 
-		ModifiersMain.Desc.Visible = _G.ModifersEnabled > 0
+		ModifiersMain.Desc.Visible = ModifersEnabled > 0
 		ModifiersMain.Visible = true
-		ModifiersMain.KnobBonus.Text = _G.AddedAmount .. "%"
-		ModifiersMain.Desc.Text = _G.ModifersEnabled .. " MODIFIER" .. (_G.ModifersEnabled ~= 1 and "S" or "") .. " ACTIVATED"
+		ModifiersMain.KnobBonus.Text = AddedAmount .. "%"
+		ModifiersMain.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "") .. " ACTIVATED"
 
 		if enabledModifier then
 			local Template = ModifiersMain.Template:Clone()
@@ -452,7 +456,7 @@ modifier.createModifier = function(customization)
 			table.insert(Data, customization.Customization.Title)
 		end
 
-		writefile("knobs.txt", game:GetService("HttpService"):JSONEncode(_G.AddedAmount))
+		writefile("knobs.txt", game:GetService("HttpService"):JSONEncode(AddedAmount))
 		writefile("name.txt", game:GetService("HttpService"):JSONEncode(customization.Customization.Title))
 
 		local colorTable = {
@@ -466,15 +470,15 @@ modifier.createModifier = function(customization)
 
 	spawn(function()
 		while wait() do
-			local knobBonusText = _G.AddedAmount ~= 0 and (_G.AddedAmount > 0 and "+" or "") .. _G.AddedAmount .. "%" or "+0%"
+			local knobBonusText = AddedAmount ~= 0 and (AddedAmount > 0 and "+" or "") .. AddedAmount .. "%" or "+0%"
 			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = knobBonusText
 
-			if _G.ModifersEnabled == 0 then
+			if ModifersEnabled == 0 then
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Visible = false
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.ModIcon.Visible = false
 			else
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Visible = true
-				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Text = _G.ModifersEnabled .. " MODIFIER" .. (_G.ModifersEnabled ~= 1 and "S" or "")
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Text = ModifersEnabled .. " MODIFIER" .. (ModifersEnabled ~= 1 and "S" or "")
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.ModIcon.Visible = true
 			end
 		end
