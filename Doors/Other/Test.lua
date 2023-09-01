@@ -290,8 +290,8 @@ modifier.createModifier = function(customization)
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
-					else
 						enabledModifier = false
+					else
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -311,10 +311,10 @@ modifier.createModifier = function(customization)
 				info.MouseButton1Click:Connect(function()
 					if selectedInfo == info then
 						selectedInfo = nil
-						updateConnectorsColor(selectedInfo) -- Update when unselecting
+						updateConnectorsColor(selectedInfo)
 					else
 						selectedInfo = info
-						updateConnectorsColor(selectedInfo) -- Update when selecting
+						updateConnectorsColor(selectedInfo)
 					end
 				end)
 			end
