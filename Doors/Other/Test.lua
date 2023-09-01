@@ -9,6 +9,7 @@ local modifier = {}
 local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
+local RemoveAmount = 0
 local ModifiersEnabled = 0
 local enabledModifiers = {}
 
@@ -285,13 +286,16 @@ modifier.createModifier = function(customization)
 
 				if info then
 					if info == selectedButton then
+						-- The selected button
 						AddedAmount -= tonumber(customization.Customization.Knobs)
+						AddedAmount += tonumber(RemoveAmount)
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
-						enabledModifier = false
 					else
+						-- The unselected button
+						RemoveAmount -= tonumber(customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -405,7 +409,7 @@ modifier.createModifier = function(customization)
 		else
 			enabledModifier = false
 			
-			AddedAmount -= tonumber(customization.Customization.Knobs)
+			AddedAmount += RemoveAmount
 			ModifiersEnabled -= 1
 			print("Disabled")
 			
