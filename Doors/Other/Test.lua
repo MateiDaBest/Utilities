@@ -9,6 +9,7 @@ local modifier = {}
 local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
+local Amount = 0
 local ModifiersEnabled = 0
 local enabledModifiers = {}
 
@@ -286,12 +287,18 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
+						print("Amount = ".. Amount)
+						ModifiersEnabled -= 1
+						AddedAmount -= tonumber(Amount)
+						Amount = nil
+						
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
 						-- The unselected button
+						Amount += tonumber(customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
