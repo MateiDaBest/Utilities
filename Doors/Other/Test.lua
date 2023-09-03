@@ -265,8 +265,6 @@ modifier.createModifier = function(customization)
 
 	modifierCreate.Visible = true
 	
-	local link = false
-	
 	local function createLinkedGroup()
 		local group = {}
 		local counter = #linkedObjects + 1
@@ -289,9 +287,7 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						-- The selected button
 						
-						--ModifiersEnabled = ModifiersEnabled - 1
-						
-                        link = true						
+						ModifiersEnabled -= 1			
 						
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
@@ -299,7 +295,14 @@ modifier.createModifier = function(customization)
 						info.TextTransparency = 0
 					else
 						-- The unselected button
-						
+						local text
+						if info.KnobBonus.Visible then
+							text = text:gsub("[+%]", "")
+						elseif info.KnobPenalty.Visible then
+							text = text:gsub("[-%]", "")
+						end
+						print(text)
+						AddedAmount -= tonumber(text)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -402,10 +405,6 @@ modifier.createModifier = function(customization)
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
 			createLinkedGroup()
-			
-			if link then
-				AddedAmount -= tonumber(customization.Customization.Knobs)
-			end
 		else
 			enabledModifier = false
 			
