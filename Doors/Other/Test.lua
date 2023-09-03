@@ -10,7 +10,7 @@ local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
-
+local previousKnobsValue = 0
 
 local defaultConfig = {
 	Tab = {
@@ -269,7 +269,9 @@ modifier.createModifier = function(customization)
 		local group = {}
 		local counter = #linkedObjects + 1
 		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
-
+		
+		previousKnobsValue = tonumber(number)
+		
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
 			table.insert(group, "Abc" .. counter)
 			counter = counter + 1
@@ -287,9 +289,10 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						-- The selected button
 						
-						print(number)
+						print(previousKnobsValue)
 						
-						AddedAmount -= tonumber(number)
+						AddedAmount -= tonumber(previousKnobsValue)
+						ModifiersEnabled -= 1
 						
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
@@ -404,7 +407,7 @@ modifier.createModifier = function(customization)
 		else
 			enabledModifier = false
 			
-			ModifiersEnabled = ModifiersEnabled - 1
+			ModifiersEnabled -= 1
 			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
 		end
 	end)
@@ -488,4 +491,4 @@ modifier.createSeperator = function()
 	Seperator.Visible = true
 end
 
-return modifier -- e
+return modifier
