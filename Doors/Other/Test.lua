@@ -473,7 +473,7 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-modifier.createModifierLogic = function(code)
+modifier.createModifierLogic = function(selected, code)
 	task.defer(code)
 end
 
