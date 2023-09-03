@@ -265,7 +265,7 @@ modifier.createModifier = function(customization)
 
 	modifierCreate.Visible = true
 	
-	local function createLinkedGroup()
+	local function createLinkedGroup(number)
 		local group = {}
 		local counter = #linkedObjects + 1
 		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
@@ -287,10 +287,10 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						-- The selected button
 						
-						print(customization.Customization.Knobs)
+						print(number)
 						
-						ModifiersEnabled -= 1
-						AddedAmount -=	tonumber(customization.Customization.Knobs)
+						ModifiersEnabled += 1
+						AddedAmount +=	tonumber(customization.Customization.Knobs)
 						
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
@@ -400,7 +400,8 @@ modifier.createModifier = function(customization)
 
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
-			createLinkedGroup()
+			
+			createLinkedGroup(customization.Customization.Knobs)
 		else
 			enabledModifier = false
 			
