@@ -11,7 +11,7 @@ local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 local enabledModifiers = {}
-local runningTotalKnobs = 0
+local knobCounts = {}
 
 local defaultConfig = {
 	Tab = {
@@ -295,7 +295,6 @@ modifier.createModifier = function(customization)
 					else
 						-- The unselected button
 						print("unselected: " .. customization.Customization.Knobs)
-						ModifiersEnabled -= 1
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -307,9 +306,10 @@ modifier.createModifier = function(customization)
 				end
 			end
 
-			-- Update the running total of knob counts
-			runningTotalKnobs = runningTotalKnobs - tonumber(customization.Customization.Knobs) -- Subtract old knob count
-			runningTotalKnobs = runningTotalKnobs + tonumber(customization.Customization.Knobs) -- Add new knob count
+			-- Update the knob count for the selected option
+			local knobCount = knobCounts[selectedButton.Name] or 0
+			knobCounts[selectedButton.Name] = tonumber(customization.Customization.Knobs)
+			AddedAmount = AddedAmount - knobCount + tonumber(customization.Customization.Knobs)
 		end
 
 		for _, name in ipairs(group) do
