@@ -11,6 +11,7 @@ local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 local enabledModifiers = {}
+_G.AmountToRemove = 0
 
 local defaultConfig = {
 	Tab = {
@@ -274,20 +275,11 @@ modifier.createModifier = function(customization)
 			table.insert(group, "Abc" .. counter)
 			counter = counter + 1
 		end
-		
+
 		local function updateConnectorsColor(selectedButton)
 			local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
 			local selectedTransparency = selectedButton and 0 or 0.8
 			local unselectedTransparency = selectedButton and 0.8 or 0
-
-			if selectedInfo then
-				-- Deselect the previously selected button
-				ModifiersEnabled = ModifiersEnabled - 1
-				AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
-				selectedInfo.BackgroundTransparency = 0.9
-				selectedInfo.UIStroke.Enabled = false
-				selectedInfo.TextTransparency = 0.8
-			end
 
 			for _, name in ipairs(group) do
 				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
@@ -295,16 +287,20 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
-						ModifiersEnabled = ModifiersEnabled + 1
-						AddedAmount = AddedAmount + tonumber(customization.Customization.Knobs)
-						print("select")
+						ModifiersEnabled -= 1
+						AddedAmount -= tonumber(_G.AmountToRemove)
+						AddedAmount += tonumber(customization.Customization.Knobs)
+						_G.AmountToRemove = 0
+						
+						print("selected: ".. customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
+						_G.AmountToRemove = tonumber(customization.Customization.Knobs)
 						-- The unselected button
-						print("unselect")
+						print("unselected: ".. customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -315,10 +311,7 @@ modifier.createModifier = function(customization)
 					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
 				end
 			end
-
-			selectedInfo = selectedButton
 		end
-
 
 		for _, name in ipairs(group) do
 			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
@@ -485,9 +478,7 @@ modifier.createModifier = function(customization)
 end
 
 modifier.createModifierLogic = function(selected, code)
-	if game.PlaceId == 6839171747 then
-		pcall(code)
-	end
+	pcall(code)
 end
 
 modifier.createSeperator = function()
@@ -495,4 +486,4 @@ modifier.createSeperator = function()
 	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 end
 
-return modifier -- hi
+return modifier
