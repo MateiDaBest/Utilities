@@ -11,6 +11,7 @@ local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 local enabledModifiers = {}
+local knobCounts = {}
 
 local defaultConfig = {
 	Tab = {
@@ -285,19 +286,12 @@ modifier.createModifier = function(customization)
 
 				if info then
 					if info == selectedButton then
-						-- The selected button
-
-						
-						ModifiersEnabled -= 1
-						
-						print("selected: ".. customization.Customization.Knobs)
+						print("selected: " .. customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
-						-- The unselected button
-						print("unselected: ".. customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -308,6 +302,8 @@ modifier.createModifier = function(customization)
 					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
 				end
 			end
+
+			knobCounts[selectedButton.Name] = tonumber(customization.Customization.Knobs)
 		end
 
 		for _, name in ipairs(group) do
@@ -405,7 +401,6 @@ modifier.createModifier = function(customization)
 		else
 			enabledModifier = false
 			
-			ModifiersEnabled -= 1
 			AddedAmount -= tonumber(customization.Customization.Knobs)
 		end
 	end)
