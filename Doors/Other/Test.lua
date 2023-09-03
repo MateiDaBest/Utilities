@@ -9,7 +9,6 @@ local modifier = {}
 local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
-local Amount = 0
 local ModifiersEnabled = 0
 local enabledModifiers = {}
 
@@ -287,18 +286,15 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
-						print("Amount = ".. Amount)
 						ModifiersEnabled -= 1
-						AddedAmount -= tonumber(Amount)
-						Amount = nil
-						
+						print("select")
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
 						-- The unselected button
-						Amount += tonumber(customization.Customization.Knobs)
+						print("unselect")
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -475,6 +471,15 @@ modifier.createModifier = function(customization)
 			end
 		end
 	end)
+end
+
+modifier.createModifierLogic = function(code)
+	task.defer(code)
+end
+
+modifier.createcreateSeperator = function()
+	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Seperator:Clone()
+	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 end
 
 return modifier
