@@ -270,7 +270,7 @@ modifier.createModifier = function(customization)
 		local counter = #linkedObjects + 1
 		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
 		
-		previousKnobsValue = tonumber(number)
+		previousKnobsValue = 0
 		
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
 			table.insert(group, "Abc" .. counter)
@@ -288,8 +288,6 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
-						
-						print(previousKnobsValue)
 						
 						AddedAmount -= tonumber(previousKnobsValue)
 						ModifiersEnabled -= 1
@@ -402,10 +400,13 @@ modifier.createModifier = function(customization)
 
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
+			previousKnobsValue = tonumber(customization.Customization.Knobs)
 			
-			createLinkedGroup(customization.Customization.Knobs)
+			createLinkedGroup(previousKnobsValue)
 		else
 			enabledModifier = false
+			
+			previousKnobsValue = 0
 			
 			ModifiersEnabled -= 1
 			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
@@ -463,7 +464,13 @@ modifier.createModifier = function(customization)
 
 		writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
 	end)
-
+	
+	spawn(function()
+		while wait(1) do
+			print(previousKnobsValue)
+		end
+	end)
+	
 	spawn(function()
 		while wait() do
 			local knobBonusText = AddedAmount ~= 0 and (AddedAmount > 0 and "+" or "") .. AddedAmount .. "%" or "+0%"
