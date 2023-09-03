@@ -265,45 +265,79 @@ modifier.createModifier = function(customization)
 
 	modifierCreate.Visible = true
 	
-	local function updateConnectorsColor(selectedButton)
-		local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
-		local selectedTransparency = selectedButton and 0 or 0.8
-		local unselectedTransparency = selectedButton and 0.8 or 0
+	local function createLinkedGroup()
+		local group = {}
+		local counter = #linkedObjects + 1
+		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
+
+		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
+			table.insert(group, "Abc" .. counter)
+			counter = counter + 1
+		end
+		
+		local function updateConnectorsColor(selectedButton)
+			local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
+			local selectedTransparency = selectedButton and 0 or 0.8
+			local unselectedTransparency = selectedButton and 0.8 or 0
+
+			if selectedInfo then
+				-- Deselect the previously selected button
+				ModifiersEnabled = ModifiersEnabled - 1
+				AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
+				selectedInfo.BackgroundTransparency = 0.9
+				selectedInfo.UIStroke.Enabled = false
+				selectedInfo.TextTransparency = 0.8
+			end
+
+			for _, name in ipairs(group) do
+				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+
+				if info then
+					if info == selectedButton then
+						-- The selected button
+						ModifiersEnabled = ModifiersEnabled + 1
+						AddedAmount = AddedAmount + tonumber(customization.Customization.Knobs)
+						print("select")
+						info.BackgroundTransparency = 0.7
+						info.UIStroke.Enabled = true
+						info.UIStroke.Color = customization.Customization.Color
+						info.TextTransparency = 0
+					else
+						-- The unselected button
+						print("unselect")
+						info.BackgroundTransparency = 0.9
+						info.UIStroke.Enabled = false
+						info.TextTransparency = 0.8
+					end
+
+					info.Connector.BackgroundColor3 = connectorsColor
+					info.ConnectorOut.BackgroundColor3 = connectorsColor
+					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
+				end
+			end
+
+			selectedInfo = selectedButton
+		end
+
 
 		for _, name in ipairs(group) do
 			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-
 			if info then
-				if info == selectedButton then
-					-- The selected button
-					if selectedInfo then
-						-- Deselect the previously selected button
-						ModifiersEnabled -= 1
-						AddedAmount -= tonumber(customization.Customization.Knobs)
+				table.insert(linkedObjects, info)
+				info.MouseButton1Click:Connect(function()
+					if selectedInfo == info then
+						selectedInfo = nil
+						updateConnectorsColor(selectedInfo)
+					else
+						selectedInfo = info
+						updateConnectorsColor(selectedInfo)
 					end
-					-- Select the current button and add its knob amount
-					ModifiersEnabled += 1
-					AddedAmount += tonumber(customization.Customization.Knobs)
-					print("select")
-					info.BackgroundTransparency = 0.7
-					info.UIStroke.Enabled = true
-					info.UIStroke.Color = customization.Customization.Color
-					info.TextTransparency = 0
-				else
-					-- The unselected button
-					print("unselect")
-					info.BackgroundTransparency = 0.9
-					info.UIStroke.Enabled = false
-					info.TextTransparency = 0.8
-				end
-
-				info.Connector.BackgroundColor3 = connectorsColor
-				info.ConnectorOut.BackgroundColor3 = connectorsColor
-				info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
+				end)
 			end
 		end
-	end
 
+		updateConnectorsColor(selectedInfo)
+	end
 
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
@@ -451,7 +485,9 @@ modifier.createModifier = function(customization)
 end
 
 modifier.createModifierLogic = function(selected, code)
-	pcall(code)
+	if game.PlaceId == 6839171747 then
+		pcall(code)
+	end
 end
 
 modifier.createSeperator = function()
@@ -459,4 +495,4 @@ modifier.createSeperator = function()
 	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 end
 
-return modifier
+return modifier -- hi
