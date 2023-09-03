@@ -474,15 +474,10 @@ modifier.createModifier = function(customization)
 end
 
 modifier.createModifierLogic = function(selected, code)
-	local success, compiledFunction = pcall(code)
-	if success then
-		compiledFunction()
-	else
-		warn("Error Loading")
-	end
+	pcall(code)
 end
 
-modifier.createcreateSeperator = function()
+modifier.createSeperator = function()
 	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Seperator:Clone()
 	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 end
