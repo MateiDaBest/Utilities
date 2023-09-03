@@ -10,7 +10,7 @@ local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
-local enabledModifiers = {}
+
 
 local defaultConfig = {
 	Tab = {
@@ -232,6 +232,8 @@ modifier.createModifier = function(customization)
 			customization[i] = defaultConfig[i]
 		end
 	end
+	
+	print(customization.Customization.Knobs)
 
 	if isfile("knobs.txt") then deletefile("knobs.txt") end
 	if isfile("name.txt") then deletefile("name.txt") end
@@ -295,17 +297,7 @@ modifier.createModifier = function(customization)
 						info.TextTransparency = 0
 					else
 						-- The unselected button
-						local text
-						if info.Info.KnobBonus.Visible then
-							text = info.Info.KnobBonus.Text:gsub("%", "")
-							text = info.Info.KnobBonus.Text:gsub("+", "")
-						elseif info.Info.KnobPenalty.Visible then
-							text = info.Info.KnobPenalty.Text:gsub("%", "")
-							text = info.Info.KnobPenalty.Text:gsub("-", "")
-						end
 						
-						print(text)
-						AddedAmount -= tonumber(text)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
