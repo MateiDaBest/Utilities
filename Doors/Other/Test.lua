@@ -289,8 +289,7 @@ modifier.createModifier = function(customization)
 						
 						print(number)
 						
-						ModifiersEnabled -= 1
-						AddedAmount -=	tonumber(customization.Customization.Knobs)
+						AddedAmount -= tonumber(number)
 						
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
@@ -400,6 +399,7 @@ modifier.createModifier = function(customization)
 
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
+			
 			createLinkedGroup(customization.Customization.Knobs)
 		else
 			enabledModifier = false
