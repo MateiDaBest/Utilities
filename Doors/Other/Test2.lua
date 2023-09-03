@@ -11,7 +11,6 @@ local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 local enabledModifiers = {}
-local knobCounts = {}
 
 local defaultConfig = {
 	Tab = {
@@ -227,6 +226,16 @@ modifier.createTab = function(tab)
 	end
 end
 
+local function disableOtherModifiers(currentModifier, EnabledModifier)
+	for _, modifier in ipairs(enabledModifiers) do
+		if modifier ~= currentModifier then
+			modifier.enabledModifier = false
+		end
+	end
+
+	EnabledModifier = currentModifier
+end
+
 modifier.createModifier = function(customization)
 	for i, v in next, defaultConfig do
 		if customization[i] == nil then
@@ -287,14 +296,12 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
-						print("selected: " .. customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
 						-- The unselected button
-						print("unselected: " .. customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -305,11 +312,6 @@ modifier.createModifier = function(customization)
 					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
 				end
 			end
-
-			-- Update the knob count for the selected option
-			local knobCount = knobCounts[selectedButton.Name] or 0
-			knobCounts[selectedButton.Name] = tonumber(customization.Customization.Knobs)
-			AddedAmount = AddedAmount - knobCount + tonumber(customization.Customization.Knobs)
 		end
 
 		for _, name in ipairs(group) do
@@ -398,18 +400,22 @@ modifier.createModifier = function(customization)
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not enabledModifier then
 			enabledModifier = true
-			
-			AddedAmount += tonumber(customization.Customization.Knobs)
-			
-			ModifiersEnabled += 1
-			
+			table.insert(enabledModifiers, modifierCreate)
+			AddedAmount = AddedAmount + tonumber(customization.Customization.Knobs)
+			ModifiersEnabled = ModifiersEnabled + 1
+			disableOtherModifiers(modifierCreate, enabledModifier)
 			createLinkedGroup()
 		else
 			enabledModifier = false
-			
-			AddedAmount -= tonumber(customization.Customization.Knobs)
+			local index = table.find(enabledModifiers, modifierCreate)
+			if index then
+				table.remove(enabledModifiers, index)
+			end
+			ModifiersEnabled = ModifiersEnabled - 1
+			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
 		end
 	end)
+
 
 	local Confirm = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("customConfirm")
 
