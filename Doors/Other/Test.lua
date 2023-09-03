@@ -474,7 +474,12 @@ modifier.createModifier = function(customization)
 end
 
 modifier.createModifierLogic = function(selected, code)
-	task.defer(code)
+	local success, compiledFunction = pcall(code)
+	if success then
+		compiledFunction()
+	else
+		warn("Error Loading")
+	end
 end
 
 modifier.createcreateSeperator = function()
