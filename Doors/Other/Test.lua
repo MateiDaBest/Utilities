@@ -10,7 +10,7 @@ local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
-local enabledModifiers = {}
+
 
 local defaultConfig = {
 	Tab = {
@@ -265,7 +265,7 @@ modifier.createModifier = function(customization)
 
 	modifierCreate.Visible = true
 	
-	local function createLinkedGroup()
+	local function createLinkedGroup(number)
 		local group = {}
 		local counter = #linkedObjects + 1
 		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
@@ -287,7 +287,10 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						-- The selected button
 						
-						ModifiersEnabled -= 1			
+						print(number)
+						
+						ModifiersEnabled -= 1
+						AddedAmount -=	tonumber(customization.Customization.Knobs)
 						
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
@@ -295,15 +298,7 @@ modifier.createModifier = function(customization)
 						info.TextTransparency = 0
 					else
 						-- The unselected button
-						local text
-						if info.Info.KnobBonus.Visible then
-							text = info.Info.KnobBonus.Text:gsub("[%+%]", "")
-						elseif info.Info.KnobPenalty.Visible then
-							text = info.Info.KnobPenalty.Text:gsub("[-%]", "")
-						end
 						
-						print(text)
-						AddedAmount -= tonumber(text)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -405,7 +400,7 @@ modifier.createModifier = function(customization)
 
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
-			createLinkedGroup()
+			createLinkedGroup(customization.Customization.Knobs)
 		else
 			enabledModifier = false
 			
