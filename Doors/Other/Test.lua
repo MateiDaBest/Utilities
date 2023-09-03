@@ -296,11 +296,12 @@ modifier.createModifier = function(customization)
 					else
 						-- The unselected button
 						local text
-						if info.KnobBonus.Visible then
-							text = text:gsub("[+%]", "")
-						elseif info.KnobPenalty.Visible then
-							text = text:gsub("[-%]", "")
+						if info.Info.KnobBonus.Visible then
+							text = info.Info.KnobBonus.Text:gsub("[%+%]", "")
+						elseif info.Info.KnobPenalty.Visible then
+							text = info.Info.KnobPenalty.Text:gsub("[-%]", "")
 						end
+						
 						print(text)
 						AddedAmount -= tonumber(text)
 						info.BackgroundTransparency = 0.9
@@ -492,4 +493,4 @@ modifier.createSeperator = function()
 	Seperator.Visible = true
 end
 
-return modifier
+return modifier -- e
