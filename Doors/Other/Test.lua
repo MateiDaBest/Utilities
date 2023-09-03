@@ -287,14 +287,13 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						-- The selected button
 						ModifiersEnabled += 1
+						AddedAmount += tonumber(customization.Customization.Knobs)
 						print("select")
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
-						ModifiersEnabled -= 1
-						AddedAmount -= tonumber(customization.Customization.Knobs)
 						-- The unselected button
 						print("unselect")
 						info.BackgroundTransparency = 0.9
@@ -395,8 +394,6 @@ modifier.createModifier = function(customization)
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not enabledModifier then
 			enabledModifier = true
-			AddedAmount += tonumber(customization.Customization.Knobs)
-			ModifiersEnabled += 1
 			
 			createLinkedGroup()
 		else
