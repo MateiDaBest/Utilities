@@ -287,14 +287,13 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
-						print("selected: " .. customization.Customization.Knobs)
+						print(customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
 						-- The unselected button
-						print("unselected: " .. customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -306,18 +305,10 @@ modifier.createModifier = function(customization)
 				end
 			end
 
-			-- Deduct the old knob count from AddedAmount
-			local oldKnobCount = 0
-			for name, knobCount in pairs(knobCounts) do
-				if name ~= selectedButton.Name then
-					oldKnobCount = oldKnobCount + knobCount
-				end
-			end
-			AddedAmount = AddedAmount - oldKnobCount
-
 			-- Update the knob count for the selected option
+			local knobCount = knobCounts[selectedButton.Name] or 0
 			knobCounts[selectedButton.Name] = tonumber(customization.Customization.Knobs)
-			AddedAmount = AddedAmount + tonumber(customization.Customization.Knobs)
+			AddedAmount = AddedAmount - knobCount + tonumber(customization.Customization.Knobs)
 		end
 
 		for _, name in ipairs(group) do
@@ -407,11 +398,15 @@ modifier.createModifier = function(customization)
 		if not enabledModifier then
 			enabledModifier = true
 			
+			AddedAmount += tonumber(customization.Customization.Knobs)
+			
 			ModifiersEnabled += 1
 			
 			createLinkedGroup()
 		else
 			enabledModifier = false
+			
+			AddedAmount -= tonumber(customization.Customization.Knobs)
 		end
 	end)
 
