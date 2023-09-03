@@ -287,7 +287,6 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
-						ModifiersEnabled -= 1
 						AddedAmount -= tonumber(_G.AmountToRemove)
 						AddedAmount += tonumber(customization.Customization.Knobs)
 						_G.AmountToRemove = 0
@@ -400,6 +399,11 @@ modifier.createModifier = function(customization)
 		if not enabledModifier then
 			enabledModifier = true
 			
+			AddedAmount -= tonumber(_G.AmountToRemove)
+			AddedAmount += tonumber(customization.Customization.Knobs)
+			
+			ModifiersEnabled += 1
+			
 			createLinkedGroup()
 		else
 			enabledModifier = false
@@ -482,8 +486,9 @@ modifier.createModifierLogic = function(selected, code)
 end
 
 modifier.createSeperator = function()
-	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Separator:Clone()
+	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
 	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
+	Seperator.Visible = true
 end
 
-return modifier
+return modifier -- e
