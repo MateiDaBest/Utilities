@@ -287,15 +287,22 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						-- The selected button
 						
-						--ModifiersEnabled = ModifiersEnabled - 1
-
+						ModifiersEnabled -= 1			
+						
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
 						-- The unselected button
-						
+						local text
+						if info.Info.KnobBonus.Visible then
+							text = info.Info.KnobBonus.Text:gsub("[+%]", "")
+						elseif info.Info.KnobPenalty.Visible then
+							text = info.Info.KnobPenalty.Text:gsub("[-%]", "")
+						end
+						print(text)
+						AddedAmount -= tonumber(text)
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -392,20 +399,17 @@ modifier.createModifier = function(customization)
 	end)
 
 	modifierCreate.MouseButton1Click:Connect(function()
-		ModifiersEnabled = ModifiersEnabled - 1
-		AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
-		
 		if not enabledModifier then
 			enabledModifier = true
 
-			AddedAmount = AddedAmount + tonumber(customization.Customization.Knobs)
-			ModifiersEnabled = ModifiersEnabled + 1
+			AddedAmount += tonumber(customization.Customization.Knobs)
+			ModifiersEnabled += 1
 			createLinkedGroup()
 		else
 			enabledModifier = false
 			
-			--ModifiersEnabled = ModifiersEnabled - 1
-			--AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
+			ModifiersEnabled = ModifiersEnabled - 1
+			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
 		end
 	end)
 
