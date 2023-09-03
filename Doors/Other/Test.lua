@@ -286,13 +286,15 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
-						ModifiersEnabled -= 1
+						ModifiersEnabled += 1
 						print("select")
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
+						ModifiersEnabled -= 1
+						AddedAmount -= tonumber(customization.Customization.Knobs)
 						-- The unselected button
 						print("unselect")
 						info.BackgroundTransparency = 0.9
@@ -478,7 +480,7 @@ modifier.createModifierLogic = function(selected, code)
 end
 
 modifier.createSeperator = function()
-	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Seperator:Clone()
+	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers.Separator:Clone()
 	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 end
 
