@@ -232,8 +232,6 @@ modifier.createModifier = function(customization)
 			customization[i] = defaultConfig[i]
 		end
 	end
-	
-	print(customization.Customization.Knobs)
 
 	if isfile("knobs.txt") then deletefile("knobs.txt") end
 	if isfile("name.txt") then deletefile("name.txt") end
@@ -289,7 +287,10 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						-- The selected button
 						
-						ModifiersEnabled -= 1			
+						print(customization.Customization.Knobs)
+						
+						ModifiersEnabled -= 1
+						AddedAmount -=	tonumber(customization.Customization.Knobs)
 						
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
