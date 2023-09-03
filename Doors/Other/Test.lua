@@ -11,7 +11,7 @@ local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 local enabledModifiers = {}
-local runningTotalKnobs = 0
+local knobCounts = {}
 
 local defaultConfig = {
 	Tab = {
@@ -295,7 +295,6 @@ modifier.createModifier = function(customization)
 					else
 						-- The unselected button
 						print("unselected: " .. customization.Customization.Knobs)
-						ModifiersEnabled = ModifiersEnabled - 1
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -307,12 +306,18 @@ modifier.createModifier = function(customization)
 				end
 			end
 
-			-- Update the running total of knob counts
-			runningTotalKnobs = runningTotalKnobs - tonumber(customization.Customization.Knobs)  -- Subtract old knob count
-
-			if selectedButton then
-				enabledModifier = false  -- If a new option is selected, disable the modifier
+			-- Deduct the old knob count from AddedAmount
+			local oldKnobCount = 0
+			for name, knobCount in pairs(knobCounts) do
+				if name ~= selectedButton.Name then
+					oldKnobCount = oldKnobCount + knobCount
+				end
 			end
+			AddedAmount = AddedAmount - oldKnobCount
+
+			-- Update the knob count for the selected option
+			knobCounts[selectedButton.Name] = tonumber(customization.Customization.Knobs)
+			AddedAmount = AddedAmount + tonumber(customization.Customization.Knobs)
 		end
 
 		for _, name in ipairs(group) do
@@ -333,7 +338,6 @@ modifier.createModifier = function(customization)
 
 		updateConnectorsColor(selectedInfo)
 	end
-
 
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
@@ -402,20 +406,12 @@ modifier.createModifier = function(customization)
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not enabledModifier then
 			enabledModifier = true
-
-			AddedAmount = AddedAmount + tonumber(customization.Customization.Knobs)  -- Add the new knob count
-			runningTotalKnobs = runningTotalKnobs + tonumber(customization.Customization.Knobs)  -- Add to the running total
-
-			ModifiersEnabled = ModifiersEnabled + 1
-
+			
+			ModifiersEnabled += 1
+			
 			createLinkedGroup()
 		else
 			enabledModifier = false
-
-			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)  -- Subtract the old knob count
-			runningTotalKnobs = runningTotalKnobs - tonumber(customization.Customization.Knobs)  -- Subtract from the running total
-
-			ModifiersEnabled = ModifiersEnabled - 1
 		end
 	end)
 
@@ -497,4 +493,4 @@ modifier.createSeperator = function()
 	Seperator.Visible = true
 end
 
-return modifier -- e
+return modifier
