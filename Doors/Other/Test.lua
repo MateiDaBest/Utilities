@@ -265,6 +265,8 @@ modifier.createModifier = function(customization)
 
 	modifierCreate.Visible = true
 	
+	local link = false
+	
 	local function createLinkedGroup()
 		local group = {}
 		local counter = #linkedObjects + 1
@@ -288,7 +290,9 @@ modifier.createModifier = function(customization)
 						-- The selected button
 						
 						--ModifiersEnabled = ModifiersEnabled - 1
-
+						
+                        link = true						
+						
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
@@ -392,21 +396,21 @@ modifier.createModifier = function(customization)
 	end)
 
 	modifierCreate.MouseButton1Click:Connect(function()
-		ModifiersEnabled -= 1
-		AddedAmount -= tonumber(customization.Customization.Knobs)
-		
 		if not enabledModifier then
 			enabledModifier = true
 
 			AddedAmount += tonumber(customization.Customization.Knobs)
-			AddedAmount += tonumber(customization.Customization.Knobs)
-			ModifiersEnabled += 2
+			ModifiersEnabled += 1
 			createLinkedGroup()
+			
+			if link then
+				AddedAmount -= tonumber(customization.Customization.Knobs)
+			end
 		else
 			enabledModifier = false
 			
-			--ModifiersEnabled = ModifiersEnabled - 1
-			--AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
+			ModifiersEnabled = ModifiersEnabled - 1
+			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
 		end
 	end)
 
