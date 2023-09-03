@@ -11,7 +11,6 @@ local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 local enabledModifiers = {}
-_G.AmountToRemove = 0
 
 local defaultConfig = {
 	Tab = {
@@ -287,9 +286,9 @@ modifier.createModifier = function(customization)
 				if info then
 					if info == selectedButton then
 						-- The selected button
-						AddedAmount -= tonumber(_G.AmountToRemove)
-						AddedAmount += tonumber(customization.Customization.Knobs)
-						_G.AmountToRemove = 0
+
+						
+						ModifiersEnabled -= 1
 						
 						print("selected: ".. customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.7
@@ -297,7 +296,6 @@ modifier.createModifier = function(customization)
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
-						_G.AmountToRemove = tonumber(customization.Customization.Knobs)
 						-- The unselected button
 						print("unselected: ".. customization.Customization.Knobs)
 						info.BackgroundTransparency = 0.9
@@ -399,7 +397,6 @@ modifier.createModifier = function(customization)
 		if not enabledModifier then
 			enabledModifier = true
 			
-			AddedAmount -= tonumber(_G.AmountToRemove)
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			
 			ModifiersEnabled += 1
@@ -491,4 +488,4 @@ modifier.createSeperator = function()
 	Seperator.Visible = true
 end
 
-return modifier -- e
+return modifier
