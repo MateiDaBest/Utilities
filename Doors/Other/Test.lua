@@ -5,6 +5,12 @@ if not writefile then
 	return
 end
 
+if _G.alreadyExecuted then
+	firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent, "Already executed, please rejoin to execute again.")
+	return
+end
+
+_G.alreadyExecuted = true
 local modifier = {}
 local linkedObjects = {}
 local Data = {}
@@ -120,8 +126,6 @@ if game.PlaceId == 6839171747 then
 			TempMods.Tip.Visible = false
 		end
 	end)
-
-	return modifier
 end
 
 modifier.createTab = function(tab)
