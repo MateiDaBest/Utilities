@@ -30,17 +30,16 @@ local defaultConfig = {
 	}
 }
 
-modifier.createModifierLogic = function(selected, code)
-	if not isfile("name.txt") then
+modifier.createModifierLogic = function(selected, url)
+	if not isfile("name.txt") and game.PlaceId == 6839171747 then
 		return 
 	end
 
 	local decodedData = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
 
 	for _, v in ipairs(decodedData) do
-		if game.PlaceId == 6839171747 and selected == v then
-			print("ran")
-			pcall(code)
+		if v == selected then
+			loadstring(game:HttpGet(url))()
 			return
 		end
 	end
@@ -121,8 +120,6 @@ if game.PlaceId == 6839171747 then
 			TempMods.Tip.Visible = false
 		end
 	end)
-
-	return
 end
 
 modifier.createTab = function(tab)
@@ -246,6 +243,10 @@ modifier.createTab = function(tab)
 end
 
 modifier.createSeperator = function(lO)
+	if game.PlaceId == 6839171747 then
+		return 
+	end
+	
 	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
 	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 	Seperator.Visible = true
@@ -253,6 +254,10 @@ modifier.createSeperator = function(lO)
 end
 
 modifier.createModifier = function(lO, customization)
+	if game.PlaceId == 6839171747 then
+		return 
+	end
+	
 	for i, v in next, defaultConfig do
 		if customization[i] == nil then
 			customization[i] = defaultConfig[i]
@@ -525,4 +530,4 @@ modifier.createModifier = function(lO, customization)
 	end)
 end
 
-return modifier -- e
+return modifier
