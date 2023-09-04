@@ -232,12 +232,8 @@ modifier.createModifier = function(customization)
 			customization[i] = defaultConfig[i]
 		end
 	end
-	
-	if customization.Customization.Name then
-		_G["Enabled" .. customization.Customization.Name] = false
-	else
-		print("error")
-	end
+
+	_G["Enabled" .. customization.Customization.Title] = false
 
 	if isfile("knobs.txt") then deletefile("knobs.txt") end
 	if isfile("name.txt") then deletefile("name.txt") end
@@ -270,7 +266,7 @@ modifier.createModifier = function(customization)
 
 	modifierCreate.Visible = true
 	
-	local function createLinkedGroup(number)
+	local function createLinkedGroup()
 		local group = {}
 		local counter = #linkedObjects + 1
 		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
@@ -292,7 +288,7 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						-- The selected button
 						
-						AddedAmount -= tonumber(number)
+						AddedAmount -= tonumber(customization.Customization.Knobs)
 						ModifiersEnabled -= 1
 						
 						info.BackgroundTransparency = 0.7
@@ -403,14 +399,14 @@ modifier.createModifier = function(customization)
 
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
-			_G["Enabled" .. customization.Customization.Name] = true
+			_G["Enabled" .. customization.Customization.Title] = true
 			
 			createLinkedGroup()
 		else
 			enabledModifier = false
 			
 			ModifiersEnabled -= 1
-			_G["Enabled" .. customization.Customization.Name] = false
+			_G["Enabled" .. customization.Customization.Title] = false
 			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
 		end
 	end)
@@ -496,4 +492,4 @@ modifier.createSeperator = function()
 	Seperator.Visible = true
 end
 
-return modifier --
+return modifier
