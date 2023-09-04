@@ -33,7 +33,7 @@ local defaultConfig = {
 modifier.createModifierLogic = function(selected, code)
 	spawn(function()
 		while wait(1) do
-			if not readfile("name.txt") then return end
+			if not isfile("name.txt") then return end
 			local decodedData = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
 			
 			for _, v in ipairs(decodedData) do
@@ -243,13 +243,14 @@ modifier.createTab = function(tab)
 	end
 end
 
-modifier.createSeperator = function()
+modifier.createSeperator = function(lO)
 	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
 	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
-	Seperator.Name = 0
+	Seperator.Visible = true
+	Seperator.LayoutOrder = lO
 end
 
-modifier.createModifier = function(customization)
+modifier.createModifier = function(lO, customization)
 	for i, v in next, defaultConfig do
 		if customization[i] == nil then
 			customization[i] = defaultConfig[i]
@@ -279,7 +280,7 @@ modifier.createModifier = function(customization)
 	if customization.Customization.Connector == true then
 		modifierCreate.Connector.Visible = true
 		modifierCreate.ConnectorOut.Visible = true
-		modifierCreate.Connector.Position = UDim2.new(-0.063, 0, 1.07, 0)
+		modifierCreate.Connector.Position = UDim2.new(-0.063, 0, 1.06, 0)
 		modifierCreate.Connector.Size = UDim2.new(0, 4, 1, 8)
 	elseif customization.Customization.ConnectorEnd == true then
 		modifierCreate.ConnectorOut.Visible = true
@@ -358,9 +359,9 @@ modifier.createModifier = function(customization)
 		end
 	end
 
-
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
+	modifierCreate.LayoutOrder = lO
 	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 	
 	if customization.Customization.NoProgress == true then
