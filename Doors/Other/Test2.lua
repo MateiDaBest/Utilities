@@ -11,7 +11,6 @@ local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 
-
 local defaultConfig = {
 	Tab = {
 		Title = "A-90", -- Tab name.
@@ -54,20 +53,21 @@ if game.PlaceId == 6839171747 then
 		end
 	end
 
-	spawn(function()
+	for _, v in ipairs(decodedData2:GetDescendants()) do
+		Mods += 1
+
 		local Template = TempMods:FindFirstChild("Template"):Clone()
 		Template.Text = decodedData2
 		Template.Parent = TempMods
 		Template.Visible = true
 		Template.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
+		
 		local Template_2 = MainMods:FindFirstChild("Template"):Clone()
 		Template_2.Text = decodedData2
 		Template_2.Parent = MainMods
 		Template_2.Visible = true
 		Template_2.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
-
-		Mods += 1
-	end)
+	end
 
 	TempMods.Desc.Text = Mods .. " MODIFIER" .. (Mods ~= 1 and "S" or "").. " ACTIVATED"
 
@@ -232,6 +232,9 @@ modifier.createModifier = function(customization)
 			customization[i] = defaultConfig[i]
 		end
 	end
+	
+	print("Enabled".. customization.Customization.Name)
+	_G["Enabled" .. customization.Customization.Name] = false
 
 	if isfile("knobs.txt") then deletefile("knobs.txt") end
 	if isfile("name.txt") then deletefile("name.txt") end
@@ -249,7 +252,6 @@ modifier.createModifier = function(customization)
 		end
 		return newName
 	end
-
 
 	local modifierCreate = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:WaitForChild("Template"):Clone()
 	local Preview = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Preview
@@ -269,7 +271,7 @@ modifier.createModifier = function(customization)
 		local group = {}
 		local counter = #linkedObjects + 1
 		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
-
+		
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
 			table.insert(group, "Abc" .. counter)
 			counter = counter + 1
@@ -287,10 +289,8 @@ modifier.createModifier = function(customization)
 					if info == selectedButton then
 						-- The selected button
 						
-						print(number)
-						
-						ModifiersEnabled += 1
-						AddedAmount +=	tonumber(customization.Customization.Knobs)
+						AddedAmount -= tonumber(number)
+						ModifiersEnabled -= 1
 						
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
@@ -400,12 +400,14 @@ modifier.createModifier = function(customization)
 
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
+			_G["Enabled" .. customization.Customization.Name] = true
 			
-			createLinkedGroup(customization.Customization.Knobs)
+			createLinkedGroup()
 		else
 			enabledModifier = false
 			
-			ModifiersEnabled = ModifiersEnabled - 1
+			ModifiersEnabled -= 1
+			_G["Enabled" .. customization.Customization.Name] = false
 			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
 		end
 	end)
@@ -451,7 +453,7 @@ modifier.createModifier = function(customization)
 		end
 
 		writefile("knobs.txt", game:GetService("HttpService"):JSONEncode(AddedAmount))
-		writefile("name.txt", game:GetService("HttpService"):JSONEncode(customization.Customization.Title))
+		writefile("name.txt", game:GetService("HttpService"):JSONEncode(Data))
 
 		local colorTable = {
 			R = customization.Customization.Color.R,
@@ -461,7 +463,7 @@ modifier.createModifier = function(customization)
 
 		writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
 	end)
-
+	
 	spawn(function()
 		while wait() do
 			local knobBonusText = AddedAmount ~= 0 and (AddedAmount > 0 and "+" or "") .. AddedAmount .. "%" or "+0%"
@@ -480,7 +482,9 @@ modifier.createModifier = function(customization)
 end
 
 modifier.createModifierLogic = function(selected, code)
-	pcall(code)
+	if _G["Enabled" .. selected] == true and game.PlaceId == 6839171747 then
+		pcall(code)
+	end
 end
 
 modifier.createSeperator = function()
@@ -489,4 +493,4 @@ modifier.createSeperator = function()
 	Seperator.Visible = true
 end
 
-return modifier -- e
+return modifier
