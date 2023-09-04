@@ -322,11 +322,12 @@ modifier.createModifier = function(lO, customization)
 		end
 
 		if connectorsEnabled and not currentLinkedGroup then
-			currentLinkedGroup = {}
+			local currentLinkedGroup2 = {}
 			local counter = #linkedObjects + 1
 
 			while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-				table.insert(currentLinkedGroup, "Abc" .. counter)
+				table.insert(currentLinkedGroup2, "Abc" .. counter)
+				print("Abc".. counter)
 				counter = counter + 1
 			end
 
@@ -337,13 +338,14 @@ modifier.createModifier = function(lO, customization)
 				local selectedTransparency = selectedButton and 0 or 0.8
 				local unselectedTransparency = selectedButton and 0.8 or 0
 
-				for _, name in ipairs(currentLinkedGroup) do
+				for _, name in ipairs(currentLinkedGroup2) do
 					local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 
 					if info then
 						if info == selectedButton then
-							for _, v in ipairs(currentLinkedGroup) do
-								local modifierInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers[v.Name]
+							for _, v in ipairs(currentLinkedGroup2) do
+								print(v.Name)
+								local modifierInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers[tostring(v.Name)]
 
 								if modifierInfo then
 									local knobBonus = tonumber(modifierInfo.KnobBonus.Name)
