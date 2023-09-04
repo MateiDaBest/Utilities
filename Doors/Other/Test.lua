@@ -30,6 +30,16 @@ local defaultConfig = {
 	}
 }
 
+modifier.createModifierLogic = function(selected, code)
+	spawn(function()
+		while wait(1) do
+			if _G["Enabled" .. selected] and game.PlaceId == 6839171747 then
+				pcall(code)
+			end
+		end
+	end)
+end
+
 if game.PlaceId == 6839171747 then
 	if not isfile("name.txt") or not isfile("knobs.txt") or not isfile("color.txt") then
 		return
@@ -55,6 +65,8 @@ if game.PlaceId == 6839171747 then
 
 	for _, v in ipairs(decodedData2) do
 		Mods += 1
+		
+		_G["Enabled" .. v] = false
 
 		local Template = TempMods:FindFirstChild("Template"):Clone()
 		Template.Text = v
@@ -233,8 +245,6 @@ modifier.createModifier = function(customization)
 		end
 	end
 
-	_G["Enabled" .. customization.Customization.Title] = false
-
 	if isfile("knobs.txt") then deletefile("knobs.txt") end
 	if isfile("name.txt") then deletefile("name.txt") end
 	if isfile("color.txt") then deletefile("color.txt") end
@@ -408,7 +418,6 @@ modifier.createModifier = function(customization)
 
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
-			_G["Enabled" .. customization.Customization.Title] = true
 			
 			if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
 				modifierCreate.BackgroundTransparency = 0.7
@@ -422,7 +431,7 @@ modifier.createModifier = function(customization)
 			enabledModifier = false
 			
 			ModifiersEnabled -= 1
-			_G["Enabled" .. customization.Customization.Title] = false
+
 			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
 			
 			if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
@@ -502,16 +511,10 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-modifier.createModifierLogic = function(selected, code)
-	if _G["Enabled" .. selected] == true and game.PlaceId == 6839171747 then
-		pcall(code)
-	end
-end
-
 modifier.createSeperator = function()
 	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
 	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 	Seperator.Visible = true
 end
 
-return modifier -- test
+return modifier
