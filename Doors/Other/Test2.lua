@@ -6,16 +6,17 @@ if not writefile then
 end
 
 if _G.alreadyExecuted then
-	firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent, "Already executed, please rejoin to execute again.")
-	return
+	firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent, "Executed twice, bugs may accure.")
 end
 
 _G.alreadyExecuted = true
+
 local modifier = {}
 local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
+local prevKnobs = 0
 
 local defaultConfig = {
 	Tab = {
@@ -66,6 +67,8 @@ if game.PlaceId == 6839171747 then
 	local decodedData = game:GetService("HttpService"):JSONDecode(readfile("knobs.txt"))
 	local decodedData2 = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
 	local decodedData3 = game:GetService("HttpService"):JSONDecode(readfile("color.txt"))
+	local decodedData4 = game:GetService("HttpService"):JSONDecode(readfile("np.txt"))
+	local decodedData5 = game:GetService("HttpService"):JSONDecode(readfile("nr.txt"))
 
 	for _, v in pairs(TempMods:GetDescendants()) do
 		if v.Name == "UIListLayout" or v.Name == "Template" or v.Name == "UICorner" or v.Name == "UIPadding" or v.Name == "Desc" or v.Name == "Icon" or v.Name == "BigList" or v.Name == "KnobBonus" or v.Name == "UIGradient" or v.Name == "IconLeft" or v.Name == "NoProgress" or v.Name == "NoRift" or v.Name == "NotFloor" or v.Name == "Tip" or v.Name == "UIGridLayout" then
@@ -77,8 +80,6 @@ if game.PlaceId == 6839171747 then
 
 	for _, v in ipairs(decodedData2) do
 		Mods += 1
-		
-		_G["Enabled" .. v] = false
 
 		local Template = TempMods:FindFirstChild("Template"):Clone()
 		Template.Text = v
@@ -94,7 +95,19 @@ if game.PlaceId == 6839171747 then
 	end
 
 	TempMods.Desc.Text = Mods .. " MODIFIER" .. (Mods ~= 1 and "S" or "").. " ACTIVATED"
+	
+	if decodedData4 == true then
+		TempMods.NoProgress.Visible = true
+	else
+		TempMods.NoProgress.Visible = false
+	end
 
+	if decodedData5 == true then
+		TempMods.NoRift.Visible = true
+	else
+		TempMods.NoRift.Visible = false
+	end
+	
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Visible = true
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Text = "MODIFIERS (".. Mods .. ")"
 	if decodedData >= 1 then
@@ -164,18 +177,11 @@ modifier.createTab = function(tab)
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.ExitElevator:Destroy()
 	Exit.Parent = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame
 	Exit.MouseButton1Click:Connect(function()
-
-		if isfile("knobs.txt") then
-			deletefile("knobs.txt")
-		end
-
-		if isfile("name.txt") then
-			deletefile("name.txt")
-		end
-
-		if isfile("color.txt") then
-			deletefile("color.txt")
-		end
+		if isfile("knobs.txt") then deletefile("knobs.txt") end
+        if isfile("name.txt") then deletefile("name.txt") end
+		if isfile("color.txt") then deletefile("color.txt") end
+		if isfile("nr.txt") then deletefile("nr.txt") end
+		if isfile("np.txt") then deletefile("np.txt") end	
 		
 		game:GetService("ReplicatedStorage").EntityInfo.ElevatorExit:FireServer()
 		game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers.Visible = false
@@ -275,6 +281,8 @@ modifier.createModifier = function(lO, customization)
 	if isfile("knobs.txt") then deletefile("knobs.txt") end
 	if isfile("name.txt") then deletefile("name.txt") end
 	if isfile("color.txt") then deletefile("color.txt") end
+	if isfile("nr.txt") then deletefile("nr.txt") end
+    if isfile("np.txt") then deletefile("np.txt") end	
 
 	local enabledModifier = false
 	local baseName = "Abc"
@@ -334,7 +342,11 @@ modifier.createModifier = function(lO, customization)
 
 					if info then
 						if info == selectedButton then
-							AddedAmount -= tonumber(customization.Customization.Knobs)
+							if info.KnobBonus.Visible then
+								AddedAmount -= tonumber(info.KnobBonus.Name)
+							elseif info.KnobPenalty.Visible then
+								AddedAmount -= tonumber(info.KnobPenalty.Name)
+							end
 							ModifiersEnabled -= 1
 
 							info.BackgroundTransparency = 0.7
@@ -395,10 +407,12 @@ modifier.createModifier = function(lO, customization)
 		modifierCreate.Info.KnobPenalty.Visible = false
 		modifierCreate.Info.KnobBonus.Text = "+" .. customization.Customization.Knobs .. "%"
 		modifierCreate.Info.KnobBonus.Visible = true
+		modifierCreate.Info.KnobBonus.Name = tonumber(customization.Customization.Knobs)
 	elseif tonumber(customization.Customization.Knobs) <= -1 then
 		modifierCreate.Info.KnobPenalty.Visible = true
 		modifierCreate.Info.KnobPenalty.Text = customization.Customization.Knobs .. "%"
 		modifierCreate.Info.KnobBonus.Visible = false
+		modifierCreate.Info.KnobPenalty.Name = tonumber(customization.Customization.Knobs)
 	end
 
 	modifierCreate.BackgroundColor3 = customization.Customization.Color
@@ -468,7 +482,6 @@ modifier.createModifier = function(lO, customization)
 		end
 	end)
 
-
 	local Confirm = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator:FindFirstChild("customConfirm")
 
 	if not Confirm then
@@ -499,15 +512,17 @@ modifier.createModifier = function(lO, customization)
 		ModifiersMain.Desc.Text = ModifiersEnabled .. " MODIFIER" .. (ModifiersEnabled ~= 1 and "S" or "") .. " ACTIVATED"
 		
 		if customization.Customization.NoProgress == true then
-			ModifiersMain.Info.NoProgress.Visible = true
+			writefile("np.txt", game:GetService("HttpService"):JSONEncode(true))
+			ModifiersMain.NoProgress.Visible = true
 		else
-			ModifiersMain.Info.NoProgress.Visible = false
+			ModifiersMain.NoProgress.Visible = false
 		end
 
 		if customization.Customization.NoRift == true then
-			ModifiersMain.Info.NoRift.Visible = true
+			writefile("nr.txt", game:GetService("HttpService"):JSONEncode(true))
+			ModifiersMain.NoRift.Visible = true
 		else
-			ModifiersMain.Info.NoRift.Visible = false
+			ModifiersMain.NoRift.Visible = false
 		end
 		
 		if enabledModifier then
@@ -537,7 +552,7 @@ modifier.createModifier = function(lO, customization)
 			local knobBonusText = AddedAmount ~= 0 and (AddedAmount > 0 and "+" or "") .. AddedAmount .. "%" or "+0%"
 			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = knobBonusText
 			
-			if customization.Customization.NoProgress == true then
+			if customization.Customization.NoProgress == true and ModifiersEnabled ~= 0 then
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.NoProgress.Visible = true
 			else
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.NoProgress.Visible = false
