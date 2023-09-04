@@ -232,9 +232,8 @@ modifier.createModifier = function(customization)
 			customization[i] = defaultConfig[i]
 		end
 	end
-	
-	print("Enabled".. customization.Customization.Name)
-	_G["Enabled" .. customization.Customization.Name] = false
+
+	_G["Enabled" .. customization.Customization.Title] = false
 
 	if isfile("knobs.txt") then deletefile("knobs.txt") end
 	if isfile("name.txt") then deletefile("name.txt") end
@@ -400,14 +399,14 @@ modifier.createModifier = function(customization)
 
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
-			_G["Enabled" .. customization.Customization.Name] = true
+			_G["Enabled" .. customization.Customization.Title] = true
 			
 			createLinkedGroup()
 		else
 			enabledModifier = false
 			
 			ModifiersEnabled -= 1
-			_G["Enabled" .. customization.Customization.Name] = false
+			_G["Enabled" .. customization.Customization.Title] = false
 			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
 		end
 	end)
