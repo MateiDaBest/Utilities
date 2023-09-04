@@ -31,17 +31,16 @@ local defaultConfig = {
 }
 
 modifier.createModifierLogic = function(selected, code)
-	if not isfile("name.txt") then return end
+	if not isfile("name.txt") then
+		return 
+	end
 
-	while wait(1) do
-		local decodedData = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
+	local decodedData = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
 
-		for _, v in ipairs(decodedData) do
-			if selected == v and game.PlaceId == 6839171747 then
-				print("ran")
-				pcall(code)
-				return
-			end
+	for _, v in ipairs(decodedData) do
+		if game.PlaceId == 6839171747 and v == selected then
+			task.defer(code)
+			return
 		end
 	end
 end
@@ -172,6 +171,7 @@ modifier.createTab = function(tab)
 		if isfile("color.txt") then
 			deletefile("color.txt")
 		end
+		
 		game:GetService("ReplicatedStorage").EntityInfo.ElevatorExit:FireServer()
 		game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers.Visible = false
 		for _, v in pairs(game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers:GetDescendants()) do
