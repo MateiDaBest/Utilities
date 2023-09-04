@@ -53,7 +53,7 @@ if game.PlaceId == 6839171747 then
 		end
 	end
 
-	for _, v in ipairs(decodedData2:GetDescendants()) do
+	for _, v in ipairs(decodedData2) do
 		Mods += 1
 
 		local Template = TempMods:FindFirstChild("Template"):Clone()
@@ -266,68 +266,77 @@ modifier.createModifier = function(customization)
 
 	modifierCreate.Visible = true
 	
-	local function createLinkedGroup(number)
-		local group = {}
-		local counter = #linkedObjects + 1
-		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
-		
-		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-			table.insert(group, "Abc" .. counter)
-			counter = counter + 1
+	local currentLinkedGroup = nil
+
+	local function createLinkedGroup()
+		local connectorsEnabled = customization.Customization.Connector
+		local connectorsEndEnabled = customization.Customization.ConnectorEnd
+
+		if connectorsEndEnabled and currentLinkedGroup then
+			currentLinkedGroup = nil
 		end
 
-		local function updateConnectorsColor(selectedButton)
-			local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
-			local selectedTransparency = selectedButton and 0 or 0.8
-			local unselectedTransparency = selectedButton and 0.8 or 0
+		if connectorsEnabled and not currentLinkedGroup then
+			currentLinkedGroup = {}
+			local counter = #linkedObjects + 1
 
-			for _, name in ipairs(group) do
-				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+			while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
+				table.insert(currentLinkedGroup, "Abc" .. counter)
+				counter = counter + 1
+			end
 
-				if info then
-					if info == selectedButton then
-						-- The selected button
-						
-						AddedAmount -= tonumber(number)
-						ModifiersEnabled -= 1
-						
-						info.BackgroundTransparency = 0.7
-						info.UIStroke.Enabled = true
-						info.UIStroke.Color = customization.Customization.Color
-						info.TextTransparency = 0
-					else
-						-- The unselected button
-						
-						info.BackgroundTransparency = 0.9
-						info.UIStroke.Enabled = false
-						info.TextTransparency = 0.8
+			local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
+
+			local function updateConnectorsColor(selectedButton)
+				local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
+				local selectedTransparency = selectedButton and 0 or 0.8
+				local unselectedTransparency = selectedButton and 0.8 or 0
+
+				for _, name in ipairs(currentLinkedGroup) do
+					local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+
+					if info then
+						if info == selectedButton then
+							AddedAmount -= tonumber(customization.Customization.Knobs)
+							ModifiersEnabled -= 1
+
+							info.BackgroundTransparency = 0.7
+							info.UIStroke.Enabled = true
+							info.UIStroke.Color = customization.Customization.Color
+							info.TextTransparency = 0
+						else
+							info.BackgroundTransparency = 0.9
+							info.UIStroke.Enabled = false
+							info.TextTransparency = 0.8
+						end
+
+						info.Connector.BackgroundColor3 = connectorsColor
+						info.ConnectorOut.BackgroundColor3 = connectorsColor
+						info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
 					end
-
-					info.Connector.BackgroundColor3 = connectorsColor
-					info.ConnectorOut.BackgroundColor3 = connectorsColor
-					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
 				end
 			end
-		end
 
-		for _, name in ipairs(group) do
-			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-			if info then
-				table.insert(linkedObjects, info)
-				info.MouseButton1Click:Connect(function()
-					if selectedInfo == info then
-						selectedInfo = nil
-						updateConnectorsColor(selectedInfo)
-					else
-						selectedInfo = info
-						updateConnectorsColor(selectedInfo)
-					end
-				end)
+			for _, name in ipairs(currentLinkedGroup) do
+				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+				if info then
+					table.insert(linkedObjects, info)
+					info.MouseButton1Click:Connect(function()
+						if selectedInfo == info then
+							selectedInfo = nil
+							updateConnectorsColor(selectedInfo)
+						else
+							selectedInfo = info
+							updateConnectorsColor(selectedInfo)
+						end
+					end)
+				end
 			end
-		end
 
-		updateConnectorsColor(selectedInfo)
+			updateConnectorsColor(selectedInfo)
+		end
 	end
+
 
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
@@ -401,6 +410,13 @@ modifier.createModifier = function(customization)
 			ModifiersEnabled += 1
 			_G["Enabled" .. customization.Customization.Title] = true
 			
+			if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
+				modifierCreate.BackgroundTransparency = 0.7
+				modifierCreate.UIStroke.Enabled = true
+				modifierCreate.UIStroke.Color = customization.Customization.Color
+				modifierCreate.TextTransparency = 0
+			end
+			
 			createLinkedGroup()
 		else
 			enabledModifier = false
@@ -408,6 +424,12 @@ modifier.createModifier = function(customization)
 			ModifiersEnabled -= 1
 			_G["Enabled" .. customization.Customization.Title] = false
 			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
+			
+			if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
+				modifierCreate.BackgroundTransparency = 0.9
+				modifierCreate.UIStroke.Enabled = false
+				modifierCreate.TextTransparency = 0.8
+			end
 		end
 	end)
 
