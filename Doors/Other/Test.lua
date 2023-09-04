@@ -31,18 +31,19 @@ local defaultConfig = {
 }
 
 modifier.createModifierLogic = function(selected, code)
-	spawn(function()
-		while wait(1) do
-			if not isfile("name.txt") then return end
-			local decodedData = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
-			
-			for _, v in ipairs(decodedData) do
-				if selected == v and game.PlaceId == 6839171747 then
-					pcall(code)
-				end
+	if not isfile("name.txt") then return end
+
+	while wait(1) do
+		local decodedData = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
+
+		for _, v in ipairs(decodedData) do
+			if selected == v and game.PlaceId == 6839171747 then
+				print("ran")
+				pcall(code)
+				return
 			end
 		end
-	end)
+	end
 end
 
 if game.PlaceId == 6839171747 then
