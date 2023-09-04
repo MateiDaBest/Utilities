@@ -233,7 +233,11 @@ modifier.createModifier = function(customization)
 		end
 	end
 	
-	_G["Enabled" .. customization.Customization.Name] = false
+	if customization.Customization.Name then
+		_G["Enabled" .. customization.Customization.Name] = false
+	else
+		print("error")
+	end
 
 	if isfile("knobs.txt") then deletefile("knobs.txt") end
 	if isfile("name.txt") then deletefile("name.txt") end
@@ -492,4 +496,4 @@ modifier.createSeperator = function()
 	Seperator.Visible = true
 end
 
-return modifier
+return modifier --
