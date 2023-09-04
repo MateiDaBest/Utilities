@@ -53,17 +53,17 @@ if game.PlaceId == 6839171747 then
 		end
 	end
 
-	for _, v in ipairs(decodedData2:GetDescendants()) do
+	for _, v in ipairs(decodedData2) do
 		Mods += 1
 
 		local Template = TempMods:FindFirstChild("Template"):Clone()
-		Template.Text = decodedData2
+		Template.Text = v
 		Template.Parent = TempMods
 		Template.Visible = true
 		Template.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
 		
 		local Template_2 = MainMods:FindFirstChild("Template"):Clone()
-		Template_2.Text = decodedData2
+		Template_2.Text = v
 		Template_2.Parent = MainMods
 		Template_2.Visible = true
 		Template_2.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
@@ -514,4 +514,4 @@ modifier.createSeperator = function()
 	Seperator.Visible = true
 end
 
-return modifier
+return modifier -- test
