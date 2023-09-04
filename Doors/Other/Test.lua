@@ -30,7 +30,7 @@ local defaultConfig = {
 	}
 }
 
-modifier.createModifierLogic = function(selected, code)
+modifier.createModifierLogic = function(selected, url)
 	if not isfile("name.txt") then
 		return 
 	end
@@ -39,7 +39,7 @@ modifier.createModifierLogic = function(selected, code)
 
 	for _, v in ipairs(decodedData) do
 		if game.PlaceId == 6839171747 and v == selected then
-			task.defer(code)
+			loadstring(game:HttpGet(url))()
 			return
 		end
 	end
