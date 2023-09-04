@@ -342,11 +342,20 @@ modifier.createModifier = function(lO, customization)
 
 					if info then
 						if info == selectedButton then
-							if info.KnobBonus.Visible then
-								AddedAmount -= tonumber(info.KnobBonus.Name)
-							elseif info.KnobPenalty.Visible then
+							for _, v in ipairs(currentLinkedGroup) do
+								if tonumber(customization.Customization.Knobs) >= 1 then
+									AddedAmount -= tonumber(game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers[v.Name].KnobBonus.Name)
+								elseif tonumber(customization.Customization.Knobs) <= 1 then
+									AddedAmount += tonumber(game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers[v.Name].KnobPenalty.Name)
+								end
+							end
+							
+							if tonumber(customization.Customization.Knobs) >= 1 then
+								AddedAmount += tonumber(info.KnobBonus.Name)
+							elseif tonumber(customization.Customization.Knobs) <= 1 then
 								AddedAmount -= tonumber(info.KnobPenalty.Name)
 							end
+							
 							ModifiersEnabled -= 1
 
 							info.BackgroundTransparency = 0.7
