@@ -1,7 +1,7 @@
 repeat wait() until game:IsLoaded()
 
 if not writefile then
-	firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent, "Executor missing arguement(s) (readfile, writefile, isfile, deletefile) please switch to Fluxus UWP.")
+	firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent, "Executor missing arguement(s) (readfile, writefile, isfile, deletefile) please switch to Fluxus or Krnl.")
 	return
 end
 
@@ -30,6 +30,20 @@ local defaultConfig = {
 	}
 }
 
+modifier.createModifierLogic = function(selected, code)
+	spawn(function()
+		while wait(1) do
+			local decodedData = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
+			
+			for _, v in ipairs(decodedData) do
+				if selected == v and game.PlaceId == 6839171747 then
+					pcall(code)
+				end
+			end
+		end
+	end)
+end
+
 if game.PlaceId == 6839171747 then
 	if not isfile("name.txt") or not isfile("knobs.txt") or not isfile("color.txt") then
 		return
@@ -55,15 +69,17 @@ if game.PlaceId == 6839171747 then
 
 	for _, v in ipairs(decodedData2) do
 		Mods += 1
+		
+		_G["Enabled" .. v] = false
 
 		local Template = TempMods:FindFirstChild("Template"):Clone()
-		Template.Text = decodedData2
+		Template.Text = v
 		Template.Parent = TempMods
 		Template.Visible = true
 		Template.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
 		
 		local Template_2 = MainMods:FindFirstChild("Template"):Clone()
-		Template_2.Text = decodedData2
+		Template_2.Text = v
 		Template_2.Parent = MainMods
 		Template_2.Visible = true
 		Template_2.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
@@ -226,14 +242,18 @@ modifier.createTab = function(tab)
 	end
 end
 
+modifier.createSeperator = function()
+	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
+	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
+	Seperator.Visible = true
+end
+
 modifier.createModifier = function(customization)
 	for i, v in next, defaultConfig do
 		if customization[i] == nil then
 			customization[i] = defaultConfig[i]
 		end
 	end
-
-	_G["Enabled" .. customization.Customization.Title] = false
 
 	if isfile("knobs.txt") then deletefile("knobs.txt") end
 	if isfile("name.txt") then deletefile("name.txt") end
@@ -408,7 +428,6 @@ modifier.createModifier = function(customization)
 
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
-			_G["Enabled" .. customization.Customization.Title] = true
 			
 			if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
 				modifierCreate.BackgroundTransparency = 0.7
@@ -422,7 +441,7 @@ modifier.createModifier = function(customization)
 			enabledModifier = false
 			
 			ModifiersEnabled -= 1
-			_G["Enabled" .. customization.Customization.Title] = false
+
 			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
 			
 			if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
@@ -500,18 +519,6 @@ modifier.createModifier = function(customization)
 			end
 		end
 	end)
-end
-
-modifier.createModifierLogic = function(selected, code)
-	if _G["Enabled" .. selected] == true and game.PlaceId == 6839171747 then
-		pcall(code)
-	end
-end
-
-modifier.createSeperator = function()
-	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
-	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
-	Seperator.Visible = true
 end
 
 return modifier
