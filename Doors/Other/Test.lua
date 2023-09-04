@@ -1,7 +1,7 @@
 repeat wait() until game:IsLoaded()
 
 if not writefile then
-	firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent, "Executor missing arguement(s) (readfile, writefile, isfile, deletefile) please switch to Fluxus UWP.")
+	firesignal(game.ReplicatedStorage.EntityInfo.Caption.OnClientEvent, "Executor missing arguement(s) (readfile, writefile, isfile, deletefile) please switch to Fluxus or Krnl.")
 	return
 end
 
@@ -33,8 +33,13 @@ local defaultConfig = {
 modifier.createModifierLogic = function(selected, code)
 	spawn(function()
 		while wait(1) do
-			if _G["Enabled" .. selected] and game.PlaceId == 6839171747 then
-				pcall(code)
+			if not readfile("name.txt") then return end
+			local decodedData = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
+			
+			for _, v in ipairs(decodedData) do
+				if selected == v and game.PlaceId == 6839171747 then
+					pcall(code)
+				end
 			end
 		end
 	end)
@@ -236,6 +241,12 @@ modifier.createTab = function(tab)
 			v:Destroy()
 		end
 	end
+end
+
+modifier.createSeperator = function()
+	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
+	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
+	Seperator.Name = 0
 end
 
 modifier.createModifier = function(customization)
@@ -511,10 +522,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-modifier.createSeperator = function()
-	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
-	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
-	Seperator.Visible = true
-end
-
-return modifier
+return modifier -- e
