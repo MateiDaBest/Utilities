@@ -31,17 +31,19 @@ local defaultConfig = {
 }
 
 modifier.createModifierLogic = function(selected, code)
-	spawn(function()
-		while wait(1) do
-			local decodedData = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
-			
-			for _, v in ipairs(decodedData) do
-				if selected == v and game.PlaceId == 6839171747 then
-					pcall(code)
-				end
-			end
+	if not isfile("name.txt") then
+		return 
+	end
+
+	local decodedData = game:GetService("HttpService"):JSONDecode(readfile("name.txt"))
+
+	for _, v in ipairs(decodedData) do
+		if game.PlaceId == 6839171747 and selected == v then
+			print("ran")
+			pcall(code)
+			return
 		end
-	end)
+	end
 end
 
 if game.PlaceId == 6839171747 then
@@ -170,6 +172,7 @@ modifier.createTab = function(tab)
 		if isfile("color.txt") then
 			deletefile("color.txt")
 		end
+		
 		game:GetService("ReplicatedStorage").EntityInfo.ElevatorExit:FireServer()
 		game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers.Visible = false
 		for _, v in pairs(game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers:GetDescendants()) do
@@ -242,13 +245,14 @@ modifier.createTab = function(tab)
 	end
 end
 
-modifier.createSeperator = function()
+modifier.createSeperator = function(lO)
 	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
 	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 	Seperator.Visible = true
+	Seperator.LayoutOrder = lO
 end
 
-modifier.createModifier = function(customization)
+modifier.createModifier = function(lO, customization)
 	for i, v in next, defaultConfig do
 		if customization[i] == nil then
 			customization[i] = defaultConfig[i]
@@ -278,7 +282,7 @@ modifier.createModifier = function(customization)
 	if customization.Customization.Connector == true then
 		modifierCreate.Connector.Visible = true
 		modifierCreate.ConnectorOut.Visible = true
-		modifierCreate.Connector.Position = UDim2.new(-0.063, 0, 1.07, 0)
+		modifierCreate.Connector.Position = UDim2.new(-0.063, 0, 1.06, 0)
 		modifierCreate.Connector.Size = UDim2.new(0, 4, 1, 8)
 	elseif customization.Customization.ConnectorEnd == true then
 		modifierCreate.ConnectorOut.Visible = true
@@ -357,9 +361,9 @@ modifier.createModifier = function(customization)
 		end
 	end
 
-
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
+	modifierCreate.LayoutOrder = lO
 	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 	
 	if customization.Customization.NoProgress == true then
@@ -521,4 +525,4 @@ modifier.createModifier = function(customization)
 	end)
 end
 
-return modifier
+return modifier -- e
