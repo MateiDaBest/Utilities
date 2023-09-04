@@ -23,14 +23,12 @@ local defaultConfig = {
 		Image = "http://www.roblox.com/asset/?id=12351005336" -- Tab image.
 	},
 	Customization = {
-		Title = "A-90", -- Modifier title.
+		Title = "A-90", -- Modifier name.
 		Description = "A-90 is a entity from rooms.", -- Preview description.
 		Color = Color3.fromRGB(255, 160, 147), -- Background / text colour.
 		Knobs = 50, -- Knob boost amount.
-		NoProgress = false,
-		NoRift = false,
-		KnobBonus = true, -- + Knobs.
-		KnobPenalty = false, -- - Knobs.
+		NoProgress = false, -- No progress.
+		NoRift = false, -- No rift.
 		Connector = false, -- The |- that keeps stuff linked.
 		ConnectorEnd = false -- The very last |-.
 	}
@@ -248,7 +246,7 @@ modifier.createTab = function(tab)
 	end
 end
 
-modifier.createSeperator = function(lO)
+modifier.createSeperator = function(lO, color)
 	if game.PlaceId == 6839171747 then
 		return 
 	end
@@ -256,7 +254,8 @@ modifier.createSeperator = function(lO)
 	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
 	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 	Seperator.Visible = true
-	Seperator.LayoutOrder = lO
+	Seperator.BackgroundColor3 = color or Color3.fromRGB(103, 73, 63)
+	Seperator.LayoutOrder = lO or 2
 end
 
 modifier.createModifier = function(lO, customization)
@@ -374,7 +373,7 @@ modifier.createModifier = function(lO, customization)
 
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
-	modifierCreate.LayoutOrder = lO
+	modifierCreate.LayoutOrder = lO or 1
 	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
 	
 	if customization.Customization.NoProgress == true then
@@ -389,11 +388,11 @@ modifier.createModifier = function(lO, customization)
 		modifierCreate.Info.NoRift.Visible = false
 	end
 
-	if customization.Customization.KnobBonus == true then
+	if tonumber(customization.Customization.Knobs) >= 1 then
 		modifierCreate.Info.KnobPenalty.Visible = false
 		modifierCreate.Info.KnobBonus.Text = "+" .. customization.Customization.Knobs .. "%"
 		modifierCreate.Info.KnobBonus.Visible = true
-	elseif customization.Customization.KnobPenalty == true then
+	elseif tonumber(customization.Customization.Knobs) <= -1 then
 		modifierCreate.Info.KnobPenalty.Visible = true
 		modifierCreate.Info.KnobPenalty.Text = customization.Customization.Knobs .. "%"
 		modifierCreate.Info.KnobBonus.Visible = false
@@ -422,13 +421,12 @@ modifier.createModifier = function(lO, customization)
 		else
 			Preview.Info.NoRift.Visible = false
 		end
-
 		
-		if customization.Customization.KnobBonus == true then
+		if tonumber(customization.Customization.Knobs) >= 1 then
 			Preview.Info.KnobPenalty.Visible = false
 			Preview.Info.KnobBonus.Text = "+" .. customization.Customization.Knobs .. "%"
 			Preview.Info.KnobBonus.Visible = true
-		elseif customization.Customization.KnobPenalty == true then
+		elseif tonumber(customization.Customization.Knobs) <= -1 then
 			Preview.Info.KnobPenalty.Visible = true
 			Preview.Info.KnobPenalty.Text = customization.Customization.Knobs .. "%"
 			Preview.Info.KnobBonus.Visible = false
@@ -496,7 +494,19 @@ modifier.createModifier = function(lO, customization)
 		ModifiersMain.Visible = true
 		ModifiersMain.KnobBonus.Text = AddedAmount .. "%"
 		ModifiersMain.Desc.Text = ModifiersEnabled .. " MODIFIER" .. (ModifiersEnabled ~= 1 and "S" or "") .. " ACTIVATED"
+		
+		if customization.Customization.NoProgress == true then
+			ModifiersMain.Info.NoProgress.Visible = true
+		else
+			ModifiersMain.Info.NoProgress.Visible = false
+		end
 
+		if customization.Customization.NoRift == true then
+			ModifiersMain.Info.NoRift.Visible = true
+		else
+			ModifiersMain.Info.NoRift.Visible = false
+		end
+		
 		if enabledModifier then
 			local Template = ModifiersMain.Template:Clone()
 			Template.Name = "abc"
@@ -523,7 +533,19 @@ modifier.createModifier = function(lO, customization)
 		while wait() do
 			local knobBonusText = AddedAmount ~= 0 and (AddedAmount > 0 and "+" or "") .. AddedAmount .. "%" or "+0%"
 			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = knobBonusText
+			
+			if customization.Customization.NoProgress == true then
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.NoProgress.Visible = true
+			else
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.NoProgress.Visible = false
+			end
 
+			if customization.Customization.NoRift == true then
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.NoRift.Visible = true
+			else
+				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.NoRift.Visible = false
+			end
+			
 			if ModifiersEnabled == 0 then
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Visible = false
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.ModIcon.Visible = false
