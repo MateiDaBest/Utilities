@@ -343,18 +343,31 @@ modifier.createModifier = function(lO, customization)
 					if info then
 						if info == selectedButton then
 							for _, v in ipairs(currentLinkedGroup) do
-								if tonumber(customization.Customization.Knobs) >= 1 then
-									AddedAmount -= tonumber(game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers[v.Name].KnobBonus.Name)
-								elseif tonumber(customization.Customization.Knobs) <= 1 then
-									AddedAmount += tonumber(game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers[v.Name].KnobPenalty.Name)
+								print(v.Name)
+								local modifierInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers[tostring(v.Name)]
+
+								if modifierInfo then
+									local knobBonus = tonumber(modifierInfo.KnobBonus.Name)
+									local knobPenalty = tonumber(modifierInfo.KnobPenalty.Name)
+									local knobCount = tonumber(customization.Customization.Knobs)
+
+									if knobCount >= 1 then
+										AddedAmount -= knobBonus
+									elseif knobCount <= 1 then
+										AddedAmount += knobPenalty
+									end
 								end
 							end
-							
-							if tonumber(customization.Customization.Knobs) >= 1 then
-								AddedAmount += tonumber(info.KnobBonus.Name)
-							elseif tonumber(customization.Customization.Knobs) <= 1 then
-								AddedAmount -= tonumber(info.KnobPenalty.Name)
-							end
+
+								local knobBonus = tonumber(info.KnobBonus.Name)
+								local knobPenalty = tonumber(info.KnobPenalty.Name)
+								local knobCount = tonumber(customization.Customization.Knobs)
+
+								if knobCount >= 1 then
+									AddedAmount += knobBonus
+								elseif knobCount <= 1 then
+									AddedAmount -= knobPenalty
+								end
 							
 							ModifiersEnabled -= 1
 
@@ -585,4 +598,4 @@ modifier.createModifier = function(lO, customization)
 	end)
 end
 
-return modifier
+return modifier -- e
