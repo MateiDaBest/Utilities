@@ -12,23 +12,19 @@ end
 _G.alreadyExecuted = true
 
 local modifier = {}
-local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 
 local function createLinkedGroup(CE, CEE, color, knob, count)
-	local connectorsEnabled = CE
-	local connectorsEndEnabled = CEE
-
 	local currentLinkedGroup = {}
-	local counter = #linkedObjects + 1
-
+	local counter = 1
+	
+	print(counter)
+	
 	while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-		if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter).Connector.Visible or game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter).ConnectorOut.Visible then 
-			print("Abc".. counter)
-			table.insert(currentLinkedGroup, "Abc" .. counter)
-		end
+		print("Abc".. counter)
+		table.insert(currentLinkedGroup, "Abc" .. counter)
 		counter += 1
 	end
 
@@ -70,7 +66,6 @@ local function createLinkedGroup(CE, CEE, color, knob, count)
 	for _, name in ipairs(currentLinkedGroup) do
 		local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 		if info then
-			table.insert(linkedObjects, info)
 			info.MouseButton1Click:Connect(function()
 				if selectedInfo == info then
 					selectedInfo = nil
