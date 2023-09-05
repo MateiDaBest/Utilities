@@ -445,16 +445,15 @@ modifier.createModifier = function(lO, customization)
 
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not _G["enabled".. counter] then
-			if not customization.Customization.Connector or not customization.Customization.ConnectorEnd then
+			if customization.Customization.Connector == false or customization.Customization.ConnectorEnd == false then
 				_G["enabled".. counter] = true
 				AddedAmount += tonumber(customization.Customization.Knobs)
 				ModifiersEnabled += 1	
 			else
-				print("test")
 				createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorEnd, customization.Customization.Color, customization.Customization.Knobs, counter)
 			end
 		else
-			if not customization.Customization.Connector or not customization.Customization.ConnectorEnd then
+			if customization.Customization.Connector == false or customization.Customization.ConnectorEnd == false then
 				_G["enabled".. counter] = false
 				ModifiersEnabled -= 1
 				AddedAmount -= tonumber(customization.Customization.Knobs)
@@ -505,7 +504,7 @@ modifier.createModifier = function(lO, customization)
 			ModifiersMain.NoRift.Visible = false
 		end
 		
-		if enabledModifier then
+		if _G["enabled".. counter] then
 			local Template = ModifiersMain.Template:Clone()
 			Template.Name = "abc"
 			Template.Visible = true
