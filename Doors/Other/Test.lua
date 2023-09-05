@@ -341,16 +341,17 @@ modifier.createModifier = function(lO, customization)
 					local knobAdd
 					local knobCount = tonumber(customization.Customization.Knobs)
 					
-					for _, v in pairs(info:GetDescendants()) do
+					for _, v in pairs(info.Info:GetDescendants()) do
 						if v:IsA("TextLabel") and v.BackgroundColor3 == Color3.fromRGB(103, 73, 63) then
-							knobAdd = tonumber(v.Name)
+							print(v.Name)
+							knobAdd = v.Name
 						end
 					end
 
 					if knobCount >= 1 then
-						AddedAmount -= knobAdd
+						AddedAmount -= tonumber(knobAdd)
 					elseif knobCount <= 1 then
-						AddedAmount += knobAdd
+						AddedAmount += tonumber(knobAdd)
 					end
 					
 					if info then
@@ -585,4 +586,4 @@ modifier.createModifier = function(lO, customization)
 	end)
 end
 
-return modifier
+return modifier -- a
