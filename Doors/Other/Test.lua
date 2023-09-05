@@ -20,6 +20,7 @@ local ModifiersEnabled = 0
 local function createLinkedGroup(CE, CEE, color, knob, count)
 	local currentLinkedGroup = {}
 	local counter = #linkedObjects + 1
+	local Total = 0
 
 	while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
 		if CE == true or CEE == true then 
@@ -38,11 +39,10 @@ local function createLinkedGroup(CE, CEE, color, knob, count)
 
 		for _, name in ipairs(currentLinkedGroup) do
 			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-
+			
 			if info then
 				if info == selectedButton then
 					AddedAmount += tonumber(knob)
-					ModifiersEnabled += 1
 					_G["enabled".. count] = false
 					info.BackgroundTransparency = 0.7
 					info.UIStroke.Enabled = true
@@ -50,8 +50,6 @@ local function createLinkedGroup(CE, CEE, color, knob, count)
 					info.TextTransparency = 0
 				else
 					_G["enabled".. count] = true
-					AddedAmount -= tonumber(knob)
-					ModifiersEnabled -= 1
 					info.BackgroundTransparency = 0.9
 					info.UIStroke.Enabled = false
 					info.TextTransparency = 0.8
@@ -323,18 +321,6 @@ modifier.createTab = function(tab)
 	end
 end
 
-modifier.createSeperator = function(lO, color)
-	if game.PlaceId == 6839171747 then
-		return 
-	end
-
-	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
-	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
-	Seperator.Visible = true
-	Seperator.BackgroundColor3 = color or Color3.fromRGB(103, 73, 63)
-	Seperator.LayoutOrder = lO or 2
-end
-
 modifier.createModifier = function(lO, customization)
 	if game.PlaceId == 6839171747 then
 		return 
@@ -445,23 +431,18 @@ modifier.createModifier = function(lO, customization)
 
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not _G["enabled".. counter] then
-			print("false")
+			ModifiersEnabled += 1
+			
 			if customization.Customization.Connector == false then
-				print("connectorend false")
 				_G["enabled".. counter] = true
 				AddedAmount += tonumber(customization.Customization.Knobs)
-				ModifiersEnabled += 1	
 			elseif customization.Customization.ConnectorOut == false then
-				print("connectorend false")
 				_G["enabled".. counter] = true
 				AddedAmount += tonumber(customization.Customization.Knobs)
-				ModifiersEnabled += 1	
 			else
-				print("linkgroup")
 				createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorEnd, customization.Customization.Color, customization.Customization.Knobs, counter)
 			end
 		else
-			print("true")
 			if customization.Customization.Connector == false then
 				_G["enabled".. counter] = false
 				ModifiersEnabled -= 1
@@ -566,6 +547,18 @@ modifier.createModifier = function(lO, customization)
 			end
 		end
 	end)
+end
+
+modifier.createSeperator = function(lO, color)
+	if game.PlaceId == 6839171747 then
+		return 
+	end
+
+	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
+	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
+	Seperator.Visible = true
+	Seperator.BackgroundColor3 = color or Color3.fromRGB(103, 73, 63)
+	Seperator.LayoutOrder = lO or 2
 end
 
 return modifier
