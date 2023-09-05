@@ -314,81 +314,76 @@ modifier.createModifier = function(lO, customization)
 		local connectorsEnabled = customization.Customization.Connector
 		local connectorsEndEnabled = customization.Customization.ConnectorEnd
 
-			local currentLinkedGroup = {}
-			local counter = #linkedObjects + 1
+		local currentLinkedGroup = {}
+		local counter = #linkedObjects + 1
+		local previousKnobCount = 0
 
-			while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-				table.insert(currentLinkedGroup, "Abc" .. counter)
-				counter = counter + 1
-			end
+		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
+			table.insert(currentLinkedGroup, "Abc" .. counter)
+			counter = counter + 1
+		end
 
-			local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
+		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
 
-			local function updateConnectorsColor(selectedButton)
-				local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
-				local selectedTransparency = selectedButton and 0 or 0.8
-				local unselectedTransparency = selectedButton and 0.8 or 0
-
-				for _, name in ipairs(currentLinkedGroup) do
-					local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-					
-					local knobAdd = 0
-					local knobCount = tonumber(customization.Customization.Knobs)
-					
-					for _, v in pairs(info.Info:GetDescendants()) do
-						print(v.Name)
-						if v:IsA("TextLabel") and v.BackgroundColor3 == Color3.fromRGB(103, 73, 63) then
-							print(v.Name)
-							knobAdd = v.Name
-						end
-					end
-
-					if knobCount >= 1 then
-						AddedAmount -= tonumber(knobAdd)
-					elseif knobCount <= 1 then
-						AddedAmount += tonumber(knobAdd)
-					end
-					
-					if info then
-						if info == selectedButton then
-							
-							ModifiersEnabled -= 1
-
-							info.BackgroundTransparency = 0.7
-							info.UIStroke.Enabled = true
-							info.UIStroke.Color = customization.Customization.Color
-							info.TextTransparency = 0
-						else
-							info.BackgroundTransparency = 0.9
-							info.UIStroke.Enabled = false
-							info.TextTransparency = 0.8
-						end
-
-						info.Connector.BackgroundColor3 = connectorsColor
-						info.ConnectorOut.BackgroundColor3 = connectorsColor
-						info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
-					end
-				end
-			end
+		local function updateConnectorsColor(selectedButton)
+			local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
+			local selectedTransparency = selectedButton and 0 or 0.8
+			local unselectedTransparency = selectedButton and 0.8 or 0
 
 			for _, name in ipairs(currentLinkedGroup) do
 				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+
+				local knobAdd = 0
+				local knobCount = tonumber(customization.Customization.Knobs)
+
+				for _, v in pairs(info.Info:GetDescendants()) do
+					if v:IsA("TextLabel") and v.BackgroundColor3 == Color3.fromRGB(103, 73, 63) then
+						knobAdd = tonumber(v.Name) or 0
+						break
+					end
+				end
+
+				AddedAmount = AddedAmount - previousKnobCount + knobAdd
+				previousKnobCount = knobAdd
+
 				if info then
-					table.insert(linkedObjects, info)
-					info.MouseButton1Click:Connect(function()
-						if selectedInfo == info then
-							selectedInfo = nil
-							updateConnectorsColor(selectedInfo)
-						else
-							selectedInfo = info
-							updateConnectorsColor(selectedInfo)
-						end
-					end)
+					if info == selectedButton then
+						info.BackgroundTransparency = 0.7
+						info.UIStroke.Enabled = true
+						info.UIStroke.Color = customization.Customization.Color
+						info.TextTransparency = 0
+					else
+						info.BackgroundTransparency = 0.9
+						info.UIStroke.Enabled = false
+						info.TextTransparency = 0.8
+					end
+
+					info.Connector.BackgroundColor3 = connectorsColor
+					info.ConnectorOut.BackgroundColor3 = connectorsColor
+					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
 				end
 			end
+		end
 
-			updateConnectorsColor(selectedInfo)
+		for _, name in ipairs(currentLinkedGroup) do
+			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+			if info then
+				table.insert(linkedObjects, info)
+				info.MouseButton1Click:Connect(function()
+					if selectedInfo == info then
+						selectedInfo = nil
+						updateConnectorsColor(selectedInfo)
+					else
+						selectedInfo = info
+						updateConnectorsColor(selectedInfo)
+					end
+				end)
+			end
+		end
+
+		updateConnectorsColor(selectedInfo)
 	end
+
 
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
@@ -423,8 +418,6 @@ modifier.createModifier = function(lO, customization)
 	modifierCreate.TextColor3 = customization.Customization.Color
 
 	modifierCreate.MouseEnter:Connect(function()
-		-- Preview behavior
-
 		Preview.BackgroundColor3 = customization.Customization.Color
 		Preview.Desc.Text = customization.Customization.Description
 		Preview.Title.Text = customization.Customization.Title
