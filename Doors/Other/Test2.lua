@@ -16,7 +16,7 @@ local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
-local prevKnobs = 0
+local currentLinkedGroup = nil
 
 local defaultConfig = {
 	Tab = {
@@ -310,8 +310,6 @@ modifier.createModifier = function(lO, customization)
 	end
 
 	modifierCreate.Visible = true
-	
-	local currentLinkedGroup = nil
 
 	local function createLinkedGroup()
 		local connectorsEnabled = customization.Customization.Connector
@@ -339,35 +337,26 @@ modifier.createModifier = function(lO, customization)
 
 				for _, name in ipairs(currentLinkedGroup) do
 					local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+					
+					local knobAdd = 0
+					local knobCount = tonumber(customization.Customization.Knobs)
+					
+					for _, v in pairs(info.Info:GetDescendants()) do
+						print(v.Name)
+						if v:IsA("TextLabel") and v.BackgroundColor3 == Color3.fromRGB(103, 73, 63) then
+							print(v.Name)
+							knobAdd = v.Name
+						end
+					end
 
+					if knobCount >= 1 then
+						AddedAmount -= tonumber(knobAdd)
+					elseif knobCount <= 1 then
+						AddedAmount += tonumber(knobAdd)
+					end
+					
 					if info then
 						if info == selectedButton then
-							for _, v in ipairs(currentLinkedGroup) do
-								print(v.Name)
-								local modifierInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers[tostring(v.Name)]
-
-								if modifierInfo then
-									local knobBonus = tonumber(modifierInfo.KnobBonus.Name)
-									local knobPenalty = tonumber(modifierInfo.KnobPenalty.Name)
-									local knobCount = tonumber(customization.Customization.Knobs)
-
-									if knobCount >= 1 then
-										AddedAmount -= knobBonus
-									elseif knobCount <= 1 then
-										AddedAmount += knobPenalty
-									end
-								end
-							end
-
-								local knobBonus = tonumber(info.KnobBonus.Name)
-								local knobPenalty = tonumber(info.KnobPenalty.Name)
-								local knobCount = tonumber(customization.Customization.Knobs)
-
-								if knobCount >= 1 then
-									AddedAmount += knobBonus
-								elseif knobCount <= 1 then
-									AddedAmount -= knobPenalty
-								end
 							
 							ModifiersEnabled -= 1
 
@@ -598,4 +587,4 @@ modifier.createModifier = function(lO, customization)
 	end)
 end
 
-return modifier -- e
+return modifier
