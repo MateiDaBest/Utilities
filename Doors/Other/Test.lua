@@ -338,14 +338,19 @@ modifier.createModifier = function(lO, customization)
 				for _, name in ipairs(currentLinkedGroup) do
 					local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 					
-					local knobBonus = tonumber(info.KnobBonus.Name)
-					local knobPenalty = tonumber(info.KnobPenalty.Name)
+					local knobAdd
 					local knobCount = tonumber(customization.Customization.Knobs)
+					
+					for _, v in pairs(info:GetDescendants()) do
+						if v:IsA("TextLabel") and v.BackgroundColor3 == Color3.fromRGB(103, 73, 63) then
+							knobAdd = tonumber(v.Name)
+						end
+					end
 
 					if knobCount >= 1 then
-						AddedAmount -= knobBonus
+						AddedAmount -= knobAdd
 					elseif knobCount <= 1 then
-						AddedAmount += knobPenalty
+						AddedAmount += knobAdd
 					end
 					
 					if info then
