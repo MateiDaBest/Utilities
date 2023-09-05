@@ -16,7 +16,6 @@ local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
-local currentLinkedGroup = nil
 
 local defaultConfig = {
 	Tab = {
@@ -315,12 +314,7 @@ modifier.createModifier = function(lO, customization)
 		local connectorsEnabled = customization.Customization.Connector
 		local connectorsEndEnabled = customization.Customization.ConnectorEnd
 
-		if connectorsEndEnabled and currentLinkedGroup then
-			currentLinkedGroup = nil
-		end
-
-		if connectorsEnabled and not currentLinkedGroup then
-			currentLinkedGroup = {}
+			local currentLinkedGroup = {}
 			local counter = #linkedObjects + 1
 
 			while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
@@ -338,10 +332,11 @@ modifier.createModifier = function(lO, customization)
 				for _, name in ipairs(currentLinkedGroup) do
 					local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 					
-					local knobAdd
+					local knobAdd = 0
 					local knobCount = tonumber(customization.Customization.Knobs)
 					
 					for _, v in pairs(info.Info:GetDescendants()) do
+						print(v.Name)
 						if v:IsA("TextLabel") and v.BackgroundColor3 == Color3.fromRGB(103, 73, 63) then
 							print(v.Name)
 							knobAdd = v.Name
@@ -393,7 +388,6 @@ modifier.createModifier = function(lO, customization)
 			end
 
 			updateConnectorsColor(selectedInfo)
-		end
 	end
 
 	modifierCreate.Name = generateUniqueName()
@@ -586,4 +580,4 @@ modifier.createModifier = function(lO, customization)
 	end)
 end
 
-return modifier -- a
+return modifier
