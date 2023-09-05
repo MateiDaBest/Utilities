@@ -17,6 +17,72 @@ local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 
+local function createLinkedGroup(CE, CEE, color, knob, count)
+	local currentLinkedGroup = {}
+	local counter = #linkedObjects + 1
+
+	while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
+		if CE == true or CEE == true then 
+			print("Abc".. counter)
+			table.insert(currentLinkedGroup, "Abc" .. counter)
+		end
+		counter += 1
+	end
+
+	local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
+
+	local function updateConnectorsColor(selectedButton)
+		local connectorsColor = selectedButton and color or Color3.fromRGB(103, 73, 63)
+		local selectedTransparency = selectedButton and 0 or 0.8
+		local unselectedTransparency = selectedButton and 0.8 or 0
+
+		for _, name in ipairs(currentLinkedGroup) do
+			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+
+			if info then
+				if info == selectedButton then
+					AddedAmount += tonumber(knob)
+					ModifiersEnabled += 1
+					_G["enabled".. count] = false
+					info.BackgroundTransparency = 0.7
+					info.UIStroke.Enabled = true
+					info.UIStroke.Color = color
+					info.TextTransparency = 0
+				else
+					_G["enabled".. count] = true
+					AddedAmount -= tonumber(knob)
+					ModifiersEnabled -= 1
+					info.BackgroundTransparency = 0.9
+					info.UIStroke.Enabled = false
+					info.TextTransparency = 0.8
+				end
+
+				info.Connector.BackgroundColor3 = connectorsColor
+				info.ConnectorOut.BackgroundColor3 = connectorsColor
+				info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
+			end
+		end
+	end
+
+	for _, name in ipairs(currentLinkedGroup) do
+		local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
+		if info then
+			table.insert(linkedObjects, info)
+			info.MouseButton1Click:Connect(function()
+				if selectedInfo == info then
+					selectedInfo = nil
+					updateConnectorsColor(selectedInfo)
+				else
+					selectedInfo = info
+					updateConnectorsColor(selectedInfo)
+				end
+			end)
+		end
+	end
+
+	updateConnectorsColor(selectedInfo)
+end
+
 local defaultConfig = {
 	Tab = {
 		Title = "A-90", -- Tab name.
@@ -269,67 +335,6 @@ modifier.createSeperator = function(lO, color)
 	Seperator.LayoutOrder = lO or 2
 end
 
-local function createLinkedGroup(CE, CEE, color, knob)
-	local connectorsEnabled = CE
-	local connectorsEndEnabled = CEE
-
-	local currentLinkedGroup = {}
-	local counter = #linkedObjects + 1
-
-	while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-		table.insert(currentLinkedGroup, "Abc" .. counter)
-		counter = counter + 1
-	end
-
-	local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
-
-	local function updateConnectorsColor(selectedButton)
-		local connectorsColor = selectedButton and color or Color3.fromRGB(103, 73, 63)
-		local selectedTransparency = selectedButton and 0 or 0.8
-		local unselectedTransparency = selectedButton and 0.8 or 0
-
-		for _, name in ipairs(currentLinkedGroup) do
-			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-
-			if info then
-				if info == selectedButton then
-					AddedAmount -= tonumber(knob)
-					info.BackgroundTransparency = 0.7
-					info.UIStroke.Enabled = true
-					info.UIStroke.Color = color
-					info.TextTransparency = 0
-				else
-					info.BackgroundTransparency = 0.9
-					info.UIStroke.Enabled = false
-					info.TextTransparency = 0.8
-				end
-
-				info.Connector.BackgroundColor3 = connectorsColor
-				info.ConnectorOut.BackgroundColor3 = connectorsColor
-				info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
-			end
-		end
-	end
-
-	for _, name in ipairs(currentLinkedGroup) do
-		local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-		if info then
-			table.insert(linkedObjects, info)
-			info.MouseButton1Click:Connect(function()
-				if selectedInfo == info then
-					selectedInfo = nil
-					updateConnectorsColor(selectedInfo)
-				else
-					selectedInfo = info
-					updateConnectorsColor(selectedInfo)
-				end
-			end)
-		end
-	end
-
-	updateConnectorsColor(selectedInfo)
-end
-
 modifier.createModifier = function(lO, customization)
 	if game.PlaceId == 6839171747 then
 		return 
@@ -347,10 +352,11 @@ modifier.createModifier = function(lO, customization)
 	if isfile("nr.txt") then deletefile("nr.txt") end
     if isfile("np.txt") then deletefile("np.txt") end	
 
-	local enabledModifier = false
 	local baseName = "Abc"
 	local counter = 1
-
+	
+	_G["enabled".. counter] = false
+	
 	local function generateUniqueName()
 		local newName = baseName .. counter
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(newName) do
@@ -373,69 +379,6 @@ modifier.createModifier = function(lO, customization)
 	end
 
 	modifierCreate.Visible = true
-
-	local function createLinkedGroup()
-		local connectorsEnabled = customization.Customization.Connector
-		local connectorsEndEnabled = customization.Customization.ConnectorEnd
-
-		local currentLinkedGroup = {}
-		local counter = #linkedObjects + 1
-
-		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-			table.insert(currentLinkedGroup, "Abc" .. counter)
-			counter = counter + 1
-		end
-
-		local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
-
-		local function updateConnectorsColor(selectedButton)
-			local connectorsColor = selectedButton and customization.Customization.Color or Color3.fromRGB(103, 73, 63)
-			local selectedTransparency = selectedButton and 0 or 0.8
-			local unselectedTransparency = selectedButton and 0.8 or 0
-
-			for _, name in ipairs(currentLinkedGroup) do
-				local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-
-				if info then
-					if info == selectedButton then
-						AddedAmount -= tonumber(customization.Customization.Knobs)
-						info.BackgroundTransparency = 0.7
-						info.UIStroke.Enabled = true
-						info.UIStroke.Color = customization.Customization.Color
-						info.TextTransparency = 0
-					else
-						enabledModifier = false
-						info.BackgroundTransparency = 0.9
-						info.UIStroke.Enabled = false
-						info.TextTransparency = 0.8
-					end
-
-					info.Connector.BackgroundColor3 = connectorsColor
-					info.ConnectorOut.BackgroundColor3 = connectorsColor
-					info.TextTransparency = info == selectedButton and selectedTransparency or unselectedTransparency
-				end
-			end
-		end
-
-		for _, name in ipairs(currentLinkedGroup) do
-			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-			if info then
-				table.insert(linkedObjects, info)
-				info.MouseButton1Click:Connect(function()
-					if selectedInfo == info then
-						selectedInfo = nil
-						updateConnectorsColor(selectedInfo)
-					else
-						selectedInfo = info
-						updateConnectorsColor(selectedInfo)
-					end
-				end)
-			end
-		end
-
-		updateConnectorsColor(selectedInfo)
-	end
-
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
 	modifierCreate.LayoutOrder = lO or 1
@@ -501,19 +444,21 @@ modifier.createModifier = function(lO, customization)
 	end)
 
 	modifierCreate.MouseButton1Click:Connect(function()
-		if not enabledModifier then
-			enabledModifier = true
-
-			AddedAmount += tonumber(customization.Customization.Knobs)
-			ModifiersEnabled += 1
-			
-			createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorOut, customization.Customization.Color, customization.Customization.Color)
+		if not _G["enabled".. counter] then
+			if not customization.Customization.Connector or not customization.Customization.ConnectorEnd then
+				_G["enabled".. counter] = true
+				AddedAmount += tonumber(customization.Customization.Knobs)
+				ModifiersEnabled += 1	
+			else
+				print("test")
+				createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorEnd, customization.Customization.Color, customization.Customization.Knobs, counter)
+			end
 		else
-			enabledModifier = false
-			
-			ModifiersEnabled -= 1
-
-			AddedAmount -= tonumber(customization.Customization.Knobs)
+			if not customization.Customization.Connector or not customization.Customization.ConnectorEnd then
+				_G["enabled".. counter] = false
+				ModifiersEnabled -= 1
+				AddedAmount -= tonumber(customization.Customization.Knobs)
+			end
 		end
 	end)
 
