@@ -338,6 +338,7 @@ modifier.createModifier = function(lO, customization)
 
 				for _, v in pairs(info.Info:GetDescendants()) do
 					if v:IsA("TextLabel") and v.BackgroundColor3 == Color3.fromRGB(103, 73, 63) then
+						print(v.Name)
 						knobAdd = tonumber(v.Name) or 0
 						break
 					end
@@ -353,6 +354,7 @@ modifier.createModifier = function(lO, customization)
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
+						ModifiersEnabled -= 1
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -383,7 +385,6 @@ modifier.createModifier = function(lO, customization)
 
 		updateConnectorsColor(selectedInfo)
 	end
-
 
 	modifierCreate.Name = generateUniqueName()
 	modifierCreate.Text = customization.Customization.Title
@@ -456,12 +457,12 @@ modifier.createModifier = function(lO, customization)
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
 			
-			if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
-				modifierCreate.BackgroundTransparency = 0.7
-				modifierCreate.UIStroke.Enabled = true
-				modifierCreate.UIStroke.Color = customization.Customization.Color
-				modifierCreate.TextTransparency = 0
-			end
+			--if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
+			--	modifierCreate.BackgroundTransparency = 0.7
+			--	modifierCreate.UIStroke.Enabled = true
+			--	modifierCreate.UIStroke.Color = customization.Customization.Color
+			--	modifierCreate.TextTransparency = 0
+			--end
 			
 			createLinkedGroup()
 		else
@@ -471,11 +472,11 @@ modifier.createModifier = function(lO, customization)
 
 			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
 			
-			if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
-				modifierCreate.BackgroundTransparency = 0.9
-				modifierCreate.UIStroke.Enabled = false
-				modifierCreate.TextTransparency = 0.8
-			end
+			--if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
+			--	modifierCreate.BackgroundTransparency = 0.9
+			--	modifierCreate.UIStroke.Enabled = false
+			--	modifierCreate.TextTransparency = 0
+			--end
 		end
 	end)
 
