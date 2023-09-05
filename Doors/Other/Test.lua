@@ -16,6 +16,7 @@ local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
+local previousKnobCount = 0
 
 local defaultConfig = {
 	Tab = {
@@ -316,7 +317,6 @@ modifier.createModifier = function(lO, customization)
 
 		local currentLinkedGroup = {}
 		local counter = #linkedObjects + 1
-		local previousKnobCount = 0
 
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
 			table.insert(currentLinkedGroup, "Abc" .. counter)
@@ -343,18 +343,21 @@ modifier.createModifier = function(lO, customization)
 						break
 					end
 				end
-
-				AddedAmount = AddedAmount - previousKnobCount + knobAdd
+				
+				print(previousKnobCount)
+				print(knobAdd)
+				AddedAmount -= previousKnobCount
+				AddedAmount += knobAdd
 				previousKnobCount = knobAdd
 
 				if info then
 					if info == selectedButton then
+						ModifiersEnabled += 1
 						info.BackgroundTransparency = 0.7
 						info.UIStroke.Enabled = true
 						info.UIStroke.Color = customization.Customization.Color
 						info.TextTransparency = 0
 					else
-						ModifiersEnabled -= 1
 						info.BackgroundTransparency = 0.9
 						info.UIStroke.Enabled = false
 						info.TextTransparency = 0.8
@@ -457,26 +460,13 @@ modifier.createModifier = function(lO, customization)
 			AddedAmount += tonumber(customization.Customization.Knobs)
 			ModifiersEnabled += 1
 			
-			--if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
-			--	modifierCreate.BackgroundTransparency = 0.7
-			--	modifierCreate.UIStroke.Enabled = true
-			--	modifierCreate.UIStroke.Color = customization.Customization.Color
-			--	modifierCreate.TextTransparency = 0
-			--end
-			
 			createLinkedGroup()
 		else
 			enabledModifier = false
 			
 			ModifiersEnabled -= 1
 
-			AddedAmount = AddedAmount - tonumber(customization.Customization.Knobs)
-			
-			--if not customization.Customization.Connector and not customization.Customization.ConnectorOut then
-			--	modifierCreate.BackgroundTransparency = 0.9
-			--	modifierCreate.UIStroke.Enabled = false
-			--	modifierCreate.TextTransparency = 0
-			--end
+			AddedAmount -= tonumber(customization.Customization.Knobs)
 		end
 	end)
 
