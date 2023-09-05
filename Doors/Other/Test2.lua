@@ -12,19 +12,20 @@ end
 _G.alreadyExecuted = true
 
 local modifier = {}
+local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 
 local function createLinkedGroup(CE, CEE, color, knob, count)
 	local currentLinkedGroup = {}
-	local counter = 1
-	
-	print(counter)
-	
+	local counter = #linkedObjects + 1
+
 	while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-		print("Abc".. counter)
-		table.insert(currentLinkedGroup, "Abc" .. counter)
+		if CE == true or CEE == true then 
+			print("Abc".. counter)
+			table.insert(currentLinkedGroup, "Abc" .. counter)
+		end
 		counter += 1
 	end
 
@@ -66,6 +67,7 @@ local function createLinkedGroup(CE, CEE, color, knob, count)
 	for _, name in ipairs(currentLinkedGroup) do
 		local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 		if info then
+			table.insert(linkedObjects, info)
 			info.MouseButton1Click:Connect(function()
 				if selectedInfo == info then
 					selectedInfo = nil
@@ -443,16 +445,19 @@ modifier.createModifier = function(lO, customization)
 
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not _G["enabled".. counter] then
-			if not customization.Customization.Connector or not customization.Customization.ConnectorEnd then
+			print("false")
+			if customization.Customization.Connector == false or customization.Customization.ConnectorEnd == false then
+				print("connectorend false")
 				_G["enabled".. counter] = true
 				AddedAmount += tonumber(customization.Customization.Knobs)
 				ModifiersEnabled += 1	
 			else
-				print("test")
+				print("linkgroup")
 				createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorEnd, customization.Customization.Color, customization.Customization.Knobs, counter)
 			end
 		else
-			if not customization.Customization.Connector or not customization.Customization.ConnectorEnd then
+			print("true")
+			if customization.Customization.Connector == false or customization.Customization.ConnectorEnd == false then
 				_G["enabled".. counter] = false
 				ModifiersEnabled -= 1
 				AddedAmount -= tonumber(customization.Customization.Knobs)
@@ -503,7 +508,7 @@ modifier.createModifier = function(lO, customization)
 			ModifiersMain.NoRift.Visible = false
 		end
 		
-		if enabledModifier then
+		if _G["enabled".. counter] then
 			local Template = ModifiersMain.Template:Clone()
 			Template.Name = "abc"
 			Template.Visible = true
