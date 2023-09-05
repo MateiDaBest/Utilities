@@ -278,7 +278,7 @@ local function createLinkedGroup(CE, CEE, color, knob)
 
 	while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
 		table.insert(currentLinkedGroup, "Abc" .. counter)
-		counter = counter + 1
+		counter += 1
 	end
 
 	local selectedInfo = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc1")
@@ -294,12 +294,14 @@ local function createLinkedGroup(CE, CEE, color, knob)
 			if info then
 				if info == selectedButton then
 					AddedAmount += tonumber(knob)
-					ModifiersEnabled -= 1
+					ModifiersEnabled += 1
 					info.BackgroundTransparency = 0.7
 					info.UIStroke.Enabled = true
 					info.UIStroke.Color = color
 					info.TextTransparency = 0
 				else
+					AddedAmount -= tonumber(knob)
+					ModifiersEnabled -= 1
 					info.BackgroundTransparency = 0.9
 					info.UIStroke.Enabled = false
 					info.TextTransparency = 0.8
@@ -504,17 +506,21 @@ modifier.createModifier = function(lO, customization)
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not enabledModifier then
 			enabledModifier = true
-
-			--AddedAmount += tonumber(customization.Customization.Knobs)
-			--ModifiersEnabled += 1
 			
-			createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorOut, customization.Customization.Color, customization.Customization.Color)
+			if not customization.Customization.Connector or not customization.Customization.ConnectorOut then
+				AddedAmount += tonumber(customization.Customization.Knobs)
+				ModifiersEnabled += 1	
+			else
+				print("test")
+				createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorOut, customization.Customization.Color, customization.Customization.Color)
+			end
 		else
 			enabledModifier = false
 			
-			ModifiersEnabled -= 1
-
-			AddedAmount -= tonumber(customization.Customization.Knobs)
+			if not customization.Customization.Connector or not customization.Customization.ConnectorOut then
+				ModifiersEnabled -= 1
+				AddedAmount -= tonumber(customization.Customization.Knobs)
+			end
 		end
 	end)
 
