@@ -446,7 +446,17 @@ modifier.createModifier = function(lO, customization)
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not _G["enabled".. counter] then
 			print("false")
-			if customization.Customization.Connector == false or customization.Customization.ConnectorEnd == false then
+			if customization.Customization.Connector == false then
+				print("connectorend false")
+				_G["enabled".. counter] = true
+				AddedAmount += tonumber(customization.Customization.Knobs)
+				ModifiersEnabled += 1	
+			else
+				print("linkgroup")
+				createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorEnd, customization.Customization.Color, customization.Customization.Knobs, counter)
+			end
+			
+			if customization.Customization.ConnectorOut == false then
 				print("connectorend false")
 				_G["enabled".. counter] = true
 				AddedAmount += tonumber(customization.Customization.Knobs)
@@ -457,7 +467,11 @@ modifier.createModifier = function(lO, customization)
 			end
 		else
 			print("true")
-			if customization.Customization.Connector == false or customization.Customization.ConnectorEnd == false then
+			if customization.Customization.Connector == false then
+				_G["enabled".. counter] = false
+				ModifiersEnabled -= 1
+				AddedAmount -= tonumber(customization.Customization.Knobs)
+			elseif customization.Customization.ConnectorOut == false then
 				_G["enabled".. counter] = false
 				ModifiersEnabled -= 1
 				AddedAmount -= tonumber(customization.Customization.Knobs)
