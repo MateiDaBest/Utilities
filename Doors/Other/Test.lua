@@ -16,7 +16,7 @@ local linkedObjects = {}
 local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
-local prevKnobs = 0
+local currentLinkedGroup = nil
 
 local defaultConfig = {
 	Tab = {
@@ -310,8 +310,6 @@ modifier.createModifier = function(lO, customization)
 	end
 
 	modifierCreate.Visible = true
-	
-	local currentLinkedGroup = nil
 
 	local function createLinkedGroup()
 		local connectorsEnabled = customization.Customization.Connector
@@ -322,11 +320,11 @@ modifier.createModifier = function(lO, customization)
 		end
 
 		if connectorsEnabled and not currentLinkedGroup then
-			local currentLinkedGroup2 = {}
+			currentLinkedGroup = {}
 			local counter = #linkedObjects + 1
 
 			while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-				table.insert(currentLinkedGroup2, "Abc" .. counter)
+				table.insert(currentLinkedGroup, "Abc" .. counter)
 				counter = counter + 1
 			end
 
@@ -337,7 +335,7 @@ modifier.createModifier = function(lO, customization)
 				local selectedTransparency = selectedButton and 0 or 0.8
 				local unselectedTransparency = selectedButton and 0.8 or 0
 
-				for _, name in ipairs(currentLinkedGroup2) do
+				for _, name in ipairs(currentLinkedGroup) do
 					local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
 					
 					local knobBonus = tonumber(info.KnobBonus.Name)
