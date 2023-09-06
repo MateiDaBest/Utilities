@@ -17,13 +17,17 @@ local Data = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 
+local KnobsFromEachModifier = {}
+
 local function createLinkedGroup(CE, CEE, color, knob, count)
+	local connectorsEnabled = CE
+	local connectorsEndEnabled = CEE
+
 	local currentLinkedGroup = {}
 	local counter = #linkedObjects + 1
 
 	while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-		if CE == true or CEE == true then 
-			print("Abc".. counter)
+		if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter).Connector.Visible or game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter).ConnectorOut.Visible then 
 			table.insert(currentLinkedGroup, "Abc" .. counter)
 		end
 		counter += 1
@@ -41,16 +45,27 @@ local function createLinkedGroup(CE, CEE, color, knob, count)
 
 			if info then
 				if info == selectedButton then
-					AddedAmount += tonumber(knob)
+					if not KnobsFromEachModifier[selectedButton] then KnobsFromEachModifier[selectedButton] = tonumber(knob) end
+
+					AddedAmount += KnobsFromEachModifier[selectedButton]
 					ModifiersEnabled += 1
 					_G["enabled".. count] = false
 					info.BackgroundTransparency = 0.7
 					info.UIStroke.Enabled = true
 					info.UIStroke.Color = color
 					info.TextTransparency = 0
+					for i, v in pairs(currentLinkedGroup) do
+						if v ~= selectedButton then
+							local button = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(v)
+							if button and KnobsFromEachModifier[button] then
+								AddedAmount -= KnobsFromEachModifier[button]
+							end
+						end
+					end
 				else
+					if not KnobsFromEachModifier[selectedButton] then KnobsFromEachModifier[selectedButton] = tonumber(knob) end
 					_G["enabled".. count] = true
-					AddedAmount -= tonumber(knob)
+					AddedAmount -= KnobsFromEachModifier[selectedButton]
 					ModifiersEnabled -= 1
 					info.BackgroundTransparency = 0.9
 					info.UIStroke.Enabled = false
@@ -151,19 +166,19 @@ if game.PlaceId == 6839171747 then
 		Template.Parent = TempMods
 		Template.Visible = true
 		Template.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
-		
+
 		local Template_2 = MainMods:FindFirstChild("Template"):Clone()
 		Template_2.Text = v
 		Template_2.Parent = MainMods
 		Template_2.Visible = true
 		Template_2.BackgroundColor3 = Color3.new(decodedData3.R, decodedData3.G, decodedData3.B)
 	end
-	
+
 	game:GetService("Players").LocalPlayer.PlayerGui.PermUI.Topbar.Modifiers.Visible = true
 	game:GetService("Players").LocalPlayer.PlayerGui.PermUI.Topbar.Modifiers.Text = Mods
-	
+
 	TempMods.Desc.Text = Mods .. " MODIFIER" .. (Mods ~= 1 and "S" or "").. " ACTIVATED"
-	
+
 	if decodedData4 == true then
 		TempMods.NoProgress.Visible = true
 	else
@@ -175,7 +190,7 @@ if game.PlaceId == 6839171747 then
 	else
 		TempMods.NoRift.Visible = false
 	end
-	
+
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Visible = true
 	game:GetService("Players").LocalPlayer.PlayerGui.MainUI.Statistics.Frame.MODIFIERS.Text = "MODIFIERS (".. Mods .. ")"
 	if decodedData >= 1 then
@@ -246,11 +261,11 @@ modifier.createTab = function(tab)
 	Exit.Parent = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame
 	Exit.MouseButton1Click:Connect(function()
 		if isfile("knobs.txt") then deletefile("knobs.txt") end
-        if isfile("name.txt") then deletefile("name.txt") end
+		if isfile("name.txt") then deletefile("name.txt") end
 		if isfile("color.txt") then deletefile("color.txt") end
 		if isfile("nr.txt") then deletefile("nr.txt") end
 		if isfile("np.txt") then deletefile("np.txt") end	
-		
+
 		game:GetService("ReplicatedStorage").EntityInfo.ElevatorExit:FireServer()
 		game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers.Visible = false
 		for _, v in pairs(game.Players.LocalPlayer.PlayerGui.MainUI.Modifiers:GetDescendants()) do
@@ -323,23 +338,11 @@ modifier.createTab = function(tab)
 	end
 end
 
-modifier.createSeperator = function(lO, color)
-	if game.PlaceId == 6839171747 then
-		return 
-	end
-	
-	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
-	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
-	Seperator.Visible = true
-	Seperator.BackgroundColor3 = color or Color3.fromRGB(103, 73, 63)
-	Seperator.LayoutOrder = lO or 2
-end
-
 modifier.createModifier = function(lO, customization)
 	if game.PlaceId == 6839171747 then
 		return 
 	end
-	
+
 	for i, v in next, defaultConfig do
 		if customization[i] == nil then
 			customization[i] = defaultConfig[i]
@@ -350,13 +353,13 @@ modifier.createModifier = function(lO, customization)
 	if isfile("name.txt") then deletefile("name.txt") end
 	if isfile("color.txt") then deletefile("color.txt") end
 	if isfile("nr.txt") then deletefile("nr.txt") end
-    if isfile("np.txt") then deletefile("np.txt") end	
+	if isfile("np.txt") then deletefile("np.txt") end	
 
 	local baseName = "Abc"
 	local counter = 1
-	
+
 	_G["enabled".. counter] = false
-	
+
 	local function generateUniqueName()
 		local newName = baseName .. counter
 		while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(newName) do
@@ -383,13 +386,13 @@ modifier.createModifier = function(lO, customization)
 	modifierCreate.Text = customization.Customization.Title
 	modifierCreate.LayoutOrder = lO or 1
 	modifierCreate.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
-	
+
 	if customization.Customization.NoProgress == true then
 		modifierCreate.Info.NoProgress.Visible = true
 	else
 		modifierCreate.Info.NoProgress.Visible = false
 	end
-	
+
 	if customization.Customization.NoRift == true then
 		modifierCreate.Info.NoRift.Visible = true
 	else
@@ -417,19 +420,19 @@ modifier.createModifier = function(lO, customization)
 		Preview.Title.Text = customization.Customization.Title
 		Preview.Desc.TextColor3 = customization.Customization.Color
 		Preview.Title.TextColor3 = customization.Customization.Color
-		
+
 		if customization.Customization.NoProgress == true then
 			Preview.Info.NoProgress.Visible = true
 		else
 			Preview.Info.NoProgress.Visible = false
 		end
-		
+
 		if customization.Customization.NoRift == true then
 			Preview.Info.NoRift.Visible = true
 		else
 			Preview.Info.NoRift.Visible = false
 		end
-		
+
 		if tonumber(customization.Customization.Knobs) >= 1 then
 			Preview.Info.KnobPenalty.Visible = false
 			Preview.Info.KnobBonus.Text = "+" .. customization.Customization.Knobs .. "%"
@@ -445,36 +448,24 @@ modifier.createModifier = function(lO, customization)
 
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not _G["enabled".. counter] then
-			print("false")
-			if customization.Customization.Connector == false then
-				print("connectorend false")
-				_G["enabled".. counter] = true
-				AddedAmount += tonumber(customization.Customization.Knobs)
-				ModifiersEnabled += 1	
-			else
-				print("linkgroup")
-				createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorEnd, customization.Customization.Color, customization.Customization.Knobs, counter)
-			end
+			ModifiersEnabled += 1
 			
-			if customization.Customization.ConnectorOut == false then
-				print("connectorend false")
+			if customization.Customization.Connector == false then
 				_G["enabled".. counter] = true
 				AddedAmount += tonumber(customization.Customization.Knobs)
-				ModifiersEnabled += 1	
+			elseif customization.Customization.ConnectorOut == false then
+				_G["enabled".. counter] = true
+				AddedAmount += tonumber(customization.Customization.Knobs)
 			else
-				print("linkgroup")
 				createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorEnd, customization.Customization.Color, customization.Customization.Knobs, counter)
 			end
 		else
-			print("true")
+			ModifiersEnabled -= 1
+			AddedAmount -= tonumber(customization.Customization.Knobs)
 			if customization.Customization.Connector == false then
 				_G["enabled".. counter] = false
-				ModifiersEnabled -= 1
-				AddedAmount -= tonumber(customization.Customization.Knobs)
 			elseif customization.Customization.ConnectorOut == false then
 				_G["enabled".. counter] = false
-				ModifiersEnabled -= 1
-				AddedAmount -= tonumber(customization.Customization.Knobs)
 			end
 		end
 	end)
@@ -507,7 +498,7 @@ modifier.createModifier = function(lO, customization)
 		ModifiersMain.Visible = true
 		ModifiersMain.KnobBonus.Text = AddedAmount .. "%"
 		ModifiersMain.Desc.Text = ModifiersEnabled .. " MODIFIER" .. (ModifiersEnabled ~= 1 and "S" or "") .. " ACTIVATED"
-		
+
 		if customization.Customization.NoProgress == true then
 			writefile("np.txt", game:GetService("HttpService"):JSONEncode(true))
 			ModifiersMain.NoProgress.Visible = true
@@ -521,7 +512,7 @@ modifier.createModifier = function(lO, customization)
 		else
 			ModifiersMain.NoRift.Visible = false
 		end
-		
+
 		if _G["enabled".. counter] then
 			local Template = ModifiersMain.Template:Clone()
 			Template.Name = "abc"
@@ -543,12 +534,12 @@ modifier.createModifier = function(lO, customization)
 
 		writefile("color.txt", game:GetService("HttpService"):JSONEncode(colorTable))
 	end)
-	
+
 	spawn(function()
 		while wait() do
 			local knobBonusText = AddedAmount ~= 0 and (AddedAmount > 0 and "+" or "") .. AddedAmount .. "%" or "+0%"
 			game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.KnobBonus.Text = knobBonusText
-			
+
 			if customization.Customization.NoProgress == true and ModifiersEnabled ~= 0 then
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.NoProgress.Visible = true
 			else
@@ -560,7 +551,7 @@ modifier.createModifier = function(lO, customization)
 			else
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.NoRift.Visible = false
 			end
-			
+
 			if ModifiersEnabled == 0 then
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.Desc.Visible = false
 				game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.customConfirm.Info.ModIcon.Visible = false
@@ -571,6 +562,18 @@ modifier.createModifier = function(lO, customization)
 			end
 		end
 	end)
+end
+
+modifier.createSeperator = function(lO, color)
+	if game.PlaceId == 6839171747 then
+		return 
+	end
+
+	local Seperator = game:GetService("Players").LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.Modifiers:WaitForChild("Separator"):Clone()
+	Seperator.Parent = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers
+	Seperator.Visible = true
+	Seperator.BackgroundColor3 = color or Color3.fromRGB(103, 73, 63)
+	Seperator.LayoutOrder = lO or 2
 end
 
 return modifier
