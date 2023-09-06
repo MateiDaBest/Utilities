@@ -14,17 +14,19 @@ _G.alreadyExecuted = true
 local modifier = {}
 local linkedObjects = {}
 local Data = {}
+local KnobsFromEachModifier = {}
 local AddedAmount = 0
 local ModifiersEnabled = 0
 
 local function createLinkedGroup(CE, CEE, color, knob, count)
+	local connectorsEnabled = CE
+	local connectorsEndEnabled = CEE
+
 	local currentLinkedGroup = {}
 	local counter = #linkedObjects + 1
-	local Total = 0
 
 	while game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter) do
-		if CE == true or CEE == true then 
-			print("Abc".. counter)
+		if game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter).Connector.Visible or game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild("Abc" .. counter).ConnectorOut.Visible then 
 			table.insert(currentLinkedGroup, "Abc" .. counter)
 		end
 		counter += 1
@@ -39,17 +41,31 @@ local function createLinkedGroup(CE, CEE, color, knob, count)
 
 		for _, name in ipairs(currentLinkedGroup) do
 			local info = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(name)
-			
+
 			if info then
 				if info == selectedButton then
-					AddedAmount += tonumber(knob)
+					if not KnobsFromEachModifier[selectedButton] then KnobsFromEachModifier[selectedButton] = tonumber(knob) end
+
+					AddedAmount += KnobsFromEachModifier[selectedButton]
+					ModifiersEnabled += 1
 					_G["enabled".. count] = false
 					info.BackgroundTransparency = 0.7
 					info.UIStroke.Enabled = true
 					info.UIStroke.Color = color
 					info.TextTransparency = 0
+					for i, v in pairs(currentLinkedGroup) do
+						if v ~= selectedButton then
+							local button = game.Players.LocalPlayer.PlayerGui.MainUI.LobbyFrame.CreateElevator.custommodifiers:FindFirstChild(v)
+							if button and KnobsFromEachModifier[button] then
+								AddedAmount -= KnobsFromEachModifier[button]
+							end
+						end
+					end
 				else
+					if not KnobsFromEachModifier[selectedButton] then KnobsFromEachModifier[selectedButton] = tonumber(knob) end
 					_G["enabled".. count] = true
+					AddedAmount -= KnobsFromEachModifier[selectedButton]
+					ModifiersEnabled -= 1
 					info.BackgroundTransparency = 0.9
 					info.UIStroke.Enabled = false
 					info.TextTransparency = 0.8
@@ -431,23 +447,16 @@ modifier.createModifier = function(lO, customization)
 
 	modifierCreate.MouseButton1Click:Connect(function()
 		if not _G["enabled".. counter] then
-			ModifiersEnabled += 1
-			
-			if customization.Customization.Connector == false then
+			if not customization.Customization.Connector or not customization.Customization.ConnectorEnd then
 				_G["enabled".. counter] = true
 				AddedAmount += tonumber(customization.Customization.Knobs)
-			elseif customization.Customization.ConnectorOut == false then
-				_G["enabled".. counter] = true
-				AddedAmount += tonumber(customization.Customization.Knobs)
+				ModifiersEnabled += 1	
 			else
+				print("test")
 				createLinkedGroup(customization.Customization.Connector, customization.Customization.ConnectorEnd, customization.Customization.Color, customization.Customization.Knobs, counter)
 			end
 		else
-			if customization.Customization.Connector == false then
-				_G["enabled".. counter] = false
-				ModifiersEnabled -= 1
-				AddedAmount -= tonumber(customization.Customization.Knobs)
-			elseif customization.Customization.ConnectorOut == false then
+			if not customization.Customization.Connector or not customization.Customization.ConnectorEnd then
 				_G["enabled".. counter] = false
 				ModifiersEnabled -= 1
 				AddedAmount -= tonumber(customization.Customization.Knobs)
