@@ -6751,13 +6751,6 @@ addcmd('clip',{'unnoclip'},function(args, speaker)
 	Clip = true
 end)
 
-_G.stopNoclip = function()
-	if Noclipping then
-		Noclipping:Disconnect()
-	end
-	Clip = true
-end
-
 addcmd('togglenoclip',{},function(args, speaker)
 	if Clip then
 		execCmd('noclip')
@@ -6975,6 +6968,10 @@ addcmd('unfly',{'nofly','novfly','unvehiclefly','novehiclefly','unvfly'},functio
 	if not IsOnMobile then NOFLY() else unmobilefly(speaker) end
 end)
 
+_G.StopFlying = function()
+	NOFLY()
+end
+
 addcmd('vfly',{'vehiclefly'},function(args, speaker)
 	if not IsOnMobile then
 		NOFLY()
@@ -7024,7 +7021,7 @@ addcmd('cframefly', {'cfly'}, function(args, speaker)
 	-- Full credit to peyton#9148 (apeyton)
 	speaker.Character:FindFirstChildOfClass('Humanoid').PlatformStand = true
 	local Head = speaker.Character:WaitForChild("Head")
-	Head.Anchored = true
+	--Head.Anchored = true
 	if CFloop then CFloop:Disconnect() end
 	CFloop = RunService.Heartbeat:Connect(function(deltaTime)
 		local moveDirection = speaker.Character:FindFirstChildOfClass('Humanoid').MoveDirection * (CFspeed * deltaTime)
@@ -7530,6 +7527,19 @@ addcmd('hideiy',{},function(args, speaker)
 	minimizeNum = 0
 	minimizeHolder()
 	if not (args[1] and tostring(args[1]) == 'nonotify') then notify('IY Hidden','You can press the prefix key to access the command bar') end
+end)
+
+spawn(function()
+	wait(1)
+	isHidden = true
+	wasStayOpen = StayOpen
+	if StayOpen == true then
+		StayOpen = false
+		On.BackgroundTransparency = 1
+	end
+	minimizeNum = 0
+	minimizeHolder()
+	notify('IY Hidden','You can press the prefix key to access the command bar')
 end)
 
 addcmd('showiy',{'unhideiy'},function(args, speaker)
