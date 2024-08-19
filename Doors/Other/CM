@@ -27,33 +27,3 @@ if game.PlaceId == 6839171747 then
 elseif game.PlaceId ~= 6516141723 and game.PlaceId ~= 12308344607 then
 	return
 end
-
--- Tables
-local CustomModifiers = {}
-local CategoryTable = {}
-local FloorTable = {}
-local FunctionTable = {
-	GetInfo = function(Modifier)
-		if Modifier.Merge ~= nil then
-			if Modifier.Connect then
-				return Modifier
-			else
-				local Extra1 = 0
-				local Extra2 = 0
-				
-				for _, Mod in pairs(Modifiers.mods) do
-					if Mod.Category == Modifier.Category and Mod.Merge == Modifier.Merge and Modifier.Merge ~= nil and math.abs(mod.Sort - Modifier.Sort) == 1 then
-						if Mod.Sort - Modifier.Sort > 0 then
-							Extra2 = -0.5
-						else
-							Extra1 = 0.5
-						end
-					end
-				end
-				
-				Modifier.Connect = 0.5 + (Extra2 + Extra1)
-			end
-		end
-		return Modifier
-	end
-}
