@@ -15,15 +15,16 @@ local AccessibleFloors = require(ReplicatedStorage:WaitForChild("AccessibleFloor
 -- Place Check
 if game.PlaceId == 6839171747 then
 	local ModifierData = TeleportService:GetTeleportSetting("ModifierData")
+	local CategoryData = TeleportService:GetTeleportSetting("CategoryData")
+	
+	Modifiers.categories = CategoryData
 	
 	for Name, Data in pairs(ModifierData) do
 		local ModifierFolder = Instance.new("Folder", ReplicatedStorage:WaitForChild("LiveModifiers"))
 		ModifierFolder.Name = Name
-		
+
 		Modifiers.mods[Name] = Data
 	end
-	
-	return
-elseif game.PlaceId ~= 6516141723 and game.PlaceId ~= 12308344607 then
+
 	return
 end
