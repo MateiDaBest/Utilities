@@ -1,5 +1,9 @@
 --@ kiwi_api.lua
 
+if game.PlaceId ~= 70876832253163 then
+	return
+end
+
 _G.KiwiAPI = {}
 
 local Players = game:GetService("Players")
